@@ -16,13 +16,13 @@ class CreateKardexTable extends Migration
         Schema::create('kardex', function (Blueprint $table) {
             $table->increments('id');
             $table->date('fecha');
+            $table->enum('tipo',['Entrada','Salida']);
             $table->unsignedInteger('producto_id')
                     ->nullable();
-            $table->double('precio_lote',8,2);      //  precio Lote
             $table->integer('cantidad');            //  es lo que se a movido sea ingreso o egreso
             $table->integer('stock');               //  cantidad actual
-            $table->enum('tipo',['Entrada','Salida']);
-            
+            $table->double('precio_lote',8,2);      //  precio Lote
+            $table->unsignedInteger('documento_id')->nullable();
             $table->timestamps();
         });
     }
