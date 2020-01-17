@@ -12,4 +12,9 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::resource('colaborador', 'ColaboradorController');
 Route::resource('proveedor', 'ProveedorController');
+Route::resource('insumo', 'InsumoController');
+Route::resource('obra', 'ObraController');
+
+Route::get('stock','ReporteController@stock');

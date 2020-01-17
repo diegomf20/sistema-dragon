@@ -20,6 +20,10 @@ var routes =[
         path: '/proveedor', 
         component: require('../vistas/maestras/proveedor.vue').default,
     },
+    { 
+        path: '/consumo', 
+        component: require('../vistas/operacion/consumo.vue').default,
+    },
 ];
 
 export default new VueRouter({

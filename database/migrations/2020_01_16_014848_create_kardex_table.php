@@ -19,11 +19,12 @@ class CreateKardexTable extends Migration
             $table->enum('tipo',['Entrada','Salida']);
             $table->unsignedInteger('producto_id')
                     ->nullable();
-            $table->integer('cantidad');            //  es lo que se a movido sea ingreso o egreso
-            $table->integer('stock');               //  cantidad actual
-            $table->double('precio_lote',8,2);      //  precio Lote
+            $table->integer('cantidad');       //  es lo que se a movido sea ingreso o egreso
+            $table->integer('stock');          //  cantidad actual
+            $table->double('precio',8,2);      //  precio Lote
+            $table->double('total',12,2);
             $table->unsignedInteger('documento_id')->nullable();
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 
