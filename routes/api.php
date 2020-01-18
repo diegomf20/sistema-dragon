@@ -16,5 +16,7 @@ Route::resource('colaborador', 'ColaboradorController');
 Route::resource('proveedor', 'ProveedorController');
 Route::resource('insumo', 'InsumoController');
 Route::resource('obra', 'ObraController');
+Route::resource('consumo', 'ConsumoController');
+Route::resource('compra', 'CompraController');
 
 Route::get('stock','ReporteController@stock');

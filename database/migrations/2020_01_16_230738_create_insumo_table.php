@@ -16,7 +16,8 @@ class CreateInsumoTable extends Migration
         Schema::create('insumo', function (Blueprint $table) {
             $table->increments('id');
             $table->string('codigo',4)->nullable();
-            $table->string('nombre_insumo');
+            $table->string('nombre_insumo',50);
+            $table->integer('punto_reorden')->nullabale();
         });
     }
 

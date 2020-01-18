@@ -29,13 +29,13 @@ class ColaboradorController extends Controller
      */
     public function store(ColaboradorValidate $request)
     {
-        $Colaborador=new Colaborador();
-        $Colaborador->documento=$request->documento;
-        $Colaborador->nombre_colaborador=$request->nombre_colaborador;
-        $Colaborador->apellido_colaborador=$request->apellido_colaborador;
-        $Colaborador->telefono=$request->telefono;
-        $Colaborador->mail=$request->mail;
-        $Colaborador->save();
+        $colaborador=new Colaborador();
+        $colaborador->documento=$request->documento;
+        $colaborador->nombre_colaborador=$request->nombre_colaborador;
+        $colaborador->apellido_colaborador=$request->apellido_colaborador;
+        $colaborador->telefono=$request->telefono;
+        $colaborador->mail=$request->mail;
+        $colaborador->save();
         return response()->json([
             "status"=> "OK",
             "data"  => "Colaborador Registrado."
@@ -47,19 +47,19 @@ class ColaboradorController extends Controller
      */
     public function show($id)
     {
-        $Colaborador=Colaborador::where('id',$id)->first();
-        return response()->json($Colaborador);
+        $colaborador=Colaborador::where('id',$id)->first();
+        return response()->json($colaborador);
     }
         
     public function update(ColaboradorValidate $request, $id)
     {
-        $Colaborador=Colaborador::where('id',$id)->first();
-        $Colaborador->documento=$request->documento;
-        $Colaborador->nombre_colaborador=$request->nombre_colaborador;
-        $Colaborador->apellido_colaborador=$request->apellido_colaborador;
-        $Colaborador->telefono=$request->telefono;
-        $Colaborador->mail=$request->mail;
-        $Colaborador->save();
+        $colaborador=Colaborador::where('id',$id)->first();
+        $colaborador->documento=$request->documento;
+        $colaborador->nombre_colaborador=$request->nombre_colaborador;
+        $colaborador->apellido_colaborador=$request->apellido_colaborador;
+        $colaborador->telefono=$request->telefono;
+        $colaborador->mail=$request->mail;
+        $colaborador->save();
         return response()->json([
             "status"=> "OK",
             "data"  => "Colaborador Actualizado."

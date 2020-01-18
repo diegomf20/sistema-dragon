@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ProveedorValidate extends FormRequest
+class ObraValidate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +27,8 @@ class ProveedorValidate extends FormRequest
     public function rules()
     {
         return [
-            'documento' => 'required|max:11',
-            'razon_social' => 'required|max:70',
-            'mail' => 'max:30'
+            'descripcion' => 'required|max:100',
+            'fecha_inicio' => 'required',
         ];
     }
     

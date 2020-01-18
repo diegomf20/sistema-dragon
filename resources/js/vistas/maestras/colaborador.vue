@@ -4,28 +4,33 @@
             <div class="col-sm-4">
                 <div class="card">
                     <div class="card-header">
-                        <h6 class="text-primary mb-0 font-weight-bold">Nuevo Proveedor</h6>
+                        <h6 class="text-primary mb-0 font-weight-bold">Nuevo Colaborador</h6>
                     </div>
                     <div class="card-body">
                         <form action="" v-on:submit.prevent="grabarNuevo()" class="row">
                             <div class="col-lg-12 form-group">
-                                <label for="">RUC:</label>
-                                <input v-model="proveedor.documento" class="form-control" type="number">
+                                <label for="">DNI:</label>
+                                <input v-model="colaborador.documento" class="form-control" type="number">
                                 <strong>{{ errors.documento }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
-                                <label for="">Razon Social:</label>
-                                <input v-model="proveedor.razon_social" class="form-control" type="text">
-                                <strong>{{ errors.razon_social }}</strong>
+                                <label for="">Nombres:</label>
+                                <input v-model="colaborador.nombre_colaborador" class="form-control" type="text">
+                                <strong>{{ errors.nombre_colaborador }}</strong>
+                            </div>                            
+                            <div class="col-lg-12 form-group">
+                                <label for="">Apellidos:</label>
+                                <input v-model="colaborador.apellido_colaborador" class="form-control" type="text">
+                                <strong>{{ errors.apellido_colaborador }}</strong>
                             </div>                            
                             <div class="col-lg-12 form-group">
                                 <label for="">Mail:</label>
-                                <input v-model="proveedor.mail" class="form-control" type="text">
+                                <input v-model="colaborador.mail" class="form-control" type="text">
                                 <strong>{{ errors.mail }}</strong>
                             </div>                            
                             <div class="col-lg-12 form-group">
                                 <label for="">Telefono:</label>
-                                <input v-model="proveedor.telefono" class="form-control" type="text">
+                                <input v-model="colaborador.telefono" class="form-control" type="text">
                                 <strong>{{ errors.telefono }}</strong>
                             </div>                            
                             <div class="col-lg-12 text-center">
@@ -41,29 +46,29 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>RUC</th>
-                                    <th>Razón Social</th>
+                                    <th>DNI</th>
+                                    <th>Nombres</th>
                                     <th>Telefono</th>
                                     <th>Mail</th>
                                     <th>Editar</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="proveedor in table.data">
-                                    <td>{{proveedor.documento}}</td>
-                                    <td>{{proveedor.razon_social}}</td>
-                                    <td>{{proveedor.telefono}}</td>
-                                    <td>{{proveedor.mail}}</td>
+                                <tr v-for="colaborador in table.data">
+                                    <td>{{colaborador.documento}}</td>
+                                    <td>{{colaborador.nombre_colaborador+" "+colaborador.apellido_colaborador}}</td>
+                                    <td>{{colaborador.telefono}}</td>
+                                    <td>{{colaborador.mail}}</td>
                                     <td>
-                                        <button @click="abrirEditar(proveedor.id)" class="btn btn-sm btn-warning">
+                                        <button @click="abrirEditar(colaborador.id)" class="btn btn-sm btn-warning">
                                             <i class="fas fa-pen"></i>
                                         </button>
                                     </td>
                                     <!-- <td>
-                                        <button v-if="proveedor.estado=='0'" @click="actualizarEstado(proveedor.id)" class="btn-link-info">
+                                        <button v-if="colaborador.estado=='0'" @click="actualizarEstado(colaborador.id)" class="btn-link-info">
                                             <i class="material-icons">radio_button_checked</i>
                                         </button>
-                                        <button v-else @click="actualizarEstado(proveedor.id)" class="btn-link-gray">
+                                        <button v-else @click="actualizarEstado(colaborador.id)" class="btn-link-gray">
                                             <i class="material-icons">radio_button_unchecked</i>
                                         </button>
                                     </td> -->
@@ -91,7 +96,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h6 class="text-primary mb-0 font-weight-bold">Editar Proveedor</h6>
+                        <h6 class="text-primary mb-0 font-weight-bold">Editar colaborador</h6>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -99,20 +104,30 @@
                     <div class="modal-body">
                         <form action="" v-on:submit.prevent="grabarEditar()">
                             <div class="col-lg-12 form-group">
-                                <label for="">Razon Social:</label>
-                                <input v-model="proveedor_editar.razon_social" class="form-control" type="text">
-                                <strong>{{ errors_editar.razon_social }}</strong>
+                                <label for="">DNI:</label>
+                                <input v-model="colaborador_editar.documento" class="form-control" type="number">
+                                <strong>{{ errors_editar.documento }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Nombres:</label>
+                                <input v-model="colaborador_editar.nombre_colaborador" class="form-control" type="text">
+                                <strong>{{ errors_editar.nombre_colaborador }}</strong>
+                            </div>                            
+                            <div class="col-lg-12 form-group">
+                                <label for="">Apellidos:</label>
+                                <input v-model="colaborador_editar.apellido_colaborador" class="form-control" type="text">
+                                <strong>{{ errors_editar.apellido_colaborador }}</strong>
                             </div>                            
                             <div class="col-lg-12 form-group">
                                 <label for="">Mail:</label>
-                                <input v-model="proveedor_editar.mail" class="form-control" type="text">
+                                <input v-model="colaborador_editar.mail" class="form-control" type="text">
                                 <strong>{{ errors_editar.mail }}</strong>
                             </div>                            
                             <div class="col-lg-12 form-group">
                                 <label for="">Telefono:</label>
-                                <input v-model="proveedor_editar.telefono" class="form-control" type="text">
+                                <input v-model="colaborador_editar.telefono" class="form-control" type="text">
                                 <strong>{{ errors_editar.telefono }}</strong>
-                            </div>
+                            </div>                    
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
                             </div>
@@ -129,8 +144,8 @@ export default {
     data() {
         return {
             areas: [],
-            proveedor: this.iniproveedor(), //datos de logeo
-            proveedor_editar: this.iniproveedor(),
+            colaborador: this.inicolaborador(), //datos de logeo
+            colaborador_editar: this.inicolaborador(),
             errors: {}, //datos de errores
             errors_editar: {}, //datos de errores
             //Datos de Tabla:
@@ -145,25 +160,27 @@ export default {
         this.listar();
     },
     methods: {
-        iniproveedor(){
+        inicolaborador(){
             this.errors_editar={};
             this.errors={};
             return {
-                nombre_insumpo: null,
-                punto_reorden: null,
+                nombre_colaborador: null,
+                apellido_colaborador: null,
+                documento: null,
+                telefono: null,
+                mail: null,
                 id: null,
-                codigo: null,
             }
         },
         listar(n=this.selectPage){
             this.selectPage=n;
-            axios.get(url_base+'/proveedor?page='+n)
+            axios.get(url_base+'/colaborador?page='+n)
             .then(response => {
                 this.table = response.data;
             })
         },
         grabarNuevo(){
-            axios.post(url_base+'/proveedor',this.proveedor)
+            axios.post(url_base+'/colaborador',this.colaborador)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
@@ -171,8 +188,8 @@ export default {
                         this.errors=respuesta.data;
                         break;
                     case "OK":
-                        this.proveedor=this.iniproveedor();
-                        swal("", "proveedor Registrado", "success");
+                        this.colaborador=this.inicolaborador();
+                        swal("", "colaborador Registrado", "success");
                         this.listar();
                         break;
                     default:
@@ -181,7 +198,7 @@ export default {
             });
         },
         actualizarEstado(id){
-            axios.post(url_base+'/proveedor/'+id+'/estado')
+            axios.post(url_base+'/colaborador/'+id+'/estado')
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
@@ -195,7 +212,7 @@ export default {
             });
         },
         grabarEditar(){
-            axios.post(url_base+'/proveedor/'+this.proveedor_editar.id+'?_method=PUT',this.proveedor_editar)
+            axios.post(url_base+'/colaborador/'+this.colaborador_editar.id+'?_method=PUT',this.colaborador_editar)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
@@ -203,9 +220,9 @@ export default {
                         this.errors_editar=respuesta.data;
                         break;
                     case "OK":
-                        this.proveedor_editar=this.iniproveedor();
+                        this.colaborador_editar=this.inicolaborador();
                         this.listar();
-                        swal("", "proveedor Actualizado", "success");
+                        swal("", "colaborador Actualizado", "success");
                         $('#modal-editar').modal('hide');
                         break;
                     default:
@@ -214,9 +231,9 @@ export default {
             });
         },
         abrirEditar(id){
-            axios.get(url_base+'/proveedor/'+id)
+            axios.get(url_base+'/colaborador/'+id)
             .then(response => {
-                this.proveedor_editar = response.data;
+                this.colaborador_editar = response.data;
             })
             $('#modal-editar').modal();
         }

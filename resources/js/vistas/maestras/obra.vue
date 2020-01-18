@@ -1,33 +1,23 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-5">
                 <div class="card">
                     <div class="card-header">
-                        <h6 class="text-primary mb-0 font-weight-bold">Nuevo Proveedor</h6>
+                        <h6 class="text-primary mb-0 font-weight-bold">Nuevo Obra</h6>
                     </div>
                     <div class="card-body">
                         <form action="" v-on:submit.prevent="grabarNuevo()" class="row">
                             <div class="col-lg-12 form-group">
-                                <label for="">RUC:</label>
-                                <input v-model="proveedor.documento" class="form-control" type="number">
-                                <strong>{{ errors.documento }}</strong>
+                                <label for="">Descripcion:</label>
+                                <input v-model="obra.descripcion" class="form-control" type="text">
+                                <strong>{{ errors.descripcion }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
-                                <label for="">Razon Social:</label>
-                                <input v-model="proveedor.razon_social" class="form-control" type="text">
-                                <strong>{{ errors.razon_social }}</strong>
-                            </div>                            
-                            <div class="col-lg-12 form-group">
-                                <label for="">Mail:</label>
-                                <input v-model="proveedor.mail" class="form-control" type="text">
-                                <strong>{{ errors.mail }}</strong>
-                            </div>                            
-                            <div class="col-lg-12 form-group">
-                                <label for="">Telefono:</label>
-                                <input v-model="proveedor.telefono" class="form-control" type="text">
-                                <strong>{{ errors.telefono }}</strong>
-                            </div>                            
+                                <label for="">Fecha Inicio:</label>
+                                <input v-model="obra.fecha_inicio" class="form-control" type="date">
+                                <strong>{{ errors.fecha_inicio }}</strong>
+                            </div>
                             <div class="col-lg-12 text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
                             </div>
@@ -35,35 +25,31 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-7">
                 <div class="card">
                     <div class="card-body">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>RUC</th>
-                                    <th>Razón Social</th>
-                                    <th>Telefono</th>
-                                    <th>Mail</th>
+                                    <th>Código</th>
+                                    <th>Descripcion</th>
                                     <th>Editar</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="proveedor in table.data">
-                                    <td>{{proveedor.documento}}</td>
-                                    <td>{{proveedor.razon_social}}</td>
-                                    <td>{{proveedor.telefono}}</td>
-                                    <td>{{proveedor.mail}}</td>
+                                <tr v-for="obra in table.data">
+                                    <td>{{obra.fecha_inicio}}</td>
+                                    <td>{{obra.descripcion}}</td>
                                     <td>
-                                        <button @click="abrirEditar(proveedor.id)" class="btn btn-sm btn-warning">
+                                        <button @click="abrirEditar(obra.id)" class="btn btn-sm btn-warning">
                                             <i class="fas fa-pen"></i>
                                         </button>
                                     </td>
                                     <!-- <td>
-                                        <button v-if="proveedor.estado=='0'" @click="actualizarEstado(proveedor.id)" class="btn-link-info">
+                                        <button v-if="obra.estado=='0'" @click="actualizarEstado(obra.id)" class="btn-link-info">
                                             <i class="material-icons">radio_button_checked</i>
                                         </button>
-                                        <button v-else @click="actualizarEstado(proveedor.id)" class="btn-link-gray">
+                                        <button v-else @click="actualizarEstado(obra.id)" class="btn-link-gray">
                                             <i class="material-icons">radio_button_unchecked</i>
                                         </button>
                                     </td> -->
@@ -91,7 +77,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h6 class="text-primary mb-0 font-weight-bold">Editar Proveedor</h6>
+                        <h6 class="text-primary mb-0 font-weight-bold">Editar Obra</h6>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -99,19 +85,14 @@
                     <div class="modal-body">
                         <form action="" v-on:submit.prevent="grabarEditar()">
                             <div class="col-lg-12 form-group">
-                                <label for="">Razon Social:</label>
-                                <input v-model="proveedor_editar.razon_social" class="form-control" type="text">
-                                <strong>{{ errors_editar.razon_social }}</strong>
-                            </div>                            
+                                <label for="">Descripcion:</label>
+                                <input v-model="obra.descripcion" class="form-control" type="text">
+                                <strong>{{ errors.descripcion }}</strong>
+                            </div>
                             <div class="col-lg-12 form-group">
-                                <label for="">Mail:</label>
-                                <input v-model="proveedor_editar.mail" class="form-control" type="text">
-                                <strong>{{ errors_editar.mail }}</strong>
-                            </div>                            
-                            <div class="col-lg-12 form-group">
-                                <label for="">Telefono:</label>
-                                <input v-model="proveedor_editar.telefono" class="form-control" type="text">
-                                <strong>{{ errors_editar.telefono }}</strong>
+                                <label for="">Fecha Inicio:</label>
+                                <input v-model="obra.fecha_inicio" class="form-control" type="date">
+                                <strong>{{ errors.fecha_inicio }}</strong>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
@@ -129,8 +110,8 @@ export default {
     data() {
         return {
             areas: [],
-            proveedor: this.iniproveedor(), //datos de logeo
-            proveedor_editar: this.iniproveedor(),
+            obra: this.iniobra(), //datos de logeo
+            obra_editar: this.iniobra(),
             errors: {}, //datos de errores
             errors_editar: {}, //datos de errores
             //Datos de Tabla:
@@ -138,6 +119,7 @@ export default {
                 data:[]
             },
             selectPage: 1,
+
             url: null
         }
     },
@@ -145,25 +127,23 @@ export default {
         this.listar();
     },
     methods: {
-        iniproveedor(){
+        iniobra(){
             this.errors_editar={};
             this.errors={};
             return {
-                nombre_insumpo: null,
-                punto_reorden: null,
-                id: null,
-                codigo: null,
+                descripcion: null,
+                fecha_inicio: null
             }
         },
         listar(n=this.selectPage){
             this.selectPage=n;
-            axios.get(url_base+'/proveedor?page='+n)
+            axios.get(url_base+'/obra?page='+n)
             .then(response => {
                 this.table = response.data;
             })
         },
         grabarNuevo(){
-            axios.post(url_base+'/proveedor',this.proveedor)
+            axios.post(url_base+'/obra',this.obra)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
@@ -171,8 +151,8 @@ export default {
                         this.errors=respuesta.data;
                         break;
                     case "OK":
-                        this.proveedor=this.iniproveedor();
-                        swal("", "proveedor Registrado", "success");
+                        this.obra=this.iniobra();
+                        swal("", "obra Registrado", "success");
                         this.listar();
                         break;
                     default:
@@ -181,7 +161,7 @@ export default {
             });
         },
         actualizarEstado(id){
-            axios.post(url_base+'/proveedor/'+id+'/estado')
+            axios.post(url_base+'/obra/'+id+'/estado')
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
@@ -195,7 +175,7 @@ export default {
             });
         },
         grabarEditar(){
-            axios.post(url_base+'/proveedor/'+this.proveedor_editar.id+'?_method=PUT',this.proveedor_editar)
+            axios.post(url_base+'/obra/'+this.obra_editar.id+'?_method=PUT',this.obra_editar)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
@@ -203,9 +183,9 @@ export default {
                         this.errors_editar=respuesta.data;
                         break;
                     case "OK":
-                        this.proveedor_editar=this.iniproveedor();
+                        this.obra_editar=this.iniobra();
                         this.listar();
-                        swal("", "proveedor Actualizado", "success");
+                        swal("", "obra Actualizado", "success");
                         $('#modal-editar').modal('hide');
                         break;
                     default:
@@ -214,9 +194,9 @@ export default {
             });
         },
         abrirEditar(id){
-            axios.get(url_base+'/proveedor/'+id)
+            axios.get(url_base+'/obra/'+id)
             .then(response => {
-                this.proveedor_editar = response.data;
+                this.obra_editar = response.data;
             })
             $('#modal-editar').modal();
         }

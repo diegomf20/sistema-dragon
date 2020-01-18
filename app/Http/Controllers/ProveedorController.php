@@ -52,12 +52,11 @@ class ProveedorController extends Controller
         
     public function update(ProveedorValidate $request, $id)
     {
-        $Proveedor=Proveedor::where('id',$id)->first();
-        $proveedor->documento=$request->documento;
+        $proveedor=Proveedor::where('id',$id)->first();
         $proveedor->razon_social=$request->razon_social;
         $proveedor->mail=$request->mail;
         $proveedor->telefono=$request->telefono;
-        $Proveedor->save();
+        $proveedor->save();
         return response()->json([
             "status"=> "OK",
             "data"  => "Proveedor Actualizado."

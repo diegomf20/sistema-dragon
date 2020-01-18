@@ -18,9 +18,9 @@ class ObraController extends Controller
     {
 
         if ($request->all==true) {
-            $obras=Obra::all();
+            $obras=Obra::orderBy('id','DESC')->get();
         }else{
-            $obras=Obra::paginate(8);
+            $obras=Obra::orderBy('id','DESC')->paginate(10);
         }
         return response()->json($obras);
     }
@@ -30,12 +30,10 @@ class ObraController extends Controller
      */
     public function store(ObraValidate $request)
     {
-        $Obra=new Obra();
-        $Obra->documento=$request->documento;
-        $Obra->razon_social=$request->razon_social;
-        $Obra->mail=$request->mail;
-        $Obra->telefono=$request->telefono;
-        $Obra->save();
+        $obra=new Obra();
+        $obra->descripcion=$request->descripcion;
+        $obra->fecha_inicio=$request->fecha_inicio;
+        $obra->save();
         return response()->json([
             "status"=> "OK",
             "data"  => "Obra Registrado."
@@ -47,18 +45,16 @@ class ObraController extends Controller
      */
     public function show($id)
     {
-        $Obra=Obra::where('id',$id)->first();
-        return response()->json($Obra);
+        $obra=Obra::where('id',$id)->first();
+        return response()->json($obra);
     }
         
     public function update(ObraValidate $request, $id)
     {
-        $Obra=Obra::where('id',$id)->first();
-        $Obra->documento=$request->documento;
-        $Obra->razon_social=$request->razon_social;
-        $Obra->mail=$request->mail;
-        $Obra->telefono=$request->telefono;
-        $Obra->save();
+        $obra=Obra::where('id',$id)->first();
+        $obra->descripcion=$request->descripcion;
+        $obra->fecha_inicio=$request->fecha_inicio;
+        $obra->save();
         return response()->json([
             "status"=> "OK",
             "data"  => "Obra Actualizado."

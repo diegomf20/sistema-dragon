@@ -2,7 +2,11 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import swal from 'sweetalert';
+import vSelect from 'vue-select'
 
+Vue.component('v-select', vSelect)
+
+window.moment = require('moment');
 
 var store = require('./global/store.js').default;
 

@@ -16,9 +16,10 @@ class CreateMovimientoTable extends Migration
         Schema::create('movimiento', function (Blueprint $table) {
             $table->increments('id');
             $table->string('documento',15);
+            $table->string('tipo_movimiento',3);
             $table->unsignedInteger('entidad_id');
-            $table->double('total',12,2);
-            $table->timestamps();
+            $table->unsignedInteger('obra_id')->nullable();
+            $table->date('fecha_ingreso');
         });
     }
 

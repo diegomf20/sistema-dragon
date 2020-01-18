@@ -3,41 +3,28 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header card-header-info">
-                    SALIDA X CONSUMO
+                    INGRESO X COMPRA
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label class="">Colaborador</label>
-                                <v-select :reduce="item => item.id" :options="colaboradores" label="nombre_colaborador" v-model="consumo.colaborador_id">
-                                    <template slot="option" slot-scope="option">
-                                        <div class="d-center">
-                                            {{ option.nombre_colaborador +" " +
-                                            option.apellido_colaborador}}
-                                        </div>
-                                    </template>
-                                    <template slot="selected-option" slot-scope="option">
-                                        <div class="selected d-center">
-                                            {{ option.nombre_colaborador +" " +
-                                            option.apellido_colaborador}}   
-                                        </div>
-                                    </template>
-                                </v-select>
+                                <label class="">Documento (F/B):</label>
+                                <input v-model="compra.documento" type="text" class="form-control">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="form-group">
-                                <label class="">Obra</label>
-                                <v-select :reduce="item => item.id" :options="obras" label="nombre_colaborador" v-model="consumo.obra_id">
+                                <label class="">Proveedor:</label>
+                                <v-select :reduce="item => item.id" :options="proveedores" label="razon" v-model="compra.proveedor_id">
                                     <template slot="option" slot-scope="option">
                                         <div class="d-center">
-                                            {{ option.descripcion }}
+                                            {{ option.documento+" - "+option.razon_social }}
                                         </div>
                                     </template>
                                     <template slot="selected-option" slot-scope="option">
                                         <div class="selected d-center">
-                                            {{ option.descripcion }}
+                                            {{ option.documento+" - "+option.razon_social }}   
                                         </div>
                                     </template>
                                 </v-select>
@@ -45,19 +32,19 @@
                         </div>
                     </div>
             
-                    <h5 class="card-title">Items de Consumo</h5>
+                    <h5 class="card-title">Items de compra</h5>
                     <div class="row">
                         <div class="col-sm-8 form-group">
                             <label>Seleccionar Insumo</label>
-                            <v-select :options="insumos" label="nombre_colaborador" v-model="itemMomentaneo.insumo" :filterable="false"  @search="onSearch">
+                            <v-select :options="insumos" label="razon" v-model="itemMomentaneo.insumo" :filterable="false"  @search="onSearch">
                                 <template slot="option" slot-scope="option">
                                     <div class="d-center">
-                                        {{ option.nombre_insumo+" - ("+option.stock+" UNI)" }}
+                                        {{ option.nombre_insumo }}
                                     </div>
                                 </template>
                                 <template slot="selected-option" slot-scope="option">
                                     <div class="selected d-center">
-                                        {{ option.nombre_insumo+" - ("+option.stock+" UNI)" }}
+                                        {{ option.nombre_insumo }}
                                     </div>
                                 </template>
                             </v-select>
@@ -65,6 +52,10 @@
                         <div class="col-sm-2 form-group">
                             <label for="">Cantidad</label>
                             <input v-model="itemMomentaneo.cantidad" type="number" class="form-control" min="1">
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label for="">Precio</label>
+                            <input v-model="itemMomentaneo.precio" type="number" class="form-control" min="1">
                         </div>
                         <div class="col-sm-2 form-group">
                             <button @click="agregarItem()" class="btn btn-info mt-4">Agregar</button>
@@ -76,14 +67,16 @@
                                 <th>Codigo</th>
                                 <th>Nombre</th>
                                 <th>Cantidad</th>
+                                <th>P.U.</th>
                                 <th>Quitar</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item,index) in consumo.items">
+                            <tr v-for="(item,index) in compra.items">
                                 <td>{{ item.codigo}}</td>
                                 <td>{{ item.nombre}}</td>
                                 <td>{{ item.cantidad }}</td>
+                                <td>{{ item.precio }}</td>
                                 <!-- <td>
                                     <input type="text" v-model="item.cantidad" class="form-control text-center cantidad">
                                 </td> -->
@@ -93,8 +86,8 @@
                                     </button>
                                 </td>
                             </tr>
-                            <tr v-if="consumo.items.length==0">
-                                <td class="text-center" colspan="5">Sin Items de consumo</td>
+                            <tr v-if="compra.items.length==0">
+                                <td class="text-center" colspan="5">Sin Items de compra</td>
                             </tr>
                         </tbody>
                     </table>
@@ -113,19 +106,20 @@ export default {
     data() {
         return {
             // a: null,
-            colaboradores:[],
+            proveedores:[],
             insumos: [],
             obras: [],
             itemMomentaneo:{
                 insumo: null,
                 cantidad: 1,
+                precio: 0.00
             },
-            consumo: this.initConsumo()
+            compra: this.initcompra()
         }
     },
     mounted() {
         this.listarObras();
-        this.listarColaborador();
+        this.listarProveedor();
     },
     methods: {
          onSearch(search, loading) {
@@ -143,17 +137,17 @@ export default {
                 loading(false);
             }
         }, 350),
-        initConsumo(){
+        initcompra(){
             return {
-                colaborador_id: null,
-                obra_id:null,
+                proveedor_id: null,
+                documento: null,
                 items: [],
             };
         },
-        listarColaborador(){
-            axios.get(url_base+'/colaborador?all=true')
+        listarProveedor(){
+            axios.get(url_base+'/proveedor?all=true')
             .then(response=>{
-                this.colaboradores=response.data;
+                this.proveedores=response.data;
             });
         },
         listarObras(){
@@ -169,25 +163,20 @@ export default {
             });
         },
         agregarItem(){
-            console.log(this.itemMomentaneo);
-
-            if (this.itemMomentaneo.cantidad<=this.itemMomentaneo.insumo.stock) {
-                this.consumo.items.push({
+                this.compra.items.push({
                     insumo_id: this.itemMomentaneo.insumo.id,
                     codigo: this.itemMomentaneo.insumo.codigo,
                     nombre: this.itemMomentaneo.insumo.nombre_insumo,
                     cantidad: this.itemMomentaneo.cantidad,
+                    precio: Number(this.itemMomentaneo.precio)
                 });
-                this.itemMomentaneo={insumo: null,cantidad: 1};
-            }else{
-                swal({title: "Stock insuficiente",icon: "info",timer: "2000"});
-            }
+                this.itemMomentaneo={insumo: null,cantidad: 1, precio: 0.00};
         },
         eliminarItem(index){
-            this.consumo.items.splice(index, 1);
+            this.compra.items.splice(index, 1);
         },
         guardar(){
-            axios.post(url_base+'/consumo',this.consumo)
+            axios.post(url_base+'/compra',this.compra)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
@@ -195,7 +184,7 @@ export default {
                         this.errors=respuesta.data;
                         break;
                     case "OK":
-                        this.consumo=this.initConsumo();
+                        this.compra=this.initcompra();
                         swal("", respuesta.data, "success");
                         break;
                     default:

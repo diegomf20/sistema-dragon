@@ -16,6 +16,7 @@
         "jquery": "^3.2",
         "laravel-mix": "^4.0.7",
         "lodash": "^4.17.13",
+        "moment": "^2.24.0",
         "popper.js": "^1.12",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
@@ -23,6 +24,7 @@
         "sweetalert": "^2.1.2",
         "vue": "^2.5.17",
         "vue-router": "^3.1.5",
+        "vue-select": "^3.4.0",
         "vue-template-compiler": "^2.6.11",
         "vuex": "^3.1.2"
     }
