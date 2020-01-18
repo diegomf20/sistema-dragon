@@ -60,15 +60,20 @@ class CompraController extends Controller
                     ->orderBy('id','DESC')
                     ->orderBy('fecha','DESC')
                     ->first();   
-
+                 $anterior_stock=0;
+                 $anterior_total=0;   
+                if($anterior!=null){
+                    $anterior_stock=$anterior->stock;
+                    $anterior_total=$anterior->total;
+                }
                 $kardex=new Kardex();
                 $kardex->fecha=Carbon::now();
                 $kardex->tipo="Ingreso";
                 $kardex->producto_id=$insumo_id;
                 $kardex->cantidad=$cantidad;
-                $kardex->stock=$anterior->stock+$cantidad;
+                $kardex->stock=$anterior_stock+$cantidad;
                 $kardex->precio=$precio;
-                $kardex->total=$anterior->total+($cantidad*$precio);
+                $kardex->total=$anterior_total+($cantidad*$precio);
                 $kardex->documento_id=$movimiento->id;
                 $kardex->save();
             }

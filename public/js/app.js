@@ -57985,7 +57985,7 @@ var render = function() {
                 "tbody",
                 _vm._l(_vm.table.data, function(insumo) {
                   return _c("tr", [
-                    _c("td", [_vm._v(_vm._s(insumo.id))]),
+                    _c("td", [_vm._v(_vm._s(insumo.codigo))]),
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(insumo.nombre_insumo))]),
                     _vm._v(" "),
@@ -77198,7 +77198,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\sistema-dragon\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\sistema-dragon\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })

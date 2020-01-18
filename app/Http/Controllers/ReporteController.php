@@ -16,7 +16,7 @@ class ReporteController extends Controller
             'FROM insumo LEFT JOIN ('.'
                 SELECT kardex.producto_id, kardex.stock '.
                     'FROM kardex WHERE kardex.id=('.
-                        "SELECT k.id FROM kardex k WHERE k.producto_id=kardex.producto_id AND k.fecha<'".$fecha."' ORDER BY k.id DESC , k.fecha DESC LIMIT 1".
+                        "SELECT k.id FROM kardex k WHERE k.producto_id=kardex.producto_id AND k.fecha<='".$fecha."' ORDER BY k.id DESC , k.fecha DESC LIMIT 1".
                     ')'.
             ') kar ON insumo.id=kar.producto_id '."WHERE insumo.nombre_insumo like '%$buscar%'"));
         return response()->json($datos);

@@ -35,9 +35,9 @@ class ConsumoController extends Controller
     {
         DB::beginTransaction();
         try {
-            $movimiento_count=Movimiento::select(DB::raw('count(id) contar'))
+            $movimiento_count=(Movimiento::select(DB::raw('count(id) contar'))
                                             ->where('tipo_movimiento','SXC')
-                                            ->first()->contar;
+                                            ->first()->contar)+1;
             $movimiento=new Movimiento();
             $movimiento->documento="SXC".str_pad($movimiento_count, 11, "0", STR_PAD_LEFT);
             $movimiento->tipo_movimiento="SXC";

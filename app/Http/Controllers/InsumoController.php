@@ -30,7 +30,7 @@ class InsumoController extends Controller
      */
     public function store(InsumoValidate $request)
     {
-        $insumo_contar=Insumo::select(DB::raw('count(id) contar'))->first()->contar;
+        $insumo_contar=(Insumo::select(DB::raw('count(id) contar'))->first()->contar)+1;
         $insumo=new Insumo();
         $insumo->codigo=str_pad($insumo_contar, 4, "0", STR_PAD_LEFT);
         $insumo->nombre_insumo=$request->nombre_insumo;

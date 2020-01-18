@@ -39,7 +39,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="insumo in table.data">
-                                    <td>{{insumo.id}}</td>
+                                    <td>{{insumo.codigo}}</td>
                                     <td>{{insumo.nombre_insumo}}</td>
                                     <td>{{insumo.punto_reorden}}</td>
                                     <td>
