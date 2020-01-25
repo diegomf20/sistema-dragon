@@ -6,17 +6,22 @@ use Illuminate\Http\Request;
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
 */
+Route::post('retorno','RetornoController@store');
+
 Route::resource('colaborador', 'ColaboradorController');
 Route::resource('proveedor', 'ProveedorController');
+Route::resource('unidad', 'UnidadController');
 Route::resource('insumo', 'InsumoController');
+Route::post('obra/{id}/finalizar','ObraController@finalizar');
 Route::resource('obra', 'ObraController');
 Route::resource('consumo', 'ConsumoController');
+Route::get('consumo', 'MovimientoController@getConsumo');
 Route::resource('compra', 'CompraController');
 
+
 Route::get('stock','ReporteController@stock');
+Route::get('kardex_unitario','ReporteController@kardex_unitario');
+Route::get('reorden','ReporteController@reorden');
+
+Route::get('exports/kardex','ExportsController@kardex');

@@ -24,23 +24,25 @@
                                         </div>
                                     </template>
                                 </v-select>
+                                <strong>{{ errors.colaborador_id }}</strong>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="">Obra</label>
-                                <v-select :reduce="item => item.id" :options="obras" label="nombre_colaborador" v-model="consumo.obra_id">
+                                <v-select :reduce="item => item.id" :options="obras" label="titulo" v-model="consumo.obra_id">
                                     <template slot="option" slot-scope="option">
                                         <div class="d-center">
-                                            {{ option.descripcion }}
+                                            {{ option.titulo }}
                                         </div>
                                     </template>
                                     <template slot="selected-option" slot-scope="option">
                                         <div class="selected d-center">
-                                            {{ option.descripcion }}
+                                            {{ option.titulo }}
                                         </div>
                                     </template>
                                 </v-select>
+                                <strong>{{ errors.obra_id }}</strong>
                             </div>
                         </div>
                     </div>
@@ -49,7 +51,7 @@
                     <div class="row">
                         <div class="col-sm-8 form-group">
                             <label>Seleccionar Insumo</label>
-                            <v-select :options="insumos" label="nombre_colaborador" v-model="itemMomentaneo.insumo" :filterable="false"  @search="onSearch">
+                            <v-select :options="insumos" v-model="itemMomentaneo.insumo" :filterable="false"  @search="onSearch">
                                 <template slot="option" slot-scope="option">
                                     <div class="d-center">
                                         {{ option.nombre_insumo+" - ("+option.stock+" UNI)" }}
@@ -120,7 +122,8 @@ export default {
                 insumo: null,
                 cantidad: 1,
             },
-            consumo: this.initConsumo()
+            consumo: this.initConsumo(),
+            errors: {}, //datos de errores
         }
     },
     mounted() {
@@ -187,6 +190,7 @@ export default {
             this.consumo.items.splice(index, 1);
         },
         guardar(){
+            this.errors={};
             axios.post(url_base+'/consumo',this.consumo)
             .then(response => {
                 var respuesta=response.data;
@@ -198,7 +202,13 @@ export default {
                         this.consumo=this.initConsumo();
                         swal("", respuesta.data, "success");
                         break;
+                    // case "WARNING":
+                    //     console.log(respuesta);
+                    //     // this.consumo=this.initConsumo();
+                    //     // swal("", respuesta.data, "success");
+                    //     break;
                     default:
+                        swal("", respuesta.data, respuesta.status.toLowerCase());
                         break;
                 }
             });

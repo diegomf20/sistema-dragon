@@ -17,7 +17,7 @@ class CreateMovimientoTable extends Migration
             $table->increments('id');
             $table->string('documento',15);
             $table->string('tipo_movimiento',3);
-            $table->unsignedInteger('entidad_id');
+            $table->unsignedInteger('entidad_id')->nullable();
             $table->unsignedInteger('obra_id')->nullable();
             $table->date('fecha_ingreso');
         });

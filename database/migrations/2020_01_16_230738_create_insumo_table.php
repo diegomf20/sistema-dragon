@@ -17,7 +17,8 @@ class CreateInsumoTable extends Migration
             $table->increments('id');
             $table->string('codigo',4)->nullable();
             $table->string('nombre_insumo',50);
-            $table->integer('punto_reorden')->nullabale();
+            $table->integer('punto_reorden')->nullable();
+            $table->unsignedInteger('unidad_id')->nullable();
         });
     }
 

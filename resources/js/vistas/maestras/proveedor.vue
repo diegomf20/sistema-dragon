@@ -38,38 +38,40 @@
             <div class="col-sm-8">
                 <div class="card">
                     <div class="card-body">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>RUC</th>
-                                    <th>Razón Social</th>
-                                    <th>Telefono</th>
-                                    <th>Mail</th>
-                                    <th>Editar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="proveedor in table.data">
-                                    <td>{{proveedor.documento}}</td>
-                                    <td>{{proveedor.razon_social}}</td>
-                                    <td>{{proveedor.telefono}}</td>
-                                    <td>{{proveedor.mail}}</td>
-                                    <td>
-                                        <button @click="abrirEditar(proveedor.id)" class="btn btn-sm btn-warning">
-                                            <i class="fas fa-pen"></i>
-                                        </button>
-                                    </td>
-                                    <!-- <td>
-                                        <button v-if="proveedor.estado=='0'" @click="actualizarEstado(proveedor.id)" class="btn-link-info">
-                                            <i class="material-icons">radio_button_checked</i>
-                                        </button>
-                                        <button v-else @click="actualizarEstado(proveedor.id)" class="btn-link-gray">
-                                            <i class="material-icons">radio_button_unchecked</i>
-                                        </button>
-                                    </td> -->
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>RUC</th>
+                                        <th>Razón Social</th>
+                                        <th>Telefono</th>
+                                        <th>Mail</th>
+                                        <th>Editar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="proveedor in table.data">
+                                        <td>{{proveedor.documento}}</td>
+                                        <td>{{proveedor.razon_social}}</td>
+                                        <td>{{proveedor.telefono}}</td>
+                                        <td>{{proveedor.mail}}</td>
+                                        <td>
+                                            <button @click="abrirEditar(proveedor.id)" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                        </td>
+                                        <!-- <td>
+                                            <button v-if="proveedor.estado=='0'" @click="actualizarEstado(proveedor.id)" class="btn-link-info">
+                                                <i class="material-icons">radio_button_checked</i>
+                                            </button>
+                                            <button v-else @click="actualizarEstado(proveedor.id)" class="btn-link-gray">
+                                                <i class="material-icons">radio_button_unchecked</i>
+                                            </button>
+                                        </td> -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="row pagination">
                             <div class="col-9 text-left">
                                 <h6>Pagina {{ selectPage }} de {{ table.last_page}} (TOTAL: {{table.total}})</h6>

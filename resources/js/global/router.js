@@ -25,6 +25,10 @@ var routes =[
         component: require('../vistas/maestras/insumo.vue').default,
     },
     { 
+        path: '/unidad', 
+        component: require('../vistas/maestras/unidad.vue').default,
+    },
+    { 
         path: '/proveedor', 
         component: require('../vistas/maestras/proveedor.vue').default,
     },
@@ -37,12 +41,24 @@ var routes =[
         component: require('../vistas/operacion/consumo.vue').default,
     },
     { 
+        path: '/retorno', 
+        component: require('../vistas/operacion/retorno.vue').default,
+    },
+    { 
         path: '/compra', 
         component: require('../vistas/operacion/compra.vue').default,
     },
     { 
         path: '/stock', 
         component: require('../vistas/reportes/stock.vue').default,
+    },
+    { 
+        path: '/reorden', 
+        component: require('../vistas/reportes/reorden.vue').default,
+    },
+    { 
+        path: '/kardex', 
+        component: require('../vistas/reportes/kardex.vue').default,
     },
 ];
 

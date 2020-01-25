@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header card-header-info">
-                    STOCK POR INSUMO
+                    INSUMO CON REORDEN
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -21,7 +21,6 @@
                                 <th>CODIGO</th>
                                 <th>NOMBRE</th>
                                 <th>STOCK</th>
-                                <th>TOTAL</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,7 +28,6 @@
                                 <td>{{ item.codigo }}</td>
                                 <td>{{ item.nombre_insumo }}</td>
                                 <td>{{ item.stock }}</td>
-                                <td>{{ (item.total!=null) ? item.total.toFixed(2) : 0.00 }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -57,7 +55,7 @@ export default {
     },
     methods: {
         listarStocks(){
-            axios.get(url_base+'/stock?fecha='+this.fecha)
+            axios.get(url_base+'/reorden?fecha='+this.fecha)
             .then(response=>{
                 this.lista=response.data;
             });

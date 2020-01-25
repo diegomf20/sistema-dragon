@@ -19,6 +19,7 @@ class CreateLoteTable extends Migration
             $table->double('precio',8,2);      //  precio Lote
             $table->integer('cantidad');       //  es lo que se a movido sea ingreso o egreso
             $table->integer('stock');          //  cantidad actual
+            $table->unsignedInteger('movimiento_id');
         });
     }
 

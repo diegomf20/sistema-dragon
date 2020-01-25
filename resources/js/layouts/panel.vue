@@ -23,6 +23,7 @@
               <div class="bg-white py-2 collapse-inner rounded">
                   <h6 class="collapse-header">Tablas de Almacen:</h6>
                   <router-link to="insumo" class="collapse-item" >Insumos</router-link>
+                  <router-link to="unidad" class="collapse-item" >unidad</router-link>
                   <router-link to="proveedor" class="collapse-item" >Proveedores</router-link>
                   <router-link to="obra" class="collapse-item" >Obras</router-link>
                   <router-link to="colaborador" class="collapse-item" >Colaboradores</router-link>
@@ -39,6 +40,7 @@
                   <h6 class="collapse-header">Tablas de Almacen:</h6>
                   <router-link to="compra" class="collapse-item" >Ingreso X Compra</router-link>
                   <router-link to="consumo" class="collapse-item" >Salida X Consumo</router-link>
+                  <router-link to="retorno" class="collapse-item" >Ingreso X Retorno</router-link>
               </div>
             </div>
           </li>
@@ -50,7 +52,8 @@
               <div class="bg-white py-2 collapse-inner rounded">
                   <h6 class="collapse-header">Reportes de Almacen:</h6>
                   <router-link to="stock" class="collapse-item" >Stock</router-link>
-                  <router-link to="consumo" class="collapse-item" >Salida X Consumo</router-link>
+                  <router-link to="kardex" class="collapse-item" >Kardex</router-link>
+                  <router-link to="reorden" class="collapse-item" >Reorden</router-link>
               </div>
             </div>
           </li>

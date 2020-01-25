@@ -23,6 +23,7 @@ class CreateKardexTable extends Migration
             $table->integer('stock');          //  cantidad actual
             $table->double('precio',8,2);      //  precio Lote
             $table->double('total',12,2);
+            $table->unsignedInteger('lote_id')->nullable();
             $table->unsignedInteger('documento_id')->nullable();
         });
     }

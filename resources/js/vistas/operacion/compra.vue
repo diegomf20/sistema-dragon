@@ -11,6 +11,7 @@
                             <div class="form-group">
                                 <label class="">Documento (F/B):</label>
                                 <input v-model="compra.documento" type="text" class="form-control">
+                                <strong>{{ errors.documento }}</strong>
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -28,6 +29,7 @@
                                         </div>
                                     </template>
                                 </v-select>
+                                <strong>{{ errors.proveedor_id }}</strong>
                             </div>
                         </div>
                     </div>
@@ -114,7 +116,8 @@ export default {
                 cantidad: 1,
                 precio: 0.00
             },
-            compra: this.initcompra()
+            compra: this.initcompra(),
+            errors: {}
         }
     },
     mounted() {
@@ -188,6 +191,7 @@ export default {
                         swal("", respuesta.data, "success");
                         break;
                     default:
+                        swal("", respuesta.data, respuesta.status.toLowerCase());
                         break;
                 }
             });

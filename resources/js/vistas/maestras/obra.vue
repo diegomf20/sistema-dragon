@@ -9,14 +9,29 @@
                     <div class="card-body">
                         <form action="" v-on:submit.prevent="grabarNuevo()" class="row">
                             <div class="col-lg-12 form-group">
+                                <label for="">Titulo:</label>
+                                <input v-model="obra.titulo" class="form-control" type="text">
+                                <strong>{{ errors.titulo }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
                                 <label for="">Descripcion:</label>
-                                <input v-model="obra.descripcion" class="form-control" type="text">
+                                <textarea v-model="obra.descripcion" class="form-control" rows="2"></textarea>
                                 <strong>{{ errors.descripcion }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
                                 <label for="">Fecha Inicio:</label>
                                 <input v-model="obra.fecha_inicio" class="form-control" type="date">
                                 <strong>{{ errors.fecha_inicio }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Total:</label>
+                                <input v-model="obra.total" class="form-control" type="text">
+                                <strong>{{ errors.total }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Dirección:</label>
+                                <textarea v-model="obra.direccion" class="form-control" rows="4"></textarea>
+                                <strong>{{ errors.direccion }}</strong>
                             </div>
                             <div class="col-lg-12 text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
@@ -32,18 +47,27 @@
                             <thead>
                                 <tr>
                                     <th>Código</th>
-                                    <th>Descripcion</th>
+                                    <th>Título de Obra</th>
                                     <th>Editar</th>
+                                    <th>Finalizar</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="obra in table.data">
                                     <td>{{obra.fecha_inicio}}</td>
-                                    <td>{{obra.descripcion}}</td>
+                                    <td>{{obra.titulo}}</td>
                                     <td>
                                         <button @click="abrirEditar(obra.id)" class="btn btn-sm btn-warning">
                                             <i class="fas fa-pen"></i>
                                         </button>
+                                    </td>
+                                    <td>
+                                        <button v-if="obra.estado=='A'" @click="finalizar(obra.id)" class="btn btn-info">
+                                            <i class="fas fa-archive"></i>
+                                        </button> 
+                                        <button v-if="obra.estado=='I'" class="btn btn-secondary">
+                                            <i class="fas fa-archive"></i>
+                                        </button> 
                                     </td>
                                     <!-- <td>
                                         <button v-if="obra.estado=='0'" @click="actualizarEstado(obra.id)" class="btn-link-info">
@@ -85,14 +109,29 @@
                     <div class="modal-body">
                         <form action="" v-on:submit.prevent="grabarEditar()">
                             <div class="col-lg-12 form-group">
+                                <label for="">Titulo:</label>
+                                <input v-model="obra_editar.titulo" class="form-control" type="text">
+                                <strong>{{ errors_editar.titulo }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
                                 <label for="">Descripcion:</label>
-                                <input v-model="obra.descripcion" class="form-control" type="text">
-                                <strong>{{ errors.descripcion }}</strong>
+                                <textarea v-model="obra_editar.descripcion" class="form-control" rows="2"></textarea>
+                                <strong>{{ errors_editar.descripcion }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
                                 <label for="">Fecha Inicio:</label>
-                                <input v-model="obra.fecha_inicio" class="form-control" type="date">
-                                <strong>{{ errors.fecha_inicio }}</strong>
+                                <input v-model="obra_editar.fecha_inicio" class="form-control" type="date">
+                                <strong>{{ errors_editar.fecha_inicio }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Total:</label>
+                                <input v-model="obra_editar.total" class="form-control" type="text">
+                                <strong>{{ errors_editar.total }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Dirección:</label>
+                                <textarea v-model="obra_editar.direccion" class="form-control" rows="4"></textarea>
+                                <strong>{{ errors_editar.direccion }}</strong>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
@@ -131,8 +170,12 @@ export default {
             this.errors_editar={};
             this.errors={};
             return {
-                descripcion: null,
-                fecha_inicio: null
+                titulo: null,
+                descripcion:  null,
+                fecha_inicio: null,
+                fecha_fin:  null,
+                direccion:  null,
+                total:      null
             }
         },
         listar(n=this.selectPage){
@@ -160,13 +203,13 @@ export default {
                 }
             });
         },
-        actualizarEstado(id){
-            axios.post(url_base+'/obra/'+id+'/estado')
+        finalizar(id){
+            axios.post(url_base+'/obra/'+id+'/finalizar')
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
                     case "OK":
-                        swal("", "Estado Actualizado", "success");
+                        swal("", "Obra Finalizada", "success");
                         this.listar();
                         break;
                     default:

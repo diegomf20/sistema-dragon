@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Model\Movimiento;
 use App\Model\Kardex;
 use App\Model\Lote;
+use App\Http\Requests\CompraValidate;
+
+
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +34,7 @@ class CompraController extends Controller
 
     /**
       */
-    public function store(Request $request)
+    public function store(CompraValidate $request)
     {
         DB::beginTransaction();
         try {
@@ -42,6 +45,12 @@ class CompraController extends Controller
             $movimiento->obra_id=null;
             $movimiento->fecha_ingreso=Carbon::now();
             $movimiento->save();
+            if (count($request->items)==0) {
+                return response()->json([
+                    "status"=> "WARNING",
+                    "data"  => "No existen Items."
+                ]);
+            }
             foreach ($request->items as $key => $item) {
                 $insumo_id=$item['insumo_id'];
                 $cantidad=$item['cantidad'];
@@ -54,6 +63,7 @@ class CompraController extends Controller
                 $lote->precio=$precio;                    
                 $lote->stock=$cantidad;                    
                 $lote->cantidad=$cantidad;
+                $lote->movimiento_id=$movimiento->id;
                 $lote->save();
                     
                 $anterior=Kardex::where('producto_id',$insumo_id)
@@ -75,6 +85,7 @@ class CompraController extends Controller
                 $kardex->precio=$precio;
                 $kardex->total=$anterior_total+($cantidad*$precio);
                 $kardex->documento_id=$movimiento->id;
+                $kardex->lote_id=$lote->id;
                 $kardex->save();
             }
             DB::commit();

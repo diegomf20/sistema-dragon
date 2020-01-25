@@ -18,9 +18,9 @@ class InsumoController extends Controller
     {
 
         if ($request->all==true) {
-            $insumos=Insumo::all();
+            $insumos=Insumo::select('insumo.*','nombre_unidad')->leftJoin('unidad','unidad.id','=','insumo.unidad_id')->get();
         }else{
-            $insumos=Insumo::paginate(10);
+            $insumos=Insumo::select('insumo.*','nombre_unidad')->leftJoin('unidad','unidad.id','=','insumo.unidad_id')->paginate(10);
         }
         return response()->json($insumos);
     }
@@ -30,11 +30,13 @@ class InsumoController extends Controller
      */
     public function store(InsumoValidate $request)
     {
+        // dd(strtoupper($request->nombre_insumo));
         $insumo_contar=(Insumo::select(DB::raw('count(id) contar'))->first()->contar)+1;
         $insumo=new Insumo();
         $insumo->codigo=str_pad($insumo_contar, 4, "0", STR_PAD_LEFT);
-        $insumo->nombre_insumo=$request->nombre_insumo;
+        $insumo->nombre_insumo=strtoupper($request->nombre_insumo);
         $insumo->punto_reorden=$request->punto_reorden;
+        $insumo->unidad_id=$request->unidad_id;
         $insumo->save();
         return response()->json([
             "status"=> "OK",
@@ -53,9 +55,12 @@ class InsumoController extends Controller
         
     public function update(InsumoValidate $request, $id)
     {
+        // dd(strtoupper($request->nombre_insumo));
+
         $insumo=Insumo::where('id',$id)->first();
-        $insumo->nombre_insumo=$request->nombre_insumo;
+        $insumo->nombre_insumo=strtoupper($request->nombre_insumo);
         $insumo->punto_reorden=$request->punto_reorden;
+        $insumo->unidad_id=$request->unidad_id;
         $insumo->save();
         return response()->json([
             "status"=> "OK",

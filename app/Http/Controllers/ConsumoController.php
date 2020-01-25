@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Model\Movimiento;
 use App\Model\Kardex;
+use App\Model\Insumo;
 use App\Model\Lote;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\ConsumoValidate;
+
 
 class ConsumoController extends Controller
 {
@@ -31,7 +34,7 @@ class ConsumoController extends Controller
 
     /**
       */
-    public function store(Request $request)
+    public function store(ConsumoValidate $request)
     {
         DB::beginTransaction();
         try {
@@ -39,13 +42,27 @@ class ConsumoController extends Controller
                                             ->where('tipo_movimiento','SXC')
                                             ->first()->contar)+1;
             $movimiento=new Movimiento();
-            $movimiento->documento="SXC".str_pad($movimiento_count, 11, "0", STR_PAD_LEFT);
+            $movimiento->documento=str_pad($movimiento_count, 8, "0", STR_PAD_LEFT);
             $movimiento->tipo_movimiento="SXC";
             $movimiento->entidad_id=$request->colaborador_id;
             $movimiento->obra_id=$request->obra_id;
             $movimiento->fecha_ingreso=Carbon::now();
             $movimiento->save();
+
+            if (count($request->items)==0) {
+                return response()->json([
+                    "status"=> "WARNING",
+                    "data"  => "No existen Items."
+                ]);
+            }
+
             foreach ($request->items as $key => $item) {
+                if (!isset($item['cantidad'])||$item['cantidad']==0) {
+                    return response()->json([
+                        "status"=> "WARNING",
+                        "data"  => "No se acepta stock 0."
+                    ]);
+                }
                 $insumo_id=$item['insumo_id'];
                 $cantidad=$item['cantidad'];
                 while ($cantidad > 0) {
@@ -54,6 +71,13 @@ class ConsumoController extends Controller
                     $lote=Lote::where('insumo_id',$item['insumo_id'])
                         ->where('stock','>',0)
                         ->first();
+                    if($lote==null){
+                        $insumo=Insumo::where('id',$item['insumo_id'])->first();
+                        return response()->json([
+                            "status"=> "WARNING",
+                            "data"  => "Stock Insuficiente en ".$insumo->nombre_insumo
+                        ]);
+                    }
                     
                     if($lote==null) return response()->json(["status"=>"ERROR","data"=>"No cuenta con Stock en el insumo."]);
                     if ($lote->stock>=$cantidad) {
@@ -79,6 +103,7 @@ class ConsumoController extends Controller
                     $kardex->precio=$lote->precio;
                     $kardex->total=($anterior->total)-($cantidad_registrar*$lote->precio);
                     $kardex->documento_id=$movimiento->id;
+                    $kardex->lote_id=$lote->id;
                     $kardex->save();
 
                     $cantidad=$cantidad-$cantidad_registrar;

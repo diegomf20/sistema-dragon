@@ -27,8 +27,11 @@ class ObraValidate extends FormRequest
     public function rules()
     {
         return [
-            'descripcion' => 'required|max:100',
+            'titulo' => 'required|max:50',
+            'descripcion' => 'required|max:150',
             'fecha_inicio' => 'required',
+            'direccion' => 'max:100',
+            'total'     => 'numeric'
         ];
     }
     
