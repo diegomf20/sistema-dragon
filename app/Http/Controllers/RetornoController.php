@@ -46,6 +46,12 @@ class RetornoController extends Controller
                     $kardex_id=$item['kardex_id'];
                     $retorno=$item['retorno'];
                     $kardex_retorno=Kardex::where('id',$kardex_id)->first();
+                    if ($item['retorno']>$kardex_retorno->cantidad) {
+                        return response()->json([
+                            "status"=> "WARNING",
+                            "data"  => "Cantidad de retorno supera al consumo."
+                        ]);    
+                    }
                     /**
                      * Actualizar Lote
                      */

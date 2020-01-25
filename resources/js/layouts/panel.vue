@@ -27,6 +27,7 @@
                   <router-link to="proveedor" class="collapse-item" >Proveedores</router-link>
                   <router-link to="obra" class="collapse-item" >Obras</router-link>
                   <router-link to="colaborador" class="collapse-item" >Colaboradores</router-link>
+                  <router-link to="cliente" class="collapse-item" >Cliente</router-link>
                   <!-- <a class="collapse-item" href="buttons.html">Insumos</a> -->
               </div>
             </div>

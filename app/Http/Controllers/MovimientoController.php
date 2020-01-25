@@ -12,7 +12,8 @@ class MovimientoController extends Controller
      * GET
      */
     public function getConsumo(Request $request){
-        $documento=$request->documento;
+        $documento=$request->codigo;
+        // dd($documento);
         $movimiento=Movimiento::with('detalles')
             ->join('obra','obra.id','=','movimiento.obra_id')
             ->leftJoin('retorno','movimiento.id','=','retorno.movimiento_id')

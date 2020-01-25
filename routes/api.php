@@ -11,6 +11,7 @@ Route::post('retorno','RetornoController@store');
 
 Route::resource('colaborador', 'ColaboradorController');
 Route::resource('proveedor', 'ProveedorController');
+Route::resource('cliente', 'ClienteController');
 Route::resource('unidad', 'UnidadController');
 Route::resource('insumo', 'InsumoController');
 Route::post('obra/{id}/finalizar','ObraController@finalizar');

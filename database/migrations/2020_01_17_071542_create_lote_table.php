@@ -16,9 +16,9 @@ class CreateLoteTable extends Migration
         Schema::create('lote', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('insumo_id');
-            $table->double('precio',8,2);      //  precio Lote
-            $table->integer('cantidad');       //  es lo que se a movido sea ingreso o egreso
-            $table->integer('stock');          //  cantidad actual
+            $table->double('precio',9,3);      //  precio Lote
+            $table->double('cantidad',8,2);       //  es lo que se a movido sea ingreso o egreso
+            $table->double('stock',8,2);          //  cantidad actual
             $table->unsignedInteger('movimiento_id');
         });
     }

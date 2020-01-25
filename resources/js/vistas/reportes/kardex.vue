@@ -44,10 +44,10 @@
                                 </tr>
                                 <tr>
                                     <th colspan="1">Cantidad</th>
-                                    <th colspan="1">Costo</th>
+                                    <th colspan="1">Costo Unitario</th>
                                     <th colspan="1">Total</th>
                                     <th colspan="1">Cantidad</th>
-                                    <th colspan="1">Costo</th>
+                                    <th colspan="1">Costo Unitario</th>
                                     <th colspan="1">Total</th>
                                     <th colspan="1">Cantidad</th>
                                     <th colspan="1">Total</th>

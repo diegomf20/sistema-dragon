@@ -33,6 +33,10 @@ var routes =[
         component: require('../vistas/maestras/proveedor.vue').default,
     },
     { 
+        path: '/cliente', 
+        component: require('../vistas/maestras/cliente.vue').default,
+    },
+    { 
         path: '/colaborador', 
         component: require('../vistas/maestras/colaborador.vue').default,
     },
