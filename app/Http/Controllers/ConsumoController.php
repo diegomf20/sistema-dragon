@@ -36,6 +36,12 @@ class ConsumoController extends Controller
       */
     public function store(ConsumoValidate $request)
     {
+        if ($request->has('fecha')) {
+            $fecha=$request->fecha;
+        }else {
+            $fecha=Carbon::now()->format('Y-m-d');
+        }
+
         DB::beginTransaction();
         try {
             $movimiento_count=(Movimiento::select(DB::raw('count(id) contar'))
@@ -46,7 +52,7 @@ class ConsumoController extends Controller
             $movimiento->tipo_movimiento="SXC";
             $movimiento->entidad_id=$request->colaborador_id;
             $movimiento->obra_id=$request->obra_id;
-            $movimiento->fecha_ingreso=Carbon::now();
+            $movimiento->fecha_ingreso=$fecha;
             $movimiento->save();
 
             if (count($request->items)==0) {
@@ -70,6 +76,7 @@ class ConsumoController extends Controller
 
                     $lote=Lote::where('insumo_id',$item['insumo_id'])
                         ->where('stock','>',0)
+                        ->orderBy('fecha_ingreso','ASC')
                         ->first();
                     if($lote==null){
                         $insumo=Insumo::where('id',$item['insumo_id'])->first();
@@ -89,13 +96,14 @@ class ConsumoController extends Controller
                     $lote->save();
                     
                     $anterior=Kardex::where('producto_id',$insumo_id)
+                        ->where('fecha','<=',$fecha)
                         ->orderBy('id','DESC')
                         ->orderBy('fecha','DESC')
                         ->first();   
                     $stock=$anterior->stock;
                     $total=$anterior->total;
                     $kardex=new Kardex();
-                    $kardex->fecha=Carbon::now();
+                    $kardex->fecha=$fecha;
                     $kardex->tipo="Salida";
                     $kardex->producto_id=$insumo_id;
                     $kardex->cantidad=$cantidad_registrar;
@@ -105,6 +113,10 @@ class ConsumoController extends Controller
                     $kardex->documento_id=$movimiento->id;
                     $kardex->lote_id=$lote->id;
                     $kardex->save();
+
+                    DB::select('UPDATE KARDEX SET stock = stock - ? , total = total - ?  where producto_id = ? AND fecha > ?', 
+                        [$cantidad_registrar, ($cantidad_registrar*$lote->precio), $insumo_id, $fecha]
+                    );
 
                     $cantidad=$cantidad-$cantidad_registrar;
                 }

@@ -53,6 +53,10 @@ var routes =[
         component: require('../vistas/operacion/compra.vue').default,
     },
     { 
+        path: '/gasto', 
+        component: require('../vistas/operacion/gasto.vue').default,
+    },
+    { 
         path: '/stock', 
         component: require('../vistas/reportes/stock.vue').default,
     },
@@ -63,6 +67,10 @@ var routes =[
     { 
         path: '/kardex', 
         component: require('../vistas/reportes/kardex.vue').default,
+    },
+    { 
+        path: '/resumen-obra', 
+        component: require('../vistas/reportes/resumen-obra.vue').default,
     },
 ];
 

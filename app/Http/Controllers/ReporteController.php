@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Obra;
+use App\Model\Gasto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use PDF;
 
 class ReporteController extends Controller
 {
@@ -16,7 +19,7 @@ class ReporteController extends Controller
             'FROM insumo LEFT JOIN ('.'
                 SELECT kardex.* '.
                     'FROM kardex WHERE kardex.id=('.
-                        "SELECT k.id FROM kardex k WHERE k.producto_id=kardex.producto_id AND k.fecha<='".$fecha."' ORDER BY k.id DESC , k.fecha DESC LIMIT 1".
+                        "SELECT k.id FROM kardex k WHERE k.producto_id=kardex.producto_id AND k.fecha<='".$fecha."' ORDER BY k.fecha DESC , k.id  DESC LIMIT 1".
                     ')'.
             ') kar ON insumo.id=kar.producto_id '."WHERE insumo.nombre_insumo like '%$buscar%'"));
         return response()->json($datos);
@@ -39,28 +42,58 @@ class ReporteController extends Controller
      * Parametros mes-año (:fecha) y codigo producto(:codigo) 
      */
     public function kardex_unitario(Request $request){
-        // dd($request->all());
         $fecha=$request->fecha;
         $codigo=$request->codigo;
         $datos=DB::select(DB::raw("(
-            SELECT 	'Inicial' fecha,'Inicial' tipo ,K.stock cantidad,0.00 precio,K.stock,K.total,'' documento 
+            SELECT 	'0' fecha, K.id id,'Inicial' tipo ,K.stock cantidad,0.00 precio,K.stock,K.total,'' documento 
                     FROM 		kardex K INNER JOIN insumo on insumo.id=K.producto_id
-                    WHERE 	insumo.codigo='0001' AND K.fecha<CONCAT(:fecha,'-01')
-                    ORDER BY K.id DESC,K.fecha DESC LIMIT 1
+                    WHERE 	insumo.codigo=:codigo AND K.fecha<CONCAT(:fecha,'-01')
+                    ORDER BY K.fecha DESC, K.id DESC LIMIT 1
                 )
                 UNION
                 (
-                    SELECT 	K.fecha,K.tipo,k.cantidad,K.precio,K.stock,K.total,CONCAT(M.tipo_movimiento,' ',M.documento) documento 
+                    SELECT 	K.fecha,K.id, K.tipo,k.cantidad,K.precio,K.stock,K.total,CONCAT(M.tipo_movimiento,' ',M.documento) documento 
                     FROM 	kardex K INNER JOIN movimiento M on M.id=K.documento_id
                             INNER JOIN insumo on insumo.id=K.producto_id 
-                    WHERE 	insumo.codigo=:codigo 
-                    AND DATE_FORMAT(K.fecha,'%Y-%m')= :fecha2 )
+                    WHERE 	insumo.codigo=:codigo2 
+                    AND DATE_FORMAT(K.fecha,'%Y-%m')= :fecha2 ) ORDER BY fecha ASC , id ASC
                 "),[
                     "codigo" =>  $codigo,
+                    "codigo2" =>  $codigo,
                     "fecha" =>  $fecha,
                     "fecha2" =>  $fecha,
                 ]);
         return response()->json($datos);
         
+    }
+
+    public function resumen_obra(Request $request){
+        $obra_id=$request->obra_id;
+        $obra=Obra::where('id',$obra_id)->first();
+        $insumos=DB::select(
+            DB::raw("SELECT insumo.id,
+                            insumo.nombre_insumo, 
+                            SUM( IF('IXR'=tipo_movimiento,-1,1)*cantidad ) cantidad,
+                            SUM( IF('IXR'=tipo_movimiento,-1,1)*cantidad*precio) total
+                    FROM kardex 
+                    INNER JOIN movimiento ON movimiento.id=kardex.documento_id
+                    INNER JOIN insumo ON insumo.id= kardex.producto_id
+                    WHERE obra_id =  :id
+                    GROUP BY insumo.id,nombre_insumo"),
+        [
+            "id"    => $obra_id
+        ]);
+        $gastos=Gasto::where('obra_id',$obra_id)->get();
+        // dd($gastos);
+        if ($request->has('pdf')) {
+            // return view('pdf.resumen_obra',compact('obra','insumos'));
+            $pdf = PDF::loadView('pdf.resumen_obra',compact('obra','insumos','gastos'));
+            return $pdf->download('reporte-obra-'.$obra_id.'.pdf');
+        }
+        return response()->json([
+                "obra" => $obra,
+                "insumos" => $insumos,
+                "gastos" => $gastos
+            ]);
     }
 }

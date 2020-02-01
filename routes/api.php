@@ -19,10 +19,12 @@ Route::resource('obra', 'ObraController');
 Route::resource('consumo', 'ConsumoController');
 Route::get('consumo', 'MovimientoController@getConsumo');
 Route::resource('compra', 'CompraController');
+Route::resource('gasto', 'GastoController');
 
 
 Route::get('stock','ReporteController@stock');
 Route::get('kardex_unitario','ReporteController@kardex_unitario');
 Route::get('reorden','ReporteController@reorden');
+Route::get('resumen-obra','ReporteController@resumen_obra');
 
 Route::get('exports/kardex','ExportsController@kardex');

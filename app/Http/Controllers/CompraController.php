@@ -36,6 +36,12 @@ class CompraController extends Controller
       */
     public function store(CompraValidate $request)
     {
+        if ($request->has('fecha')) {
+            $fecha=$request->fecha;
+        }else {
+            $fecha=Carbon::now()->format('Y-m-d');
+        }
+
         DB::beginTransaction();
         try {
             $movimiento=new Movimiento();
@@ -43,7 +49,7 @@ class CompraController extends Controller
             $movimiento->tipo_movimiento="IXC";
             $movimiento->entidad_id=$request->proveedor_id;
             $movimiento->obra_id=null;
-            $movimiento->fecha_ingreso=Carbon::now();
+            $movimiento->fecha_ingreso=$fecha;
             $movimiento->save();
             if (count($request->items)==0) {
                 return response()->json([
@@ -64,20 +70,22 @@ class CompraController extends Controller
                 $lote->stock=$cantidad;                    
                 $lote->cantidad=$cantidad;
                 $lote->movimiento_id=$movimiento->id;
+                $lote->fecha_ingreso=$fecha;
                 $lote->save();
                     
                 $anterior=Kardex::where('producto_id',$insumo_id)
+                    ->where('fecha','<=',$fecha)
                     ->orderBy('id','DESC')
                     ->orderBy('fecha','DESC')
-                    ->first();   
-                 $anterior_stock=0;
-                 $anterior_total=0;   
+                    ->first();
+                $anterior_stock=0;
+                $anterior_total=0;   
                 if($anterior!=null){
                     $anterior_stock=$anterior->stock;
                     $anterior_total=$anterior->total;
                 }
                 $kardex=new Kardex();
-                $kardex->fecha=Carbon::now();
+                $kardex->fecha=$fecha;
                 $kardex->tipo="Ingreso";
                 $kardex->producto_id=$insumo_id;
                 $kardex->cantidad=$cantidad;
@@ -87,6 +95,10 @@ class CompraController extends Controller
                 $kardex->documento_id=$movimiento->id;
                 $kardex->lote_id=$lote->id;
                 $kardex->save();
+
+                DB::select('UPDATE KARDEX SET stock = stock + ? , total = total + ?  where producto_id = ? AND fecha > ?', 
+                    [$cantidad, $cantidad*$precio, $insumo_id, $fecha]
+                );
             }
             DB::commit();
             return response()->json([

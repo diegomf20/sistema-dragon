@@ -7,6 +7,10 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="">Fecha de Ingreso</label>
+                            <input v-model="compra.fecha" type="text" class="form-control">
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="">Documento (F/B):</label>
@@ -14,10 +18,11 @@
                                 <strong>{{ errors.documento }}</strong>
                             </div>
                         </div>
+                        
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label class="">Proveedor:</label>
-                                <v-select :reduce="item => item.id" :options="proveedores" label="razon" v-model="compra.proveedor_id">
+                                <v-select :reduce="item => item.id" :options="proveedores" label="razon_social" v-model="compra.proveedor_id">
                                     <template slot="option" slot-scope="option">
                                         <div class="d-center">
                                             {{ option.documento+" - "+option.razon_social }}
@@ -38,7 +43,7 @@
                     <div class="row">
                         <div class="col-sm-8 form-group">
                             <label>Seleccionar Insumo</label>
-                            <v-select :options="insumos" label="razon" v-model="itemMomentaneo.insumo" :filterable="false"  @search="onSearch">
+                            <v-select :options="insumos" v-model="itemMomentaneo.insumo" :filterable="false"  @search="onSearch">
                                 <template slot="option" slot-scope="option">
                                     <div class="d-center">
                                         {{ option.nombre_insumo }}
@@ -114,7 +119,7 @@ export default {
             itemMomentaneo:{
                 insumo: null,
                 cantidad: 1,
-                precio: 0.00
+                precio: 0.00,
             },
             compra: this.initcompra(),
             errors: {}
@@ -145,6 +150,7 @@ export default {
                 proveedor_id: null,
                 documento: null,
                 items: [],
+                fecha: moment().format('YYYY-MM-DD')
             };
         },
         listarProveedor(){

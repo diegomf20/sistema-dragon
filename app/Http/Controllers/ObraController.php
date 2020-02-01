@@ -19,7 +19,17 @@ class ObraController extends Controller
     {
 
         if ($request->all==true) {
-            $obras=Obra::orderBy('id','DESC')->where('estado','A')->get();
+            switch ($request->estado) {
+                case 'A':
+                    $obras=Obra::orderBy('id','DESC')->where('estado','A')->get();
+                    break;
+                case 'I':
+                    $obras=Obra::orderBy('id','DESC')->where('estado','I')->get();
+                    break;
+                default:
+                    $obras=Obra::orderBy('id','DESC')->get();
+                    break;
+            }
         }else{
             $obras=Obra::orderBy('id','DESC')->paginate(10);
         }
@@ -36,6 +46,7 @@ class ObraController extends Controller
         $obra->descripcion=$request->descripcion;
         $obra->fecha_inicio=$request->fecha_inicio;
         $obra->direccion=$request->direccion;
+        $obra->cliente_id=$request->cliente_id;
         $obra->total=$request->total;
         $obra->estado = 'A';
         $obra->save();
@@ -62,6 +73,7 @@ class ObraController extends Controller
         $obra->fecha_inicio=$request->fecha_inicio;
         $obra->direccion=$request->direccion;
         $obra->total=$request->total;
+        $obra->cliente_id=$request->cliente_id;
         $obra->save();
         return response()->json([
             "status"=> "OK",

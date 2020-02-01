@@ -7,6 +7,10 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="">Fecha de Salida</label>
+                            <input v-model="consumo.fecha" type="text" class="form-control">
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="">Colaborador</label>
@@ -151,6 +155,7 @@ export default {
                 colaborador_id: null,
                 obra_id:null,
                 items: [],
+                fecha: moment().format('YYYY-MM-DD')
             };
         },
         listarColaborador(){
@@ -160,7 +165,7 @@ export default {
             });
         },
         listarObras(){
-            axios.get(url_base+'/obra?all=true')
+            axios.get(url_base+'/obra?all=true&estado=A')
             .then(response=>{
                 this.obras=response.data;
             });
@@ -172,8 +177,6 @@ export default {
             });
         },
         agregarItem(){
-            console.log(this.itemMomentaneo);
-
             if (this.itemMomentaneo.cantidad<=this.itemMomentaneo.insumo.stock) {
                 this.consumo.items.push({
                     insumo_id: this.itemMomentaneo.insumo.id,

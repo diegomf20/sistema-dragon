@@ -33,6 +33,14 @@
                                 <textarea v-model="obra.direccion" class="form-control" rows="4"></textarea>
                                 <strong>{{ errors.direccion }}</strong>
                             </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Cliente:</label>
+                                <select v-model="obra.cliente_id" class="form-control">
+                                    <option value=null>--Seleccionar Cliente--</option>
+                                    <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.razon_social }}</option>
+                                </select>
+                            </div>
+
                             <div class="col-lg-12 text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
                             </div>
@@ -114,6 +122,13 @@
                                 <strong>{{ errors_editar.titulo }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
+                                <label for="">Cliente:</label>
+                                <select v-model="obra_editar.cliente_id" class="form-control">
+                                    <option value=null>-- Seleccionar Cliente --</option>
+                                    <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.razon_social }}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-12 form-group">
                                 <label for="">Descripcion:</label>
                                 <textarea v-model="obra_editar.descripcion" class="form-control" rows="2"></textarea>
                                 <strong>{{ errors_editar.descripcion }}</strong>
@@ -149,6 +164,7 @@ export default {
     data() {
         return {
             areas: [],
+            clientes: [],
             obra: this.iniobra(), //datos de logeo
             obra_editar: this.iniobra(),
             errors: {}, //datos de errores
@@ -164,6 +180,7 @@ export default {
     },
     mounted() {
         this.listar();
+        this.listarClientes();
     },
     methods: {
         iniobra(){
@@ -175,7 +192,8 @@ export default {
                 fecha_inicio: null,
                 fecha_fin:  null,
                 direccion:  null,
-                total:      null
+                total:      null,
+                cliente_id: null
             }
         },
         listar(n=this.selectPage){
@@ -183,6 +201,12 @@ export default {
             axios.get(url_base+'/obra?page='+n)
             .then(response => {
                 this.table = response.data;
+            })
+        },
+        listarClientes(){
+            axios.get(url_base+'/cliente?all=true')
+            .then(response => {
+                this.clientes = response.data;
             })
         },
         grabarNuevo(){

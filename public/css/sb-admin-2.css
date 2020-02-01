@@ -11001,3 +11001,7 @@ body.sidebar-toggled footer.sticky-footer {
 .form-group strong{
   color: var(--red);
 }
+
+.v-select{
+  font-size: 12px;
+}

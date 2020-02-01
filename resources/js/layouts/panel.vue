@@ -42,6 +42,7 @@
                   <router-link to="compra" class="collapse-item" >Ingreso X Compra</router-link>
                   <router-link to="consumo" class="collapse-item" >Salida X Consumo</router-link>
                   <router-link to="retorno" class="collapse-item" >Ingreso X Retorno</router-link>
+                  <router-link to="gasto" class="collapse-item" >Gasto</router-link>
               </div>
             </div>
           </li>
@@ -55,6 +56,7 @@
                   <router-link to="stock" class="collapse-item" >Stock</router-link>
                   <router-link to="kardex" class="collapse-item" >Kardex</router-link>
                   <router-link to="reorden" class="collapse-item" >Reorden</router-link>
+                  <router-link to="resumen-obra" class="collapse-item" >resumen-obra</router-link>
               </div>
             </div>
           </li>
