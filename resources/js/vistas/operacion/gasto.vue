@@ -27,7 +27,7 @@
                             </v-select>
                         </div>
                         <div class="col-sm-6 form-group">
-                            <label for="">Ingresar Fecha:</label>
+                            <label for="">Descripcion:</label>
                             <input v-model="gasto.descripcion" type="text" class="form-control">
                         </div>
                         <div class="col-sm-6 form-group">
