@@ -57,6 +57,10 @@ var routes =[
         component: require('../vistas/operacion/gasto.vue').default,
     },
     { 
+        path: '/movimiento', 
+        component: require('../vistas/reportes/movimiento.vue').default,
+    },
+    { 
         path: '/stock', 
         component: require('../vistas/reportes/stock.vue').default,
     },

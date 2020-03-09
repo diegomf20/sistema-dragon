@@ -3,23 +3,24 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header card-header-info">
-                    INSUMO CON REORDEN
+                    INSUMOS URGENTES (BAJO PUNTO DE REORDEN)
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-lg-4 col-sm-6 form-group">
                             <input v-model="fecha" type="date" class="form-control">
                         </div>
                         <div class="col-lg-4 col-sm-6">
                             <button class="btn btn-primary" @click="listarStocks()">Buscar</button>
-                            <!-- <a :href="url" class="btn btn-success">Excel</a> -->
+                            <a :href="url" class="btn btn-success">Excel</a>
                         </div>
-                    </div>
+                    </div> -->
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>CODIGO</th>
                                 <th>NOMBRE</th>
+                                <th>PUNTO REORDEN</th>
                                 <th>STOCK</th>
                             </tr>
                         </thead>
@@ -27,6 +28,7 @@
                             <tr v-for="item in lista">
                                 <td>{{ item.codigo }}</td>
                                 <td>{{ item.nombre_insumo }}</td>
+                                <td>{{ item.punto_reorden }}</td>
                                 <td>{{ item.stock }}</td>
                             </tr>
                         </tbody>

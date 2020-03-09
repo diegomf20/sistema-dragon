@@ -44,6 +44,7 @@
                                 <thead>
                                     <tr>
                                         <th>Insumo</th>
+                                        <th>SXC</th>
                                         <th>Cantidad</th>
                                         <th>Total</th>
                                     </tr>
@@ -51,12 +52,13 @@
                                 <tbody>
                                     <tr v-for="insumo in resumen_obra.insumos">
                                         <td>{{ insumo.nombre_insumo }}</td>
+                                        <td>{{ insumo.documentos }}</td>
                                         <td>{{ insumo.cantidad }}</td>
-                                        <td>{{ insumo.total }}</td>
+                                        <td>{{ insumo.total.toFixed(2) }}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2">Total:</td>
-                                        <td>{{ totalInsumos }}</td>
+                                        <td colspan="3">Total:</td>
+                                        <td>{{ totalInsumos.toFixed(2) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -76,13 +78,13 @@
                                     <tr v-for="gasto in resumen_obra.gastos">
                                         <td>{{ gasto.fecha }}</td>
                                         <td>{{ gasto.descripcion }}</td>
-                                        <td>{{ gasto.monto }}</td>
+                                        <td>{{ gasto.monto.toFixed(2) }}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td colspan="2"><b>Total:</b></td>
-                                        <td><b>{{ totalGastos }}</b></td>
+                                        <td><b>{{ totalGastos.toFixed(2) }}</b></td>
                                     </tr>
                                 </tfoot>
                             </table>

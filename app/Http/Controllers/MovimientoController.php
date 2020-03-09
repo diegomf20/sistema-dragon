@@ -3,11 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Model\Movimiento;
+use App\Model\Proveedor;
+use App\Model\Colaborador;
 use App\Model\Kardex;
 use Illuminate\Http\Request;
 
 class MovimientoController extends Controller
 {
+    public function index(Request $request){
+        $Movimiento=Movimiento::orderBy('id','DESC')->paginate(10);
+        return response()->json($Movimiento);
+    }
+
+    public function show(Request $request,$id){
+        $movimiento=Movimiento::where('id',$id)->first();
+        $movimiento->detalles=Kardex::join('insumo','producto_id','=','insumo.id')->where('documento_id',$movimiento->id)->get();
+        switch ($movimiento->tipo_movimiento) {
+            case 'IXC':
+                $movimiento->entidad=Proveedor::where('id',$movimiento->entidad_id)->first();
+                break;
+            case 'SXC':
+                $movimiento->entidad=Colaborador::where('id',$movimiento->entidad_id)->first();
+                break;
+            default:
+                break;
+        }
+        return response()->json($movimiento);
+    }
     /**
      * GET
      */

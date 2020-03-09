@@ -51,6 +51,7 @@
             <thead>
                 <tr>
                     <th>Insumo</th>
+                    <th>SXC</th>
                     <th class="w-100 center">Cantidad</th>
                     <th class="w-100 center">Total</th>
                 </tr>
@@ -62,6 +63,7 @@
                 @foreach ($insumos as $insumo)
                     <tr>
                         <td>{{ $insumo->nombre_insumo }}</td>
+                        <td class="w-100 center">{{ $insumo->documentos }}</td>
                         <td class="w-100 center">{{ $insumo->cantidad }}</td>
                         <td class="w-100 right">{{ round($insumo->total,2) }}</td>
                     </tr>
@@ -70,7 +72,7 @@
                     @endphp
                 @endforeach
                 <tr>
-                    <td colspan="2"><b>Total:</b></td>
+                    <td colspan="3"><b>Total:</b></td>
                     <td class="w-100 right"><b>{{ round($total,2) }}</b></td>
                 </tr>
             </tbody>

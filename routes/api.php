@@ -26,5 +26,6 @@ Route::get('stock','ReporteController@stock');
 Route::get('kardex_unitario','ReporteController@kardex_unitario');
 Route::get('reorden','ReporteController@reorden');
 Route::get('resumen-obra','ReporteController@resumen_obra');
+Route::resource('movimiento','MovimientoController');
 
 Route::get('exports/kardex','ExportsController@kardex');
