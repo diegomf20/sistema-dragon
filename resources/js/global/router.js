@@ -53,6 +53,10 @@ var routes =[
         component: require('../vistas/operacion/compra.vue').default,
     },
     { 
+        path: '/cuadre', 
+        component: require('../vistas/operacion/cuadre.vue').default,
+    },
+    { 
         path: '/gasto', 
         component: require('../vistas/operacion/gasto.vue').default,
     },

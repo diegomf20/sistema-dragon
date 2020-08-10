@@ -178,6 +178,7 @@ export default {
                         this.listar();
                         break;
                     default:
+                        swal("",respuesta.data, "error");
                         break;
                 }
             });

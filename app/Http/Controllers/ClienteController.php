@@ -29,6 +29,13 @@ class ClienteController extends Controller
      */
     public function store(clienteValidate $request)
     {
+        $clienteBuscar=Cliente::where('documento',$request->documento)->first();
+        if ($clienteBuscar!=null) {
+            return response()->json([
+                "status"=>"ERROR",
+                "data"=>"El cliente ya fue registrado."
+            ]);
+        }
         $cliente=new Cliente();
         $cliente->documento=$request->documento;
         $cliente->razon_social=$request->razon_social;

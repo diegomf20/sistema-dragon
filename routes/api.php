@@ -19,6 +19,7 @@ Route::resource('obra', 'ObraController');
 Route::resource('consumo', 'ConsumoController');
 Route::get('consumo', 'MovimientoController@getConsumo');
 Route::resource('compra', 'CompraController');
+Route::resource('cuadre', 'CuadreController');
 Route::resource('gasto', 'GastoController');
 
 

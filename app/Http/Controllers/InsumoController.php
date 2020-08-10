@@ -16,11 +16,15 @@ class InsumoController extends Controller
      */
     public function index(Request $request)
     {
+        // dd($request->all());
+        $insumos=Insumo::select('insumo.*','nombre_unidad')
+                    ->leftJoin('unidad','unidad.id','=','insumo.unidad_id')
+                    ->where('nombre_insumo','like','%'.$request->search.'%');
 
         if ($request->all==true) {
-            $insumos=Insumo::select('insumo.*','nombre_unidad')->leftJoin('unidad','unidad.id','=','insumo.unidad_id')->get();
+            $insumos=$insumos->get();
         }else{
-            $insumos=Insumo::select('insumo.*','nombre_unidad')->leftJoin('unidad','unidad.id','=','insumo.unidad_id')->paginate(10);
+            $insumos=$insumos->paginate(10);
         }
         return response()->json($insumos);
     }

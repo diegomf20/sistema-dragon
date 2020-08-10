@@ -43,6 +43,14 @@
             <div class="col-sm-8">
                 <div class="card">
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-9 form-group">
+                                <input type="text" class="form-control" v-model="search">
+                            </div>
+                            <div class="col-sm-3 form-group">
+                                <button class="btn btn-info" @click="listar()">Buscar</button>
+                            </div>
+                        </div>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -153,7 +161,8 @@ export default {
                 data:[]
             },
             selectPage: 1,
-            url: null
+            url: null,
+            search: ''
         }
     },
     mounted() {
@@ -174,7 +183,7 @@ export default {
         },
         listar(n=this.selectPage){
             this.selectPage=n;
-            axios.get(url_base+'/colaborador?page='+n)
+            axios.get(url_base+'/colaborador?search='+this.search+'&page='+n)
             .then(response => {
                 this.table = response.data;
             })
@@ -193,6 +202,7 @@ export default {
                         this.listar();
                         break;
                     default:
+                        swal("",respuesta.data, "error");
                         break;
                 }
             });

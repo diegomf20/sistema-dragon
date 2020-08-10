@@ -41,6 +41,7 @@
                   <h6 class="collapse-header">Tablas de Almacen:</h6>
                   <router-link to="compra" class="collapse-item" >Ingreso X Compra</router-link>
                   <router-link to="consumo" class="collapse-item" >Salida X Consumo</router-link>
+                  <router-link to="cuadre" class="collapse-item" >Cuadre</router-link>
                   <router-link to="retorno" class="collapse-item" >Ingreso X Retorno</router-link>
                   <router-link to="gasto" class="collapse-item" >Gasto</router-link>
               </div>

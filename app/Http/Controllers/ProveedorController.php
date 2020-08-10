@@ -29,6 +29,13 @@ class ProveedorController extends Controller
      */
     public function store(ProveedorValidate $request)
     {
+        $buscarProveedor=Proveedor::where('documento',$request->documento)->first();
+        if ($buscarProveedor!=null) {
+            return response()->json([
+                "status"=>"ERROR",
+                "data"=>"El RUC del proveedor ya fue registrado."
+            ]);
+        }
         $proveedor=new Proveedor();
         $proveedor->documento=$request->documento;
         $proveedor->razon_social=$request->razon_social;

@@ -27,7 +27,7 @@ class ClienteValidate extends FormRequest
     public function rules()
     {
         return [
-            'documento' => 'required|max:8',
+            'documento' => 'required|max:11|min:11',
             'razon_social' => 'required|max:120',
         ];
     }
