@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-md-4 mb-3">
                 <div class="card">
                     <div class="card-header">
                         <h6 class="text-primary mb-0 font-weight-bold">Nuevo Proveedor</h6>
@@ -35,9 +35,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-8">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
+                        <a :href="pdf" class="btn btn-danger mb-3"><i class="far fa-file-pdf"></i> PDF</a>
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
@@ -145,6 +146,11 @@ export default {
     },
     mounted() {
         this.listar();
+    },
+    computed: {
+        pdf(){
+            return url_base+'/proveedor?pdf'
+        }
     },
     methods: {
         iniproveedor(){

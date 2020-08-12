@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Http\Requests\ProveedorValidate;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class ProveedorController extends Controller
 {
@@ -16,12 +17,17 @@ class ProveedorController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->all==true) {
-            $Proveedores=Proveedor::all();
-        }else{
-            $Proveedores=Proveedor::paginate(8);
+        if ($request->has('pdf')) {
+            $proveedores=Proveedor::all();
+            $pdf = PDF::loadView('pdf.proveedor',compact('proveedores'));
+            return $pdf->download('proveedores.pdf');
         }
-        return response()->json($Proveedores);
+        if ($request->all==true) {
+            $proveedores=Proveedor::all();
+        }else{
+            $proveedores=Proveedor::paginate(8);
+        }
+        return response()->json($proveedores);
     }
 
     /**
