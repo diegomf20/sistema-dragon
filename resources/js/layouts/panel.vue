@@ -1,10 +1,10 @@
 <template>
     <div id="wrapper" :class="(statusSidebar) ? 'open':''">
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-          <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+          <div class="sidebar-brand d-flex align-items-center justify-content-center">
             <img src="/img/logo.jpeg" class="img-fluid" alt="">
             <!-- <div class="sidebar-brand-text mx-3">Casa Goza<sup>2</sup></div> -->
-          </a>
+          </div>
           <hr class="sidebar-divider">
           <div class="sidebar-heading">Módulo de Almacen</div>
           <li class="nav-item">
@@ -14,6 +14,7 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
               <div class="bg-white py-2 collapse-inner rounded">
                   <h6 class="collapse-header">Tablas de Almacen:</h6>
+                  <router-link to="activo" class="collapse-item" >Activos</router-link>
                   <router-link to="insumo" class="collapse-item" >Insumos</router-link>
                   <router-link to="unidad" class="collapse-item" >unidad</router-link>
                   <router-link to="proveedor" class="collapse-item" >Proveedores</router-link>

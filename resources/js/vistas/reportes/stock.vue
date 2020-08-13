@@ -30,7 +30,7 @@
                                 <td>{{ item.codigo }}</td>
                                 <td>{{ item.nombre_insumo }}</td>
                                 <td>{{ item.stock }}</td>
-                                <td>{{ (item.stock==0) ? 0 : item.total/item.stock }}</td>
+                                <td>{{ (item.stock==0) ? 0 : (item.total/item.stock).toFixed(2) }}</td>
                                 <td>{{ (item.total!=null) ? item.total.toFixed(2) : 0.00 }}</td>
                             </tr>
                         </tbody>

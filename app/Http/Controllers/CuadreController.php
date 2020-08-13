@@ -144,8 +144,8 @@ class CuadreController extends Controller
                             
                             $anterior=Kardex::where('producto_id',$insumo_id)
                                 ->where('fecha','<=',$fecha)
-                                ->orderBy('id','DESC')
                                 ->orderBy('fecha','DESC')
+                                ->orderBy('id','DESC')
                                 ->first();   
                             $stock=$anterior->stock;
                             $total=$anterior->total;
@@ -160,18 +160,16 @@ class CuadreController extends Controller
                             $kardex->documento_id=$movimiento->id;
                             $kardex->lote_id=$lote->id;
                             $kardex->save();
-        
                             DB::select('UPDATE KARDEX SET stock = stock - ? , total = total - ?  where producto_id = ? AND fecha > ?', 
                                 [$cantidad_registrar, ($cantidad_registrar*$lote->precio), $insumo_id, $fecha]
                             );
-        
                             $cantidad=$cantidad-$cantidad_registrar;
                         }
                     }
                     DB::commit();
                     return response()->json([
                         "status"=> "OK",
-                        "data"  => "Salida x Consumo Registrado (".$movimiento->documento.")"
+                        "data"  => "Salida x Cuadre Registrado (".$movimiento->documento.")"
                     ]);
                     break;
             }             

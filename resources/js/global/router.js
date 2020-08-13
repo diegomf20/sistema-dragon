@@ -25,6 +25,10 @@ var routes =[
         component: require('../vistas/maestras/insumo.vue').default,
     },
     { 
+        path: '/activo', 
+        component: require('../vistas/maestras/activo.vue').default,
+    },
+    { 
         path: '/unidad', 
         component: require('../vistas/maestras/unidad.vue').default,
     },

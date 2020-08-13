@@ -97,8 +97,8 @@ class ConsumoController extends Controller
                     
                     $anterior=Kardex::where('producto_id',$insumo_id)
                         ->where('fecha','<=',$fecha)
-                        ->orderBy('id','DESC')
                         ->orderBy('fecha','DESC')
+                        ->orderBy('id','DESC')
                         ->first();   
                     $stock=$anterior->stock;
                     $total=$anterior->total;

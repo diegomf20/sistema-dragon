@@ -4,27 +4,24 @@
             <div class="col-sm-4">
                 <div class="card">
                     <div class="card-header">
-                        <h6 class="text-primary mb-0 font-weight-bold">Nuevo Insumo</h6>
+                        <h6 class="text-primary mb-0 font-weight-bold">Nuevo Activo</h6>
                     </div>
                     <div class="card-body">
                         <form action="" v-on:submit.prevent="grabarNuevo()" class="row">
                             <div class="col-lg-12 form-group">
-                                <label for="">Nombre de Insumo:</label>
-                                <input v-model="insumo.nombre_insumo" class="form-control" type="text" 
-                                @keyup="buscarTecleo()">
-                                <strong>{{ errors.nombre_insumo }}</strong>
+                                <label for="">Nombre de activo:</label>
+                                <input v-model="activo.nombre_activo" class="form-control" type="text">
+                                <strong>{{ errors.nombre_activo }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
-                                <label for="">Unidad:</label>
-                                <select v-model="insumo.unidad_id" class="form-control">
-                                    <option value=null>--Seleccionar Unidad--</option>
-                                    <option v-for="unidad in unidades" :value="unidad.id">{{ unidad.nombre_unidad }}</option>
-                                </select>
+                                <label for="">Marca:</label>
+                                <input v-model="activo.marca" class="form-control">
+                                <strong>{{ errors.marca }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
-                                <label for="">Punto de Reorden:</label>
-                                <input v-model="insumo.punto_reorden" class="form-control" type="number">
-                                <strong>{{ errors.punto_reorden }}</strong>
+                                <label for="">Serie:</label>
+                                <input v-model="activo.serie" class="form-control">
+                                <strong>{{ errors.serie }}</strong>
                             </div>
                             <div class="col-lg-12 text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
@@ -48,31 +45,28 @@
                             <thead>
                                 <tr>
                                     <th>Código</th>
-                                    <th>Unidad</th>
-                                    <th>Descripcion</th>
-                                    <th>P.R.</th>
-                                    <th>Editar</th>
+                                    <th>Nombre</th>
+                                    <th>Marca</th>
+                                    <th>Serie</th>
+                                    <th>Obra</th>
+                                    <th>opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="insumo in table.data">
-                                    <td>{{insumo.codigo}}</td>
-                                    <td>{{insumo.nombre_unidad}}</td>
-                                    <td>{{insumo.nombre_insumo}}</td>
-                                    <td>{{insumo.punto_reorden}}</td>
+                                <tr v-for="activo in table.data">
+                                    <td>{{activo.codigo}}</td>
+                                    <td>{{activo.nombre_activo}}</td>
+                                    <td>{{activo.marca}}</td>
+                                    <td>{{activo.serie}}</td>
+                                    <td>{{activo.titulo}}</td>
                                     <td>
-                                        <button @click="abrirEditar(insumo.id)" class="btn btn-sm btn-warning">
+                                        <button @click="abrirEditar(activo.id)" class="btn btn-sm btn-warning">
                                             <i class="fas fa-pen"></i>
                                         </button>
+                                        <button @click="abrirCambiar(activo.id)" class="btn btn-sm btn-info">
+                                            <i class="fas fa-building"></i>
+                                        </button>
                                     </td>
-                                    <!-- <td>
-                                        <button v-if="insumo.estado=='0'" @click="actualizarEstado(insumo.id)" class="btn-link-info">
-                                            <i class="material-icons">radio_button_checked</i>
-                                        </button>
-                                        <button v-else @click="actualizarEstado(insumo.id)" class="btn-link-gray">
-                                            <i class="material-icons">radio_button_unchecked</i>
-                                        </button>
-                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -93,11 +87,39 @@
             </div>
         </div>
         <!--Modal Editar-->
+        <div id="modal-cambiar" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="text-primary mb-0 font-weight-bold">Mover a obra</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" v-on:submit.prevent="grabarCambiar()">
+                            <div class="col-lg-12 form-group">
+                                <label for="">Seleccione Obra:</label>
+                                <select v-model="activo_editar.obra_id" class="form-control">
+                                    <option value=""> -- No esta en Obra --</option>
+                                    <option :value="obra.id" v-for="obra in obras">{{ obra.titulo }}</option>
+                                </select>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Fin Modal Editar-->
+        <!--Modal Editar-->
         <div id="modal-editar" class="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h6 class="text-primary mb-0 font-weight-bold">Editar Insumo</h6>
+                        <h6 class="text-primary mb-0 font-weight-bold">Editar Activo</h6>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -105,21 +127,19 @@
                     <div class="modal-body">
                         <form action="" v-on:submit.prevent="grabarEditar()">
                             <div class="col-lg-12 form-group">
-                                <label for="">Nombre de Insumo:</label>
-                                <input v-model="insumo_editar.nombre_insumo" class="form-control" type="text">
-                                <strong>{{ errors_editar.nombre_insumo }}</strong>
+                                <label for="">Nombre de Activo:</label>
+                                <input v-model="activo_editar.nombre_activo" class="form-control" type="text">
+                                <strong>{{ errors_editar.nombre_activo }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
-                                <label for="">Unidad:</label>
-                                <select v-model="insumo_editar.unidad_id" class="form-control">
-                                    <option value=null>--Seleccionar Unidad--</option>
-                                    <option v-for="unidad in unidades" :value="unidad.id">{{ unidad.nombre_unidad }}</option>
-                                </select>
+                                <label for="">Marca:</label>
+                                <input v-model="activo_editar.marca" class="form-control">
+                                <strong>{{ errors_editar.marca }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
-                                <label for="">Punto de Reorden:</label>
-                                <input v-model="insumo_editar.punto_reorden" class="form-control" type="number" >
-                                <strong>{{ errors_editar.punto_reorden }}</strong>
+                                <label for="">Serie:</label>
+                                <input v-model="activo_editar.serie" class="form-control">
+                                <strong>{{ errors_editar.serie }}</strong>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
@@ -143,8 +163,8 @@ export default {
     data() {
         return {
             areas: [],
-            insumo: this.iniInsumo(), //datos de logeo
-            insumo_editar: this.iniInsumo(),
+            activo: this.iniActivo(), //datos de logeo
+            activo_editar: this.iniActivo(),
             errors: {}, //datos de errores
             errors_editar: {}, //datos de errores
             //Datos de Tabla:
@@ -152,34 +172,35 @@ export default {
                 data:[]
             },
             selectPage: 1,
-            unidades: [],
+            obras: [],
             url: null,
             search: ''
         }
     },
     mounted() {
         this.listar();
-        this.listarUnidades();
+        this.listarObras();
     },
     methods: {
-        buscarTecleo(){
-            this.search=this.insumo.nombre_insumo;
-            this.listar();
+        listarObras(){
+            axios.get(url_base+'/obra?all=true&estado=A')
+            .then(response=>{
+                this.obras=response.data;
+            });
         },
-        iniInsumo(){
+        iniActivo(){
             this.errors_editar={};
             this.errors={};
             return {
-                nombre_insumo: null,
-                punto_reorden: null,
-                unidad_id: null,
-                id: null,
-                codigo: null,
+                nombre_activo: null,
+                marca: null,
+                serie: null,
+                obra_id: ''
             }
         },
         listar(n=this.selectPage){
             this.selectPage=n;
-            axios.get(url_base+'/insumo?search='+this.search+'&page='+n)
+            axios.get(url_base+'/activo?search='+this.search+'&page='+n)
             .then(response => {
                 this.table = response.data;
             })
@@ -191,7 +212,7 @@ export default {
             })
         },
         grabarNuevo(){
-            axios.post(url_base+'/insumo',this.insumo)
+            axios.post(url_base+'/activo',this.activo)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
@@ -199,8 +220,8 @@ export default {
                         this.errors=respuesta.data;
                         break;
                     case "OK":
-                        this.insumo=this.iniInsumo();
-                        swal("", "insumo Registrado", "success");
+                        this.activo=this.iniActivo();
+                        swal("", "Activo Registrado", "success");
                         this.listar();
                         break;
                     default:
@@ -209,7 +230,7 @@ export default {
             });
         },
         actualizarEstado(id){
-            axios.post(url_base+'/insumo/'+id+'/estado')
+            axios.post(url_base+'/activo/'+id+'/estado')
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
@@ -223,7 +244,7 @@ export default {
             });
         },
         grabarEditar(){
-            axios.post(url_base+'/insumo/'+this.insumo_editar.id+'?_method=PUT',this.insumo_editar)
+            axios.post(url_base+'/activo/'+this.activo_editar.id+'?_method=PUT',this.activo_editar)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
@@ -231,9 +252,9 @@ export default {
                         this.errors_editar=respuesta.data;
                         break;
                     case "OK":
-                        this.insumo_editar=this.iniInsumo();
+                        this.activo_editar=this.iniActivo();
                         this.listar();
-                        swal("", "insumo Actualizado", "success");
+                        swal("", "Activo Actualizado", "success");
                         $('#modal-editar').modal('hide');
                         break;
                     default:
@@ -241,12 +262,38 @@ export default {
                 }
             });
         },
-        abrirEditar(id){
-            axios.get(url_base+'/insumo/'+id)
+        grabarCambiar(){
+            axios.post(url_base+'/activo/'+this.activo_editar.id+'/obra',this.activo_editar)
             .then(response => {
-                this.insumo_editar = response.data;
+                var respuesta=response.data;
+                switch (respuesta.status) {
+                    case "VALIDATION":
+                        this.errors_editar=respuesta.data;
+                        break;
+                    case "OK":
+                        this.activo_editar=this.iniActivo();
+                        this.listar();
+                        swal("", "Activo Actualizado", "success");
+                        $('#modal-cambiar').modal('hide');
+                        break;
+                    default:
+                        break;
+                }
+            });
+        },
+        abrirEditar(id){
+            axios.get(url_base+'/activo/'+id)
+            .then(response => {
+                this.activo_editar = response.data;
             })
             $('#modal-editar').modal();
+        },
+        abrirCambiar(id){
+            axios.get(url_base+'/activo/'+id)
+            .then(response => {
+                this.activo_editar = response.data;
+            })
+            $('#modal-cambiar').modal();
         }
     },
 }
