@@ -44,6 +44,7 @@
             <thead>
                 <tr>
                     <th>Inicio</th>
+                    <th>Termino</th>
                     <th>Título de Obra</th>
                     <th>Cliente</th>
                     <th>Total</th>
@@ -53,6 +54,7 @@
                 @foreach ($obras as $obra)
                     <tr>
                         <td>{{ $obra->fecha_inicio }}</td>
+                        <td>{{ $obra->fecha_fin }}</td>
                         <td>{{ $obra->titulo }}</td>
                         <td>{{ $obra->razon_social }}</td>
                         <td>{{ $obra->total }}</td>

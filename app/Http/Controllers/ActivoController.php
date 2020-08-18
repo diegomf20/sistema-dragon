@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Model\Activo;
 use App\Model\MovimientoActivo;
+use App\Exports\ActivoExports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use App\Http\Requests\ActivoValidate;
 use Illuminate\Support\Facades\DB;
 use PDF;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ActivoController extends Controller
 {
@@ -24,6 +26,11 @@ class ActivoController extends Controller
             // return view('pdf.activo',compact('activos'));
             $pdf = PDF::loadView('pdf.activo',compact('activos'));
             return $pdf->download('activos.pdf');
+        }
+        
+        if ($request->has('excel')) {
+            $activos=Activo::all();
+            return Excel::download(new ActivoExports($activos), "activos.xlsx");
         }
         $texto_busqueda=explode(" ",$request->search);
         $activos=Activo::select('activo.*','obra.titulo')->leftJoin('obra','obra.id','=','activo.obra_id')

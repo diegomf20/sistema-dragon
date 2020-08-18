@@ -12,7 +12,7 @@
                         </div>
                         <div class="col-lg-4 col-sm-6">
                             <button class="btn btn-primary" @click="listarStocks()">Buscar</button>
-                            <!-- <a :href="url" class="btn btn-success">Excel</a> -->
+                            <a :href="excel" class="btn btn-success">Excel</a>
                         </div>
                     </div>
                     <table class="table">
@@ -73,8 +73,8 @@ export default {
         this.listarStocks();
     },
     computed: {
-        url(){
-            return url_base+'/api/stock?fecha='+this.fecha;
+        excel(){
+            return url_base+'/stock?excel';
         }
     },
     methods: {

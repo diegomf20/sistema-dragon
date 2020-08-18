@@ -5694,8 +5694,8 @@ __webpack_require__.r(__webpack_exports__);
     this.listarStocks();
   },
   computed: {
-    url: function url() {
-      return url_base + '/api/stock?fecha=' + this.fecha;
+    excel: function excel() {
+      return url_base + '/stock?excel';
     }
   },
   methods: {
@@ -66056,6 +66056,12 @@ var render = function() {
                   }
                 },
                 [_vm._v("Buscar")]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                { staticClass: "btn btn-success", attrs: { href: _vm.excel } },
+                [_vm._v("Excel")]
               )
             ])
           ]),

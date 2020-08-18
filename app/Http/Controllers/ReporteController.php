@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Model\Obra;
 use App\Model\Gasto;
 use App\Model\Movimiento;
+use App\Exports\ReporteStockExports;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use PDF;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class ReporteController extends Controller
 {
@@ -28,6 +32,10 @@ class ReporteController extends Controller
             $datos=$this->paginate($query,[],10,$request->page);
         }else{
             $datos=DB::select(DB::raw($query));
+
+            if ($request->has('excel')) {
+                return Excel::download(new ReporteStockExports($datos), "stock.xlsx");
+            }
         }
 
         
