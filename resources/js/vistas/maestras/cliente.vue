@@ -39,6 +39,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
+                            <a :href="pdf" class="btn btn-danger mb-3"><i class="far fa-file-pdf"></i> PDF</a>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
@@ -145,6 +146,11 @@ export default {
     },
     mounted() {
         this.listar();
+    },
+    computed: {
+        pdf(){
+            return url_base+'/cliente?pdf'
+        }
     },
     methods: {
         inicliente(){

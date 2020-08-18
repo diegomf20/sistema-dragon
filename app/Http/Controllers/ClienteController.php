@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Http\Requests\ClienteValidate;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class ClienteController extends Controller
 {
@@ -16,6 +17,11 @@ class ClienteController extends Controller
      */
     public function index(Request $request)
     {
+        if ($request->has('pdf')) {
+            $clientes=Cliente::all();
+            $pdf = PDF::loadView('pdf.cliente',compact('clientes'));
+            return $pdf->download('clientes.pdf');
+        }
         if ($request->all==true) {
             $clientees=Cliente::all();
         }else{

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\ObraValidate;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use PDF;
+
 class ObraController extends Controller
 {
     /**
@@ -17,7 +19,13 @@ class ObraController extends Controller
      */
     public function index(Request $request)
     {
-
+        if ($request->has('pdf')) {
+            $obras=Obra::select('obra.*','razon_social')
+                            ->leftJoin('cliente','cliente.id','=','obra.cliente_id')
+                            ->get();
+            $pdf = PDF::loadView('pdf.obra',compact('obras'));
+            return $pdf->download('obras.pdf');
+        }      
         if ($request->all==true) {
             switch ($request->estado) {
                 case 'A':

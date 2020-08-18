@@ -27,9 +27,11 @@ class ActivoValidate extends FormRequest
     public function rules()
     {
         return [
+            'codigo' => 'required|max:12',
             'nombre_activo' => 'required|max:150',
             'marca' => 'max:50',
             'serie' => 'max:50',
+            'precio_compra' => 'numeric'
         ];
     }
     

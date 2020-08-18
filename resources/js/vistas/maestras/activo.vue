@@ -1,13 +1,18 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
                         <h6 class="text-primary mb-0 font-weight-bold">Nuevo Activo</h6>
                     </div>
                     <div class="card-body">
                         <form action="" v-on:submit.prevent="grabarNuevo()" class="row">
+                            <div class="col-lg-12 form-group">
+                                <label for="">Código:</label>
+                                <input v-model="activo.codigo" class="form-control" type="text">
+                                <strong>{{ errors.codigo }}</strong>
+                            </div>
                             <div class="col-lg-12 form-group">
                                 <label for="">Nombre de activo:</label>
                                 <input v-model="activo.nombre_activo" class="form-control" type="text">
@@ -23,6 +28,16 @@
                                 <input v-model="activo.serie" class="form-control">
                                 <strong>{{ errors.serie }}</strong>
                             </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Fecha:</label>
+                                <input v-model="activo.fecha_compra" type="date" class="form-control">
+                                <strong>{{ errors.fecha_compra }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Precio Compra:</label>
+                                <input v-model="activo.precio_compra" class="form-control">
+                                <strong>{{ errors.precio_compra }}</strong>
+                            </div>
                             <div class="col-lg-12 text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
                             </div>
@@ -30,14 +45,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-8">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-9 form-group">
+                            <div class="col-sm-2">
+                                <a :href="pdf" class="btn btn-danger mb-3"><i class="far fa-file-pdf"></i> PDF</a>
+                            </div>
+                            <div class="col-sm-8 form-group">
                                 <input type="text" class="form-control" v-model="search">
                             </div>
-                            <div class="col-sm-3 form-group">
+                            <div class="col-sm-2 form-group">
                                 <button class="btn btn-info" @click="listar()">Buscar</button>
                             </div>
                         </div>
@@ -101,7 +119,7 @@
                             <div class="col-lg-12 form-group">
                                 <label for="">Seleccione Obra:</label>
                                 <select v-model="activo_editar.obra_id" class="form-control">
-                                    <option value=""> -- No esta en Obra --</option>
+                                    <option :value="null">-- En Almacen --</option>
                                     <option :value="obra.id" v-for="obra in obras">{{ obra.titulo }}</option>
                                 </select>
                             </div>
@@ -127,6 +145,11 @@
                     <div class="modal-body">
                         <form action="" v-on:submit.prevent="grabarEditar()">
                             <div class="col-lg-12 form-group">
+                                <label for="">Código:</label>
+                                <input v-model="activo_editar.codigo" class="form-control" type="text">
+                                <strong>{{ errors_editar.codigo }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
                                 <label for="">Nombre de Activo:</label>
                                 <input v-model="activo_editar.nombre_activo" class="form-control" type="text">
                                 <strong>{{ errors_editar.nombre_activo }}</strong>
@@ -141,6 +164,16 @@
                                 <input v-model="activo_editar.serie" class="form-control">
                                 <strong>{{ errors_editar.serie }}</strong>
                             </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Fecha:</label>
+                                <input v-model="activo_editar.fecha_compra" type="date" class="form-control">
+                                <strong>{{ errors_editar.fecha_compra }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Precio Compra:</label>
+                                <input v-model="activo_editar.precio_compra" class="form-control">
+                                <strong>{{ errors_editar.precio_compra }}</strong>
+                            </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
                             </div>
@@ -153,13 +186,7 @@
     </div>
 </template>
 <script>
-// import Input from '../../dragon-desing/dg-input.vue'
-// import Select from '../../dragon-desing/dg-select.vue'
 export default {
-    // components:{
-    //     Input,
-    //     Select
-    // },
     data() {
         return {
             areas: [],
@@ -181,6 +208,11 @@ export default {
         this.listar();
         this.listarObras();
     },
+    computed: {
+        pdf(){
+            return url_base+'/activo?pdf'
+        }
+    },
     methods: {
         listarObras(){
             axios.get(url_base+'/obra?all=true&estado=A')
@@ -195,7 +227,9 @@ export default {
                 nombre_activo: null,
                 marca: null,
                 serie: null,
-                obra_id: ''
+                obra_id: '',
+                precio_compra: '',
+                fecha_compra: ''
             }
         },
         listar(n=this.selectPage){
@@ -222,6 +256,10 @@ export default {
                     case "OK":
                         this.activo=this.iniActivo();
                         swal("", "Activo Registrado", "success");
+                        this.listar();
+                        break;
+                    case "ERROR":
+                        swal("", respuesta.data, "error");
                         this.listar();
                         break;
                     default:

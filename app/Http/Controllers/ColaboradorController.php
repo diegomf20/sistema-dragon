@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Http\Requests\ColaboradorValidate;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class ColaboradorController extends Controller
 {
@@ -16,6 +17,11 @@ class ColaboradorController extends Controller
      */
     public function index(Request $request)
     {
+        if ($request->has('pdf')) {
+            $colaboradores=Colaborador::all();
+            $pdf = PDF::loadView('pdf.colaborador',compact('colaboradores'));
+            return $pdf->download('colaboradors.pdf');
+        }
         $texto_busqueda=explode(" ",$request->search);
         $colaboradores=Colaborador::where(DB::raw("CONCAT(nombre_colaborador,' ',apellido_colaborador,' ',documento)"),"like","%".$texto_busqueda[0]."%");
         

@@ -35,7 +35,7 @@
                             <input v-model="gasto.monto" type="text" class="form-control">
                         </div>
                         <div class="col-sm-2 form-group">
-                            <button class="btn btn-primary mt-sm-4" @click="guardar">Consultar</button>
+                            <button class="btn btn-primary mt-sm-4" @click="guardar">Registrar</button>
                         </div>
                     </div>
                 </div>

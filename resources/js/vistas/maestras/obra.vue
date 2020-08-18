@@ -51,10 +51,15 @@
             <div class="col-sm-7">
                 <div class="card">
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <a :href="pdf" class="btn btn-danger mb-3"><i class="far fa-file-pdf"></i> PDF</a>
+                            </div>
+                        </div>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Código</th>
+                                    <th>Fecha Inicio</th>
                                     <th>Título de Obra</th>
                                     <th>Editar</th>
                                     <th>Finalizar</th>
@@ -181,6 +186,11 @@ export default {
     mounted() {
         this.listar();
         this.listarClientes();
+    },
+    computed: {
+        pdf(){
+            return url_base+'/obra?pdf'
+        }
     },
     methods: {
         iniobra(){

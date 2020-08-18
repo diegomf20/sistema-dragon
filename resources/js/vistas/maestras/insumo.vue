@@ -37,10 +37,13 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-9 form-group">
+                            <div class="col-sm-2">
+                                <a :href="pdf" class="btn btn-danger mb-3"><i class="far fa-file-pdf"></i> PDF</a>
+                            </div>
+                            <div class="col-sm-8 form-group">
                                 <input type="text" class="form-control" v-model="search">
                             </div>
-                            <div class="col-sm-3 form-group">
+                            <div class="col-sm-2 form-group">
                                 <button class="btn btn-info" @click="listar()">Buscar</button>
                             </div>
                         </div>
@@ -160,6 +163,11 @@ export default {
     mounted() {
         this.listar();
         this.listarUnidades();
+    },
+    computed: {
+        pdf(){
+            return url_base+'/insumo?pdf'
+        }
     },
     methods: {
         buscarTecleo(){

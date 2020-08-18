@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Model\Activo;
+use App\Model\MovimientoActivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use App\Http\Requests\ActivoValidate;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class ActivoController extends Controller
 {
@@ -16,6 +18,13 @@ class ActivoController extends Controller
      */
     public function index(Request $request)
     {
+
+        if ($request->has('pdf')) {
+            $activos=Activo::all();
+            // return view('pdf.activo',compact('activos'));
+            $pdf = PDF::loadView('pdf.activo',compact('activos'));
+            return $pdf->download('activos.pdf');
+        }
         $texto_busqueda=explode(" ",$request->search);
         $activos=Activo::select('activo.*','obra.titulo')->leftJoin('obra','obra.id','=','activo.obra_id')
         ->where("nombre_activo","like","%".$texto_busqueda[0]."%");
@@ -36,14 +45,20 @@ class ActivoController extends Controller
      */
     public function store(ActivoValidate $request)
     {
-
-        $activo_contar=(Activo::select(DB::raw('count(id) contar'))->first()->contar)+1;
+        $activoBuscar=Activo::where('codigo',$request->codigo)->first();
+        if ($activoBuscar!=null) {
+            return response()->json([
+                "status"=>"ERROR",
+                "data"=>"El activo ya fue registrado."
+            ]);
+        }
         $activo=new Activo();
-        $activo->codigo=str_pad($activo_contar, 4, "0", STR_PAD_LEFT);
+        $activo->codigo=$request->codigo;
         $activo->nombre_activo=$request->nombre_activo;
         $activo->marca=$request->marca;
         $activo->serie=$request->serie;
-        // $activo->obra_id=$request->obra_id;
+        $activo->precio_compra=$request->precio_compra;
+        $activo->fecha_compra=$request->fecha_compra;
         $activo->save();
         return response()->json([
             "status"=> "OK",
@@ -63,9 +78,12 @@ class ActivoController extends Controller
     public function update(ActivoValidate $request, $id)
     {
         $activo=Activo::where('id',$id)->first();
+        $activo->codigo=$request->codigo;
         $activo->nombre_activo=$request->nombre_activo;
         $activo->marca=$request->marca;
         $activo->serie=$request->serie;
+        $activo->precio_compra=$request->precio_compra;
+        $activo->fecha_compra=$request->fecha_compra;
         $activo->save();
         return response()->json([
             "status"=> "OK",
@@ -77,9 +95,20 @@ class ActivoController extends Controller
         $activo=Activo::where('id',$id)->first();
         $activo->obra_id=$request->obra_id;
         $activo->save();
+        $movimientoActivo=new MovimientoActivo();
+        $movimientoActivo->activo_id=$id;
+        $movimientoActivo->obra_id=$request->obra_id;
+        $movimientoActivo->save();
         return response()->json([
             "status"=> "OK",
             "data"  => "Activo Actualizado."
         ]);
+    }
+
+    public function movimiento($id){
+        $movimientosActivo=MovimientoActivo::where('activo_id',$id)
+                            ->orderBy('id','DESC')
+                            ->get();
+        return response()->json($movimientosActivo);
     }
 }

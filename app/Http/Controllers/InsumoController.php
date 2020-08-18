@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Http\Requests\InsumoValidate;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class InsumoController extends Controller
 {
@@ -16,7 +17,13 @@ class InsumoController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request->all());
+        if ($request->has('pdf')) {
+            $insumos=Insumo::select('insumo.*','nombre_unidad')
+                            ->leftJoin('unidad','unidad.id','=','insumo.unidad_id')
+                            ->get();
+            $pdf = PDF::loadView('pdf.insumo',compact('insumos'));
+            return $pdf->download('insumos.pdf');
+        }      
         $insumos=Insumo::select('insumo.*','nombre_unidad')
                     ->leftJoin('unidad','unidad.id','=','insumo.unidad_id')
                     ->where('nombre_insumo','like','%'.$request->search.'%');

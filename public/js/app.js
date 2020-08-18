@@ -2296,13 +2296,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-// import Input from '../../dragon-desing/dg-input.vue'
-// import Select from '../../dragon-desing/dg-select.vue'
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  // components:{
-  //     Input,
-  //     Select
-  // },
   data: function data() {
     return {
       areas: [],
@@ -2327,6 +2354,11 @@ __webpack_require__.r(__webpack_exports__);
     this.listar();
     this.listarObras();
   },
+  computed: {
+    pdf: function pdf() {
+      return url_base + '/activo?pdf';
+    }
+  },
   methods: {
     listarObras: function listarObras() {
       var _this = this;
@@ -2342,7 +2374,9 @@ __webpack_require__.r(__webpack_exports__);
         nombre_activo: null,
         marca: null,
         serie: null,
-        obra_id: ''
+        obra_id: '',
+        precio_compra: '',
+        fecha_compra: ''
       };
     },
     listar: function listar() {
@@ -2375,6 +2409,13 @@ __webpack_require__.r(__webpack_exports__);
           case "OK":
             _this4.activo = _this4.iniActivo();
             swal("", "Activo Registrado", "success");
+
+            _this4.listar();
+
+            break;
+
+          case "ERROR":
+            swal("", respuesta.data, "error");
 
             _this4.listar();
 
@@ -2612,6 +2653,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2633,6 +2675,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.listar();
+  },
+  computed: {
+    pdf: function pdf() {
+      return url_base + '/cliente?pdf';
+    }
   },
   methods: {
     inicliente: function inicliente() {
@@ -2894,6 +2941,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2916,6 +2966,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.listar();
+  },
+  computed: {
+    pdf: function pdf() {
+      return url_base + '/colaborador?pdf';
+    }
   },
   methods: {
     inicolaborador: function inicolaborador() {
@@ -3164,6 +3219,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 // import Input from '../../dragon-desing/dg-input.vue'
 // import Select from '../../dragon-desing/dg-select.vue'
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3194,6 +3252,11 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.listar();
     this.listarUnidades();
+  },
+  computed: {
+    pdf: function pdf() {
+      return url_base + '/insumo?pdf';
+    }
   },
   methods: {
     buscarTecleo: function buscarTecleo() {
@@ -3478,6 +3541,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3501,6 +3569,11 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.listar();
     this.listarClientes();
+  },
+  computed: {
+    pdf: function pdf() {
+      return url_base + '/obra?pdf';
+    }
   },
   methods: {
     iniobra: function iniobra() {
@@ -59273,7 +59346,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-4" }, [
+      _c("div", { staticClass: "col-md-4" }, [
         _c("div", { staticClass: "card" }, [
           _vm._m(0),
           _vm._v(" "),
@@ -59291,6 +59364,34 @@ var render = function() {
                 }
               },
               [
+                _c("div", { staticClass: "col-lg-12 form-group" }, [
+                  _c("label", { attrs: { for: "" } }, [_vm._v("Código:")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.activo.codigo,
+                        expression: "activo.codigo"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.activo.codigo },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.activo, "codigo", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("strong", [_vm._v(_vm._s(_vm.errors.codigo))])
+                ]),
+                _vm._v(" "),
                 _c("div", { staticClass: "col-lg-12 form-group" }, [
                   _c("label", { attrs: { for: "" } }, [
                     _vm._v("Nombre de activo:")
@@ -59379,6 +59480,71 @@ var render = function() {
                   _c("strong", [_vm._v(_vm._s(_vm.errors.serie))])
                 ]),
                 _vm._v(" "),
+                _c("div", { staticClass: "col-lg-12 form-group" }, [
+                  _c("label", { attrs: { for: "" } }, [_vm._v("Fecha:")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.activo.fecha_compra,
+                        expression: "activo.fecha_compra"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "date" },
+                    domProps: { value: _vm.activo.fecha_compra },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.activo,
+                          "fecha_compra",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("strong", [_vm._v(_vm._s(_vm.errors.fecha_compra))])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-lg-12 form-group" }, [
+                  _c("label", { attrs: { for: "" } }, [
+                    _vm._v("Precio Compra:")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.activo.precio_compra,
+                        expression: "activo.precio_compra"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    domProps: { value: _vm.activo.precio_compra },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.activo,
+                          "precio_compra",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("strong", [_vm._v(_vm._s(_vm.errors.precio_compra))])
+                ]),
+                _vm._v(" "),
                 _vm._m(1)
               ]
             )
@@ -59386,11 +59552,22 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-8" }, [
+      _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-sm-9 form-group" }, [
+              _c("div", { staticClass: "col-sm-2" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-danger mb-3",
+                    attrs: { href: _vm.pdf }
+                  },
+                  [_c("i", { staticClass: "far fa-file-pdf" }), _vm._v(" PDF")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-8 form-group" }, [
                 _c("input", {
                   directives: [
                     {
@@ -59414,7 +59591,7 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-sm-3 form-group" }, [
+              _c("div", { staticClass: "col-sm-2 form-group" }, [
                 _c(
                   "button",
                   {
@@ -59640,8 +59817,8 @@ var render = function() {
                           }
                         },
                         [
-                          _c("option", { attrs: { value: "" } }, [
-                            _vm._v(" -- No esta en Obra --")
+                          _c("option", { domProps: { value: null } }, [
+                            _vm._v("-- En Almacen --")
                           ]),
                           _vm._v(" "),
                           _vm._l(_vm.obras, function(obra) {
@@ -59693,6 +59870,38 @@ var render = function() {
                     }
                   },
                   [
+                    _c("div", { staticClass: "col-lg-12 form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [_vm._v("Código:")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.activo_editar.codigo,
+                            expression: "activo_editar.codigo"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.activo_editar.codigo },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.activo_editar,
+                              "codigo",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("strong", [_vm._v(_vm._s(_vm.errors_editar.codigo))])
+                    ]),
+                    _vm._v(" "),
                     _c("div", { staticClass: "col-lg-12 form-group" }, [
                       _c("label", { attrs: { for: "" } }, [
                         _vm._v("Nombre de Activo:")
@@ -59789,6 +59998,75 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("strong", [_vm._v(_vm._s(_vm.errors_editar.serie))])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12 form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [_vm._v("Fecha:")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.activo_editar.fecha_compra,
+                            expression: "activo_editar.fecha_compra"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "date" },
+                        domProps: { value: _vm.activo_editar.fecha_compra },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.activo_editar,
+                              "fecha_compra",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("strong", [
+                        _vm._v(_vm._s(_vm.errors_editar.fecha_compra))
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12 form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v("Precio Compra:")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.activo_editar.precio_compra,
+                            expression: "activo_editar.precio_compra"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        domProps: { value: _vm.activo_editar.precio_compra },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.activo_editar,
+                              "precio_compra",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("strong", [
+                        _vm._v(_vm._s(_vm.errors_editar.precio_compra))
+                      ])
                     ]),
                     _vm._v(" "),
                     _vm._m(6)
@@ -60086,6 +60364,15 @@ var render = function() {
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "table-responsive" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "btn btn-danger mb-3",
+                  attrs: { href: _vm.pdf }
+                },
+                [_c("i", { staticClass: "far fa-file-pdf" }), _vm._v(" PDF")]
+              ),
+              _vm._v(" "),
               _c("table", { staticClass: "table table-striped" }, [
                 _vm._m(2),
                 _vm._v(" "),
@@ -60644,7 +60931,18 @@ var render = function() {
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-sm-9 form-group" }, [
+              _c("div", { staticClass: "col-sm-2 form-group" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-danger mb-3",
+                    attrs: { href: _vm.pdf }
+                  },
+                  [_c("i", { staticClass: "far fa-file-pdf" }), _vm._v(" PDF")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-8 form-group" }, [
                 _c("input", {
                   directives: [
                     {
@@ -60668,7 +60966,7 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-sm-3 form-group" }, [
+              _c("div", { staticClass: "col-sm-2 form-group" }, [
                 _c(
                   "button",
                   {
@@ -61287,7 +61585,18 @@ var render = function() {
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-sm-9 form-group" }, [
+              _c("div", { staticClass: "col-sm-2" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-danger mb-3",
+                    attrs: { href: _vm.pdf }
+                  },
+                  [_c("i", { staticClass: "far fa-file-pdf" }), _vm._v(" PDF")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-8 form-group" }, [
                 _c("input", {
                   directives: [
                     {
@@ -61311,7 +61620,7 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-sm-3 form-group" }, [
+              _c("div", { staticClass: "col-sm-2 form-group" }, [
                 _c(
                   "button",
                   {
@@ -61941,6 +62250,19 @@ var render = function() {
       _c("div", { staticClass: "col-sm-7" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm-2" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-danger mb-3",
+                    attrs: { href: _vm.pdf }
+                  },
+                  [_c("i", { staticClass: "far fa-file-pdf" }), _vm._v(" PDF")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
             _c("table", { staticClass: "table table-striped" }, [
               _vm._m(2),
               _vm._v(" "),
@@ -62381,7 +62703,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("Código")]),
+        _c("th", [_vm._v("Fecha Inicio")]),
         _vm._v(" "),
         _c("th", [_vm._v("Título de Obra")]),
         _vm._v(" "),
@@ -64539,7 +64861,7 @@ var render = function() {
                   staticClass: "btn btn-primary mt-sm-4",
                   on: { click: _vm.guardar }
                 },
-                [_vm._v("Consultar")]
+                [_vm._v("Registrar")]
               )
             ])
           ])
