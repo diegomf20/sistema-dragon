@@ -1,51 +1,14 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> --}}
+@extends('pdf.pdf')
 
-    <style>
-        .left{
-            text-align: left
+@section('titulo','RESUMEN DE OBRA')
 
-        }
-        .right{
-            text-align: right;
-        }
-        .center{
-            text-align: center;
-        }
-        .table{
-            width: 100%;
-        }
-        .w-100{
-            width: 100px;
-        }
-        table{
-            border-collapse: collapse;
-        }
-        td,th,tr,thead,tbody{
-            margin: 0;
-        }
-        td{
-            border-top: 1px solid #ddd;
-            padding: 10px 15px
-        }
-        th{
-            border-bottom: 1px solid #ddd;
-            border-top: 1px solid #ddd
-        }
-    </style>
-</head>
-<body>
-    <div class="col-12">
-        <h4 class="center">RESUMEN DE OBRA</h4>
+@section('content')
         <p><strong>Titulo: </strong> {{ $obra->titulo }}</p> 
         <p><strong>Descripción: </strong> {{ $obra->descripcion }}</p> 
         <p><strong>Fecha Inicio: </strong> {{ $obra->fecha_inicio }}</p> 
         <p><strong>Fecha Fin: </strong> {{ $obra->fecha_fin }}</p> 
-    </div>
-    <div class="col-12">
-        <hr>
+        <p><strong>Cotizado: </strong> S/. {{ $obra->total }}</p> 
+        <br>
         <h4>Insumos Consumidos</h4>
         <table class="table">
             <thead>
@@ -77,9 +40,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div class="col-12">
-        <hr>
+        <br>
         <h4>Gastos Otros</h4>
         <table class="table">
             <thead>
@@ -109,6 +70,4 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-</body>
-</html>
+@endsection

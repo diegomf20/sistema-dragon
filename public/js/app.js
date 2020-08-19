@@ -2329,6 +2329,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2357,9 +2376,15 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     pdf: function pdf() {
       return url_base + '/activo?pdf';
+    },
+    excel: function excel() {
+      return url_base + '/activo?excel';
     }
   },
   methods: {
+    format: function format(fecha) {
+      return moment(fecha).format('YYYY-MM-DD');
+    },
     listarObras: function listarObras() {
       var _this = this;
 
@@ -2376,7 +2401,8 @@ __webpack_require__.r(__webpack_exports__);
         serie: null,
         obra_id: '',
         precio_compra: '',
-        fecha_compra: ''
+        fecha_compra: '',
+        movimientos: []
       };
     },
     listar: function listar() {
@@ -3546,6 +3572,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3554,6 +3592,8 @@ __webpack_require__.r(__webpack_exports__);
       obra: this.iniobra(),
       //datos de logeo
       obra_editar: this.iniobra(),
+      finalizar_id: null,
+      finalizar_fecha: moment().format('YYYY-MM-DD'),
       errors: {},
       //datos de errores
       errors_editar: {},
@@ -3629,15 +3669,22 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    finalizar: function finalizar(id) {
+    abrirFinalizar: function abrirFinalizar(finalizar_id) {
+      this.finalizar_id = finalizar_id;
+      $('#modal-finalizar').modal();
+    },
+    finalizar: function finalizar() {
       var _this4 = this;
 
-      axios.post(url_base + '/obra/' + id + '/finalizar').then(function (response) {
+      axios.post(url_base + '/obra/' + this.finalizar_id + '/finalizar', {
+        fecha_fin: this.finalizar_fecha
+      }).then(function (response) {
         var respuesta = response.data;
 
         switch (respuesta.status) {
           case "OK":
             swal("", "Obra Finalizada", "success");
+            $('#modal-finalizar').modal('hide');
 
             _this4.listar();
 
@@ -59346,7 +59393,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-4" }, [
+      _c("div", { staticClass: "col-md-4 mb-3" }, [
         _c("div", { staticClass: "card" }, [
           _vm._m(0),
           _vm._v(" "),
@@ -59564,6 +59611,18 @@ var render = function() {
                     attrs: { href: _vm.pdf }
                   },
                   [_c("i", { staticClass: "far fa-file-pdf" }), _vm._v(" PDF")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-success mb-3",
+                    attrs: { href: _vm.excel }
+                  },
+                  [
+                    _c("i", { staticClass: "far fa-file-excel" }),
+                    _vm._v(" Excel")
+                  ]
                 )
               ]),
               _vm._v(" "),
@@ -59607,54 +59666,56 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c("table", { staticClass: "table table-striped" }, [
-              _vm._m(2),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.table.data, function(activo) {
-                  return _c("tr", [
-                    _c("td", [_vm._v(_vm._s(activo.codigo))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(activo.nombre_activo))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(activo.marca))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(activo.serie))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(activo.titulo))]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-sm btn-warning",
-                          on: {
-                            click: function($event) {
-                              return _vm.abrirEditar(activo.id)
-                            }
-                          }
-                        },
-                        [_c("i", { staticClass: "fas fa-pen" })]
-                      ),
+            _c("div", { staticClass: "table-responsive" }, [
+              _c("table", { staticClass: "table table-striped" }, [
+                _vm._m(2),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.table.data, function(activo) {
+                    return _c("tr", [
+                      _c("td", [_vm._v(_vm._s(activo.codigo))]),
                       _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-sm btn-info",
-                          on: {
-                            click: function($event) {
-                              return _vm.abrirCambiar(activo.id)
+                      _c("td", [_vm._v(_vm._s(activo.nombre_activo))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(activo.marca))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(activo.serie))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(activo.titulo || "En Almacen"))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-warning",
+                            on: {
+                              click: function($event) {
+                                return _vm.abrirEditar(activo.id)
+                              }
                             }
-                          }
-                        },
-                        [_c("i", { staticClass: "fas fa-building" })]
-                      )
+                          },
+                          [_c("i", { staticClass: "fas fa-pen" })]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-info",
+                            on: {
+                              click: function($event) {
+                                return _vm.abrirCambiar(activo.id)
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fas fa-building" })]
+                        )
+                      ])
                     ])
-                  ])
-                }),
-                0
-              )
+                  }),
+                  0
+                )
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "row pagination" }, [
@@ -59833,7 +59894,35 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    _vm._m(4)
+                    _c("div", { staticClass: "col-12 form-group" }, [
+                      _vm.activo_editar.movimientos.length > 0
+                        ? _c("table", { staticClass: "table" }, [
+                            _vm._m(4),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.activo_editar.movimientos, function(
+                                movimiento
+                              ) {
+                                return _c("tr", [
+                                  _c("td", [
+                                    _vm._v(_vm._s(_vm.format(movimiento)))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(
+                                      _vm._s(movimiento.titulo || "En Almacen")
+                                    )
+                                  ])
+                                ])
+                              }),
+                              0
+                            )
+                          ])
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(5)
                   ]
                 )
               ])
@@ -59855,7 +59944,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(5),
+              _vm._m(6),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c(
@@ -60069,7 +60158,7 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(6)
+                    _vm._m(7)
                   ]
                 )
               ])
@@ -60144,6 +60233,18 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Fecha")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Obra")])
+      ])
     ])
   },
   function() {
@@ -62272,6 +62373,8 @@ var render = function() {
                   return _c("tr", [
                     _c("td", [_vm._v(_vm._s(obra.fecha_inicio))]),
                     _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(obra.fecha_fin))]),
+                    _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(obra.titulo))]),
                     _vm._v(" "),
                     _c("td", [
@@ -62297,7 +62400,7 @@ var render = function() {
                               staticClass: "btn btn-info",
                               on: {
                                 click: function($event) {
-                                  return _vm.finalizar(obra.id)
+                                  return _vm.abrirFinalizar(obra.id)
                                 }
                               }
                             },
@@ -62416,7 +62519,7 @@ var render = function() {
       "div",
       {
         staticClass: "modal",
-        attrs: { id: "modal-editar", tabindex: "-1", role: "dialog" }
+        attrs: { id: "modal-finalizar", tabindex: "-1", role: "dialog" }
       },
       [
         _c(
@@ -62425,6 +62528,60 @@ var render = function() {
           [
             _c("div", { staticClass: "modal-content" }, [
               _vm._m(3),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.finalizar_fecha,
+                      expression: "finalizar_fecha"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "date", id: "" },
+                  domProps: { value: _vm.finalizar_fecha },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.finalizar_fecha = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    on: { click: _vm.finalizar }
+                  },
+                  [_vm._v("FINALIZAR")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal",
+        attrs: { id: "modal-editar", tabindex: "-1", role: "dialog" }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c(
@@ -62663,7 +62820,7 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(4)
+                    _vm._m(5)
                   ]
                 )
               ])
@@ -62705,12 +62862,37 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Fecha Inicio")]),
         _vm._v(" "),
+        _c("th", [_vm._v("Fecha Fin")]),
+        _vm._v(" "),
         _c("th", [_vm._v("Título de Obra")]),
         _vm._v(" "),
         _c("th", [_vm._v("Editar")]),
         _vm._v(" "),
         _c("th", [_vm._v("Finalizar")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h6", { staticClass: "text-primary mb-0 font-weight-bold" }, [
+        _vm._v("Finalizar Obra")
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
     ])
   },
   function() {

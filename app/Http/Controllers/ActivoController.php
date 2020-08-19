@@ -23,7 +23,6 @@ class ActivoController extends Controller
 
         if ($request->has('pdf')) {
             $activos=Activo::all();
-            // return view('pdf.activo',compact('activos'));
             $pdf = PDF::loadView('pdf.activo',compact('activos'));
             return $pdf->download('activos.pdf');
         }
@@ -78,7 +77,7 @@ class ActivoController extends Controller
      */
     public function show($id)
     {
-        $activo=Activo::where('id',$id)->first();
+        $activo=Activo::with('movimientos')->where('id',$id)->first();
         return response()->json($activo);
     }
         

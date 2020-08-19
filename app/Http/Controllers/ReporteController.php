@@ -81,7 +81,11 @@ class ReporteController extends Controller
                     "fecha2" =>  $fecha,
                 ]);
         return response()->json($datos);
-        
+    }
+
+    public function rango_compras(){
+        $data=DB::select(DB::raw("SELECT producto_id,tipo,SUM(cantidad) FROM kardex GROUP BY producto_id,tipo"));
+        return response()->json($data);
     }
 
     public function resumen_obra(Request $request){
@@ -102,9 +106,7 @@ class ReporteController extends Controller
             "id"    => $obra_id
         ]);
         $gastos=Gasto::where('obra_id',$obra_id)->get();
-        // dd($gastos);
         if ($request->has('pdf')) {
-            // return view('pdf.resumen_obra',compact('obra','insumos'));
             $pdf = PDF::loadView('pdf.resumen_obra',compact('obra','insumos','gastos'));
             return $pdf->download('reporte-obra-'.$obra_id.'.pdf');
         }

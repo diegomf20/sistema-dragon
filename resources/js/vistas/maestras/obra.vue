@@ -60,6 +60,7 @@
                             <thead>
                                 <tr>
                                     <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
                                     <th>Título de Obra</th>
                                     <th>Editar</th>
                                     <th>Finalizar</th>
@@ -68,6 +69,7 @@
                             <tbody>
                                 <tr v-for="obra in table.data">
                                     <td>{{obra.fecha_inicio}}</td>
+                                    <td>{{obra.fecha_fin}}</td>
                                     <td>{{obra.titulo}}</td>
                                     <td>
                                         <button @click="abrirEditar(obra.id)" class="btn btn-sm btn-warning">
@@ -75,21 +77,13 @@
                                         </button>
                                     </td>
                                     <td>
-                                        <button v-if="obra.estado=='A'" @click="finalizar(obra.id)" class="btn btn-info">
+                                        <button v-if="obra.estado=='A'" @click="abrirFinalizar(obra.id)" class="btn btn-info">
                                             <i class="fas fa-archive"></i>
                                         </button> 
                                         <button v-if="obra.estado=='I'" class="btn btn-secondary">
                                             <i class="fas fa-archive"></i>
                                         </button> 
                                     </td>
-                                    <!-- <td>
-                                        <button v-if="obra.estado=='0'" @click="actualizarEstado(obra.id)" class="btn-link-info">
-                                            <i class="material-icons">radio_button_checked</i>
-                                        </button>
-                                        <button v-else @click="actualizarEstado(obra.id)" class="btn-link-gray">
-                                            <i class="material-icons">radio_button_unchecked</i>
-                                        </button>
-                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -105,6 +99,24 @@
                                 <button class="btn btn-primary" @click="listar(Number(selectPage)+1)" v-if="!(selectPage==table.last_page||table.last_page==1)">></button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal Editar-->
+        <div id="modal-finalizar" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="text-primary mb-0 font-weight-bold">Finalizar Obra</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="date" v-model="finalizar_fecha" class="form-control" id="">
+                        <br>
+                        <button class="btn btn-danger" @click="finalizar">FINALIZAR</button>
                     </div>
                 </div>
             </div>
@@ -172,6 +184,8 @@ export default {
             clientes: [],
             obra: this.iniobra(), //datos de logeo
             obra_editar: this.iniobra(),
+            finalizar_id: null,
+            finalizar_fecha: moment().format('YYYY-MM-DD'),
             errors: {}, //datos de errores
             errors_editar: {}, //datos de errores
             //Datos de Tabla:
@@ -237,13 +251,20 @@ export default {
                 }
             });
         },
-        finalizar(id){
-            axios.post(url_base+'/obra/'+id+'/finalizar')
+        abrirFinalizar(finalizar_id){
+            this.finalizar_id=finalizar_id;
+            $('#modal-finalizar').modal();
+        },
+        finalizar(){
+            axios.post(url_base+'/obra/'+this.finalizar_id+'/finalizar',{
+                fecha_fin: this.finalizar_fecha
+            })
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
                     case "OK":
                         swal("", "Obra Finalizada", "success");
+                        $('#modal-finalizar').modal('hide');
                         this.listar();
                         break;
                     default:

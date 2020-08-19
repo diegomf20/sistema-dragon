@@ -31,10 +31,9 @@
             padding: 8px 16px;
             font-size: 12px
         }
-        
         .encabezado{
             padding: 2rem;
-            margin-bottom: 1.5rem;
+            padding-bottom: 4rem;
             position: relative
         }
         .encabezado img{
@@ -43,7 +42,6 @@
             left: 0;
             height: 80px
         }
-        
     </style>
 </head>
 <body>

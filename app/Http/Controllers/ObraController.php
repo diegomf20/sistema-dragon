@@ -29,17 +29,17 @@ class ObraController extends Controller
         if ($request->all==true) {
             switch ($request->estado) {
                 case 'A':
-                    $obras=Obra::orderBy('id','DESC')->where('estado','A')->get();
+                    $obras=Obra::orderBy('fecha_inicio','DESC')->where('estado','A')->get();
                     break;
                 case 'I':
-                    $obras=Obra::orderBy('id','DESC')->where('estado','I')->get();
+                    $obras=Obra::orderBy('fecha_inicio','DESC')->where('estado','I')->get();
                     break;
                 default:
-                    $obras=Obra::orderBy('id','DESC')->get();
+                    $obras=Obra::orderBy('fecha_inicio','DESC')->get();
                     break;
             }
         }else{
-            $obras=Obra::orderBy('id','DESC')->paginate(10);
+            $obras=Obra::orderBy('fecha_inicio','DESC')->paginate(10);
         }
         return response()->json($obras);
     }
@@ -92,7 +92,7 @@ class ObraController extends Controller
     public function finalizar(Request $request,$id){
         $obra=Obra::where('id',$id)->first();
         $obra->estado="I";
-        $obra->fecha_fin=Carbon::now();
+        $obra->fecha_fin=$request->fecha_fin ? $request->fecha_fin : Carbon::now();
         $obra->save();
         return response()->json([
             "status"=> "OK",

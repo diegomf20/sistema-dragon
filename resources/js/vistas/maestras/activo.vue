@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 mb-3">
                 <div class="card">
                     <div class="card-header">
                         <h6 class="text-primary mb-0 font-weight-bold">Nuevo Activo</h6>
@@ -51,6 +51,7 @@
                         <div class="row">
                             <div class="col-sm-2">
                                 <a :href="pdf" class="btn btn-danger mb-3"><i class="far fa-file-pdf"></i> PDF</a>
+                                <a :href="excel" class="btn btn-success mb-3"><i class="far fa-file-excel"></i> Excel</a>
                             </div>
                             <div class="col-sm-8 form-group">
                                 <input type="text" class="form-control" v-model="search">
@@ -59,35 +60,37 @@
                                 <button class="btn btn-info" @click="listar()">Buscar</button>
                             </div>
                         </div>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Marca</th>
-                                    <th>Serie</th>
-                                    <th>Obra</th>
-                                    <th>opciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="activo in table.data">
-                                    <td>{{activo.codigo}}</td>
-                                    <td>{{activo.nombre_activo}}</td>
-                                    <td>{{activo.marca}}</td>
-                                    <td>{{activo.serie}}</td>
-                                    <td>{{activo.titulo}}</td>
-                                    <td>
-                                        <button @click="abrirEditar(activo.id)" class="btn btn-sm btn-warning">
-                                            <i class="fas fa-pen"></i>
-                                        </button>
-                                        <button @click="abrirCambiar(activo.id)" class="btn btn-sm btn-info">
-                                            <i class="fas fa-building"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Marca</th>
+                                        <th>Serie</th>
+                                        <th>Obra</th>
+                                        <th>opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="activo in table.data">
+                                        <td>{{activo.codigo}}</td>
+                                        <td>{{activo.nombre_activo}}</td>
+                                        <td>{{activo.marca}}</td>
+                                        <td>{{activo.serie}}</td>
+                                        <td>{{ ( activo.titulo || 'En Almacen')}}</td>
+                                        <td>
+                                            <button @click="abrirEditar(activo.id)" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <button @click="abrirCambiar(activo.id)" class="btn btn-sm btn-info">
+                                                <i class="fas fa-building"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="row pagination">
                             <div class="col-9 text-left">
                                 <h6>Pagina {{ selectPage }} de {{ table.last_page}} (TOTAL: {{table.total}})</h6>
@@ -122,6 +125,22 @@
                                     <option :value="null">-- En Almacen --</option>
                                     <option :value="obra.id" v-for="obra in obras">{{ obra.titulo }}</option>
                                 </select>
+                            </div>
+                            <div class="col-12 form-group">
+                                <table class="table" v-if="activo_editar.movimientos.length>0">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Obra</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="movimiento in activo_editar.movimientos">
+                                            <td>{{ format(movimiento) }}</td>
+                                            <td>{{ (movimiento.titulo || 'En Almacen') }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
@@ -211,9 +230,15 @@ export default {
     computed: {
         pdf(){
             return url_base+'/activo?pdf'
+        },
+        excel(){
+            return url_base+'/activo?excel'
         }
     },
     methods: {
+        format(fecha){
+            return moment(fecha).format('YYYY-MM-DD')
+        },
         listarObras(){
             axios.get(url_base+'/obra?all=true&estado=A')
             .then(response=>{
@@ -229,7 +254,8 @@ export default {
                 serie: null,
                 obra_id: '',
                 precio_compra: '',
-                fecha_compra: ''
+                fecha_compra: '',
+                movimientos: []
             }
         },
         listar(n=this.selectPage){
