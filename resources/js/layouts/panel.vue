@@ -48,6 +48,8 @@
               <div class="bg-white py-2 collapse-inner rounded">
                   <h6 class="collapse-header">Reportes de Almacen:</h6>
                   <router-link to="movimiento" class="collapse-item" >Movimientos</router-link>
+                  <router-link to="ingreso-insumos" class="collapse-item" >Ingreso x Insumos</router-link>
+                  <router-link to="salida-insumos" class="collapse-item" >Salida x Insumos</router-link>
                   <router-link to="stock" class="collapse-item" >Stock</router-link>
                   <router-link to="kardex" class="collapse-item" >Kardex</router-link>
                   <router-link to="reorden" class="collapse-item" >Reorden</router-link>

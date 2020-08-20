@@ -6,6 +6,7 @@ use App\Model\Obra;
 use App\Model\Gasto;
 use App\Model\Movimiento;
 use App\Exports\ReporteStockExports;
+use App\Exports\DataExports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -80,11 +81,49 @@ class ReporteController extends Controller
                     "fecha" =>  $fecha,
                     "fecha2" =>  $fecha,
                 ]);
+
+        
         return response()->json($datos);
     }
 
-    public function rango_compras(){
-        $data=DB::select(DB::raw("SELECT producto_id,tipo,SUM(cantidad) FROM kardex GROUP BY producto_id,tipo"));
+    public function ingreso_insumos(Request $request){
+        $fecha_inicio=$request->fecha_inicio;
+        $fecha_fin=$request->fecha_fin;
+        $data=DB::select(
+                DB::raw("SELECT producto_id,codigo,nombre_insumo,tipo,SUM(cantidad) cantidad_compra, SUM(precio*cantidad) total_compra
+                        FROM kardex 
+                        INNER JOIN insumo ON insumo.id=kardex.producto_id
+                        WHERE (fecha BETWEEN ? AND ?)
+                        AND tipo='Ingreso'
+                        GROUP BY producto_id,tipo,nombre_insumo,codigo
+                        ORDER BY cantidad_compra DESC"),
+                [
+                    $fecha_inicio,
+                    $fecha_fin
+                ]);
+        if ($request->has('excel')) {
+            return Excel::download(new DataExports($data,'exports.ingreso-insumos'), "ingreso-insumos.xlsx");
+        }
+        return response()->json($data);
+    }
+    public function salida_insumos(Request $request){
+        $fecha_inicio=$request->fecha_inicio;
+        $fecha_fin=$request->fecha_fin;
+        $data=DB::select(
+                DB::raw("SELECT producto_id,codigo,nombre_insumo,tipo,SUM(cantidad) cantidad_consumo, SUM(precio*cantidad) total_consumo 
+                        FROM kardex 
+                        INNER JOIN insumo ON insumo.id=kardex.producto_id
+                        WHERE (fecha BETWEEN ? AND ?)
+                        AND tipo='Salida'
+                        GROUP BY producto_id,tipo,nombre_insumo,codigo
+                        ORDER BY cantidad_consumo DESC"),
+                [
+                    $fecha_inicio,
+                    $fecha_fin
+                ]);
+        if ($request->has('excel')) {
+            return Excel::download(new DataExports($data,'exports.salida-insumos'), "salida-insumos.xlsx");
+        }
         return response()->json($data);
     }
 

@@ -4,10 +4,10 @@ namespace App\Exports;
 
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Support\Facades\DB;
 
-
-class ReporteStockExports implements FromView
+class ReporteStockExports implements FromView,ShouldAutoSize
 {
 
     private $stocks;

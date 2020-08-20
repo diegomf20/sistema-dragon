@@ -81,6 +81,14 @@ var routes =[
         component: require('../vistas/reportes/kardex.vue').default,
     },
     { 
+        path: '/ingreso-insumos', 
+        component: require('../vistas/reportes/ingreso-insumos.vue').default,
+    },
+    { 
+        path: '/salida-insumos', 
+        component: require('../vistas/reportes/salida-insumos.vue').default,
+    },
+    { 
         path: '/resumen-obra', 
         component: require('../vistas/reportes/resumen-obra.vue').default,
     },

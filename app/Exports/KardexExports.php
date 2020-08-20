@@ -4,10 +4,10 @@ namespace App\Exports;
 
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Support\Facades\DB;
 
-
-class KardexExports implements FromView
+class KardexExports implements FromView,ShouldAutoSize
 {
 
     private $fecha;

@@ -26,7 +26,8 @@ Route::resource('cuadre', 'CuadreController');
 Route::resource('gasto', 'GastoController');
 
 
-Route::get('rango-compras','ReporteController@rango_compras');
+Route::get('ingreso-insumos','ReporteController@ingreso_insumos');
+Route::get('salida-insumos','ReporteController@salida_insumos');
 Route::get('stock','ReporteController@stock');
 Route::get('kardex_unitario','ReporteController@kardex_unitario');
 Route::get('reorden','ReporteController@reorden');
