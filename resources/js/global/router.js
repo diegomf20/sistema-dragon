@@ -29,6 +29,10 @@ var routes =[
         component: require('../vistas/maestras/activo.vue').default,
     },
     { 
+        path: '/categoria-activo', 
+        component: require('../vistas/maestras/categoria-activo.vue').default,
+    },
+    { 
         path: '/unidad', 
         component: require('../vistas/maestras/unidad.vue').default,
     },

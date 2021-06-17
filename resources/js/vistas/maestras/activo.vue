@@ -15,7 +15,7 @@
                             </div>
                             <div class="col-lg-12 form-group">
                                 <label for="">Nombre de activo:</label>
-                                <input v-model="activo.nombre_activo" class="form-control" type="text">
+                                <input v-model="activo.nombre_activo" class="form-control" @keyup="buscarTecleo()" type="text">
                                 <strong>{{ errors.nombre_activo }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
@@ -236,6 +236,10 @@ export default {
         }
     },
     methods: {
+        buscarTecleo(){
+            this.search=this.activo.nombre_activo;
+            this.listar();
+        },
         format(fecha){
             return moment(fecha).format('YYYY-MM-DD')
         },
@@ -281,6 +285,7 @@ export default {
                         break;
                     case "OK":
                         this.activo=this.iniActivo();
+                        this.errors={};
                         swal("", "Activo Registrado", "success");
                         this.listar();
                         break;
@@ -321,6 +326,9 @@ export default {
                         swal("", "Activo Actualizado", "success");
                         $('#modal-editar').modal('hide');
                         break;
+                    case "ERROR":
+                        swal("", respuesta.data, "error");
+                        break;
                     default:
                         break;
                 }
@@ -346,6 +354,7 @@ export default {
             });
         },
         abrirEditar(id){
+            this.errors_editar={};
             axios.get(url_base+'/activo/'+id)
             .then(response => {
                 this.activo_editar = response.data;

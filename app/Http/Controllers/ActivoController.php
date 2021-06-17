@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use App\Http\Requests\ActivoValidate;
+use App\Http\Requests\ActivoUpdateValidate;
 use Illuminate\Support\Facades\DB;
 use PDF;
 use Maatwebsite\Excel\Facades\Excel;
@@ -81,8 +82,17 @@ class ActivoController extends Controller
         return response()->json($activo);
     }
         
-    public function update(ActivoValidate $request, $id)
+    public function update(ActivoUpdateValidate $request, $id)
     {
+        $activoBuscar=Activo::where('codigo',$request->codigo)
+                            ->where('id','<>',$id)    
+                            ->first();
+        if ($activoBuscar!=null) {
+            return response()->json([
+                "status"=>"ERROR",
+                "data"=>"Código usado en otro activo."
+            ]);
+        }
         $activo=Activo::where('id',$id)->first();
         $activo->codigo=$request->codigo;
         $activo->nombre_activo=$request->nombre_activo;

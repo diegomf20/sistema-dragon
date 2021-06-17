@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ActivoValidate extends FormRequest
+class CategoriaActivoValidate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,16 +26,9 @@ class ActivoValidate extends FormRequest
      */
     public function rules()
     {
-        
-        $rules=[
-            'codigo' => 'required|max:12|unique:activo',
-            'nombre_activo' => 'required|max:150',
-            'marca' => 'max:50',
-            'serie' => 'nullable|max:50|unique:activo',
-            'precio_compra' => 'numeric'
+        return [
+            'nombre_categoria' => 'required|max:50',
         ];
-
-        return $rules;
     }
     
     protected function failedValidation(Validator $validator) {

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ActivoValidate extends FormRequest
+class ActivoUpdateValidate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +28,6 @@ class ActivoValidate extends FormRequest
     {
         
         $rules=[
-            'codigo' => 'required|max:12|unique:activo',
             'nombre_activo' => 'required|max:150',
             'marca' => 'max:50',
             'serie' => 'nullable|max:50|unique:activo',

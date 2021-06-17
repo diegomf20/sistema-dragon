@@ -12,6 +12,7 @@ Route::post('retorno','RetornoController@store');
 Route::post('activo/{id}/movimiento','ActivoController@movimiento');
 Route::post('activo/{id}/obra','ActivoController@asignarObra');
 Route::resource('activo', 'ActivoController');
+Route::resource('categoria-activo', 'CategoriaActivoController');
 Route::resource('colaborador', 'ColaboradorController');
 Route::resource('proveedor', 'ProveedorController');
 Route::resource('cliente', 'ClienteController');
