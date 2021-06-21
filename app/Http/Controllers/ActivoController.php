@@ -40,9 +40,9 @@ class ActivoController extends Controller
             $activos=$activos->where("nombre_activo","like","%".$texto_busqueda[$i]."%");
         }
         if ($request->all==true) {
-            $activos=$activos->get();
+            $activos=$activos->where('activo.estado',"0")->get();
         }else{
-            $activos=$activos->paginate(8);
+            $activos=$activos->where('activo.estado',"0")->paginate(8);
         }
         return response()->json($activos);
     }
@@ -64,6 +64,7 @@ class ActivoController extends Controller
         $activo->nombre_activo=$request->nombre_activo;
         $activo->marca=$request->marca;
         $activo->serie=$request->serie;
+        $activo->categoria_id=$request->categoria_id;
         $activo->precio_compra=$request->precio_compra;
         $activo->fecha_compra=$request->fecha_compra;
         $activo->save();
@@ -98,12 +99,23 @@ class ActivoController extends Controller
         $activo->nombre_activo=$request->nombre_activo;
         $activo->marca=$request->marca;
         $activo->serie=$request->serie;
+        $activo->categoria_id=$request->categoria_id;
         $activo->precio_compra=$request->precio_compra;
         $activo->fecha_compra=$request->fecha_compra;
         $activo->save();
         return response()->json([
             "status"=> "OK",
             "data"  => "Activo Actualizado."
+        ]);
+    }
+    
+    public function destroy($id){
+        $activo=Activo::where('id',$id)->first();
+        $activo->estado='1';
+        $activo->save();
+        return response()->json([
+            "status"=> "OK",
+            "data"  => "Activo de Baja."
         ]);
     }
     

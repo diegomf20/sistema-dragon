@@ -2351,6 +2351,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2366,6 +2383,7 @@ __webpack_require__.r(__webpack_exports__);
       table: {
         data: []
       },
+      categorias: [],
       selectPage: 1,
       obras: [],
       url: null,
@@ -2375,6 +2393,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.listar();
     this.listarObras();
+    this.listarCategorias();
   },
   computed: {
     pdf: function pdf() {
@@ -2408,6 +2427,7 @@ __webpack_require__.r(__webpack_exports__);
         serie: null,
         obra_id: '',
         precio_compra: '',
+        categoria_id: null,
         fecha_compra: '',
         movimientos: []
       };
@@ -2421,54 +2441,42 @@ __webpack_require__.r(__webpack_exports__);
         _this2.table = response.data;
       });
     },
-    listarUnidades: function listarUnidades() {
+    listarCategorias: function listarCategorias() {
       var _this3 = this;
 
+      axios.get(url_base + '/categoria-activo?all=true').then(function (response) {
+        _this3.categorias = response.data;
+      });
+    },
+    listarUnidades: function listarUnidades() {
+      var _this4 = this;
+
       axios.get(url_base + '/unidad?all=true').then(function (response) {
-        _this3.unidades = response.data;
+        _this4.unidades = response.data;
       });
     },
     grabarNuevo: function grabarNuevo() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.post(url_base + '/activo', this.activo).then(function (response) {
         var respuesta = response.data;
 
         switch (respuesta.status) {
           case "VALIDATION":
-            _this4.errors = respuesta.data;
+            _this5.errors = respuesta.data;
             break;
 
           case "OK":
-            _this4.activo = _this4.iniActivo();
-            _this4.errors = {};
+            _this5.activo = _this5.iniActivo();
+            _this5.errors = {};
             swal("", "Activo Registrado", "success");
 
-            _this4.listar();
+            _this5.listar();
 
             break;
 
           case "ERROR":
             swal("", respuesta.data, "error");
-
-            _this4.listar();
-
-            break;
-
-          default:
-            break;
-        }
-      });
-    },
-    actualizarEstado: function actualizarEstado(id) {
-      var _this5 = this;
-
-      axios.post(url_base + '/activo/' + id + '/estado').then(function (response) {
-        var respuesta = response.data;
-
-        switch (respuesta.status) {
-          case "OK":
-            swal("", "Estado Actualizado", "success");
 
             _this5.listar();
 
@@ -2479,21 +2487,40 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    grabarEditar: function grabarEditar() {
+    actualizarEstado: function actualizarEstado(id) {
       var _this6 = this;
+
+      axios.post(url_base + '/activo/' + id + '/estado').then(function (response) {
+        var respuesta = response.data;
+
+        switch (respuesta.status) {
+          case "OK":
+            swal("", "Estado Actualizado", "success");
+
+            _this6.listar();
+
+            break;
+
+          default:
+            break;
+        }
+      });
+    },
+    grabarEditar: function grabarEditar() {
+      var _this7 = this;
 
       axios.post(url_base + '/activo/' + this.activo_editar.id + '?_method=PUT', this.activo_editar).then(function (response) {
         var respuesta = response.data;
 
         switch (respuesta.status) {
           case "VALIDATION":
-            _this6.errors_editar = respuesta.data;
+            _this7.errors_editar = respuesta.data;
             break;
 
           case "OK":
-            _this6.activo_editar = _this6.iniActivo();
+            _this7.activo_editar = _this7.iniActivo();
 
-            _this6.listar();
+            _this7.listar();
 
             swal("", "Activo Actualizado", "success");
             $('#modal-editar').modal('hide');
@@ -2509,20 +2536,20 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     grabarCambiar: function grabarCambiar() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.post(url_base + '/activo/' + this.activo_editar.id + '/obra', this.activo_editar).then(function (response) {
         var respuesta = response.data;
 
         switch (respuesta.status) {
           case "VALIDATION":
-            _this7.errors_editar = respuesta.data;
+            _this8.errors_editar = respuesta.data;
             break;
 
           case "OK":
-            _this7.activo_editar = _this7.iniActivo();
+            _this8.activo_editar = _this8.iniActivo();
 
-            _this7.listar();
+            _this8.listar();
 
             swal("", "Activo Actualizado", "success");
             $('#modal-cambiar').modal('hide');
@@ -2534,21 +2561,47 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     abrirEditar: function abrirEditar(id) {
-      var _this8 = this;
+      var _this9 = this;
 
       this.errors_editar = {};
       axios.get(url_base + '/activo/' + id).then(function (response) {
-        _this8.activo_editar = response.data;
+        _this9.activo_editar = response.data;
       });
       $('#modal-editar').modal();
     },
     abrirCambiar: function abrirCambiar(id) {
-      var _this9 = this;
+      var _this10 = this;
 
       axios.get(url_base + '/activo/' + id).then(function (response) {
-        _this9.activo_editar = response.data;
+        _this10.activo_editar = response.data;
       });
       $('#modal-cambiar').modal();
+    },
+    eliminar: function eliminar(id) {
+      var _this11 = this;
+
+      swal({
+        title: "",
+        text: "Desea dar de baja el activo",
+        icon: "warning",
+        buttons: true
+      }).then(function (value) {
+        switch (value) {
+          case true:
+            axios.post(url_base + '/activo/' + id + '?_method=DELETE').then(function (response) {
+              var respuesta = response.data;
+
+              switch (respuesta.status) {
+                case "OK":
+                  _this11.listar();
+
+                  swal("", "Activo de baja", "success");
+                  break;
+              }
+            });
+            break;
+        }
+      });
     }
   }
 });
@@ -59956,6 +60009,58 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-lg-12 form-group" }, [
+                  _c("label", { attrs: { for: "" } }, [_vm._v("Categoria:")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.activo.categoria_id,
+                          expression: "activo.categoria_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.activo,
+                            "categoria_id",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { domProps: { value: null } }, [
+                        _vm._v("--Seleccionar Categoria--")
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.categorias, function(categoria) {
+                        return _c(
+                          "option",
+                          { domProps: { value: categoria.id } },
+                          [_vm._v(_vm._s(categoria.nombre_categoria))]
+                        )
+                      })
+                    ],
+                    2
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-lg-12 form-group" }, [
                   _c("label", { attrs: { for: "" } }, [_vm._v("Fecha:")]),
                   _vm._v(" "),
                   _c("input", {
@@ -60137,6 +60242,19 @@ var render = function() {
                             }
                           },
                           [_c("i", { staticClass: "fas fa-building" })]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-danger",
+                            on: {
+                              click: function($event) {
+                                return _vm.eliminar(activo.id)
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fas fa-ban" })]
                         )
                       ])
                     ])
@@ -60515,6 +60633,60 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("strong", [_vm._v(_vm._s(_vm.errors_editar.serie))])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12 form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v("Categoria:")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.activo_editar.categoria_id,
+                              expression: "activo_editar.categoria_id"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.activo_editar,
+                                "categoria_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { domProps: { value: null } }, [
+                            _vm._v("--Seleccionar Categoria--")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.categorias, function(categoria) {
+                            return _c(
+                              "option",
+                              { domProps: { value: categoria.id } },
+                              [_vm._v(_vm._s(categoria.nombre_categoria))]
+                            )
+                          })
+                        ],
+                        2
+                      )
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-lg-12 form-group" }, [

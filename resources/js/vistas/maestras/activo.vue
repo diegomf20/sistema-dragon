@@ -29,6 +29,13 @@
                                 <strong>{{ errors.serie }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
+                                <label for="">Categoria:</label>
+                                <select v-model="activo.categoria_id" class="form-control">
+                                    <option :value="null">--Seleccionar Categoria--</option>
+                                    <option v-for="categoria in categorias" :value="categoria.id">{{ categoria.nombre_categoria }}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-12 form-group">
                                 <label for="">Fecha:</label>
                                 <input v-model="activo.fecha_compra" type="date" class="form-control">
                                 <strong>{{ errors.fecha_compra }}</strong>
@@ -85,6 +92,9 @@
                                             </button>
                                             <button @click="abrirCambiar(activo.id)" class="btn btn-sm btn-info">
                                                 <i class="fas fa-building"></i>
+                                            </button>
+                                            <button @click="eliminar(activo.id)" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-ban"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -184,6 +194,13 @@
                                 <strong>{{ errors_editar.serie }}</strong>
                             </div>
                             <div class="col-lg-12 form-group">
+                                <label for="">Categoria:</label>
+                                <select v-model="activo_editar.categoria_id" class="form-control">
+                                    <option :value="null">--Seleccionar Categoria--</option>
+                                    <option v-for="categoria in categorias" :value="categoria.id">{{ categoria.nombre_categoria }}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-12 form-group">
                                 <label for="">Fecha:</label>
                                 <input v-model="activo_editar.fecha_compra" type="date" class="form-control">
                                 <strong>{{ errors_editar.fecha_compra }}</strong>
@@ -217,6 +234,7 @@ export default {
             table:{
                 data:[]
             },
+            categorias:[],
             selectPage: 1,
             obras: [],
             url: null,
@@ -226,6 +244,7 @@ export default {
     mounted() {
         this.listar();
         this.listarObras();
+        this.listarCategorias();
     },
     computed: {
         pdf(){
@@ -258,6 +277,7 @@ export default {
                 serie: null,
                 obra_id: '',
                 precio_compra: '',
+                categoria_id: null,
                 fecha_compra: '',
                 movimientos: []
             }
@@ -267,6 +287,12 @@ export default {
             axios.get(url_base+'/activo?search='+this.search+'&page='+n)
             .then(response => {
                 this.table = response.data;
+            })
+        },
+        listarCategorias(){
+            axios.get(url_base+'/categoria-activo?all=true')
+            .then(response => {
+                this.categorias = response.data;
             })
         },
         listarUnidades(){
@@ -367,6 +393,30 @@ export default {
                 this.activo_editar = response.data;
             })
             $('#modal-cambiar').modal();
+        },
+        eliminar(id){
+            swal({
+                title: "", 
+                text: "Desea dar de baja el activo", 
+                icon: "warning",
+                buttons: true,
+            })
+            .then((value) => {
+            switch (value) {
+                case true:
+                    axios.post(url_base+'/activo/'+id+'?_method=DELETE')
+                    .then(response => {
+                        var respuesta=response.data;
+                        switch (respuesta.status) {
+                            case "OK":
+                                this.listar();
+                                swal("", "Activo de baja", "success");
+                                break;
+                        }
+                    });
+                break;
+            }
+            });
         }
     },
 }
