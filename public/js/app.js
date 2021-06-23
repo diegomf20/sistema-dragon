@@ -2368,6 +2368,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2387,7 +2394,9 @@ __webpack_require__.r(__webpack_exports__);
       selectPage: 1,
       obras: [],
       url: null,
-      search: ''
+      //filtros
+      search: '',
+      estado: '0'
     };
   },
   mounted: function mounted() {
@@ -2397,10 +2406,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     pdf: function pdf() {
-      return url_base + '/activo?pdf';
+      return url_base + '/activo?pdf&estado=' + this.estado;
     },
     excel: function excel() {
-      return url_base + '/activo?excel';
+      return url_base + '/activo?excel&estado=' + this.estado;
     }
   },
   methods: {
@@ -2437,7 +2446,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var n = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.selectPage;
       this.selectPage = n;
-      axios.get(url_base + '/activo?search=' + this.search + '&page=' + n).then(function (response) {
+      axios.get(url_base + '/activo?estado=' + this.estado + '&search=' + this.search + '&page=' + n).then(function (response) {
         _this2.table = response.data;
       });
     },
@@ -60136,30 +60145,70 @@ var render = function() {
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-sm-2" }, [
+              _c("div", { staticClass: "col-12 form-group" }, [
+                _c("label", { attrs: { for: "" } }, [_vm._v("Exportar: ")]),
+                _vm._v(" "),
                 _c(
                   "a",
-                  {
-                    staticClass: "btn btn-danger mb-3",
-                    attrs: { href: _vm.pdf }
-                  },
-                  [_c("i", { staticClass: "far fa-file-pdf" }), _vm._v(" PDF")]
+                  { staticClass: "btn btn-danger", attrs: { href: _vm.pdf } },
+                  [_c("i", { staticClass: "far fa-file-pdf" })]
                 ),
                 _vm._v(" "),
                 _c(
                   "a",
                   {
-                    staticClass: "btn btn-success mb-3",
+                    staticClass: "btn btn-success",
                     attrs: { href: _vm.excel }
                   },
+                  [_c("i", { staticClass: "far fa-file-excel" })]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-4 form-group" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.estado,
+                        expression: "estado"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.estado = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        },
+                        function($event) {
+                          return _vm.listar()
+                        }
+                      ]
+                    }
+                  },
                   [
-                    _c("i", { staticClass: "far fa-file-excel" }),
-                    _vm._v(" Excel")
+                    _c("option", { attrs: { value: "0" } }, [
+                      _vm._v("Activos")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "1" } }, [_vm._v("De Baja")])
                   ]
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-sm-8 form-group" }, [
+              _c("div", { staticClass: "col-sm-6 form-group" }, [
                 _c("input", {
                   directives: [
                     {

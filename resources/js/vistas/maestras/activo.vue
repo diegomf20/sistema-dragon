@@ -56,11 +56,18 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-2">
-                                <a :href="pdf" class="btn btn-danger mb-3"><i class="far fa-file-pdf"></i> PDF</a>
-                                <a :href="excel" class="btn btn-success mb-3"><i class="far fa-file-excel"></i> Excel</a>
+                            <div class="col-12 form-group">
+                                <label for="">Exportar: </label>
+                                <a :href="pdf" class="btn btn-danger"><i class="far fa-file-pdf"></i></a>
+                                <a :href="excel" class="btn btn-success"><i class="far fa-file-excel"></i></a>
                             </div>
-                            <div class="col-sm-8 form-group">
+                            <div class="col-sm-4 form-group">
+                                <select class="form-control" v-model="estado" @change="listar()">
+                                    <option value="0">Activos</option>
+                                    <option value="1">De Baja</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 form-group">
                                 <input type="text" class="form-control" v-model="search">
                             </div>
                             <div class="col-sm-2 form-group">
@@ -238,7 +245,9 @@ export default {
             selectPage: 1,
             obras: [],
             url: null,
-            search: ''
+            //filtros
+            search: '',
+            estado: '0'
         }
     },
     mounted() {
@@ -248,10 +257,10 @@ export default {
     },
     computed: {
         pdf(){
-            return url_base+'/activo?pdf'
+            return url_base+'/activo?pdf&estado='+this.estado;
         },
         excel(){
-            return url_base+'/activo?excel'
+            return url_base+'/activo?excel&estado='+this.estado;
         }
     },
     methods: {
@@ -284,7 +293,7 @@ export default {
         },
         listar(n=this.selectPage){
             this.selectPage=n;
-            axios.get(url_base+'/activo?search='+this.search+'&page='+n)
+            axios.get(url_base+'/activo?estado='+this.estado+'&search='+this.search+'&page='+n)
             .then(response => {
                 this.table = response.data;
             })

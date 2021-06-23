@@ -21,17 +21,28 @@ class ActivoController extends Controller
      */
     public function index(Request $request)
     {
-
+        /**
+         * Variables
+         */
+        $estado = $request->estado | "0" ;
+        
+        /**
+         * Reportes
+         */
         if ($request->has('pdf')) {
-            $activos=Activo::all();
+            $activos=Activo::where('estado',$estado)->get();
             $pdf = PDF::loadView('pdf.activo',compact('activos'));
             return $pdf->download('activos.pdf');
         }
         
         if ($request->has('excel')) {
-            $activos=Activo::all();
+            $activos=Activo::where('estado',$estado)->get();
             return Excel::download(new ActivoExports($activos), "activos.xlsx");
         }
+
+        /**
+         * Listar JSON
+         */
         $texto_busqueda=explode(" ",$request->search);
         $activos=Activo::select('activo.*','obra.titulo')->leftJoin('obra','obra.id','=','activo.obra_id')
         ->where("nombre_activo","like","%".$texto_busqueda[0]."%");
@@ -40,9 +51,9 @@ class ActivoController extends Controller
             $activos=$activos->where("nombre_activo","like","%".$texto_busqueda[$i]."%");
         }
         if ($request->all==true) {
-            $activos=$activos->where('activo.estado',"0")->get();
+            $activos=$activos->where('activo.estado',$estado)->get();
         }else{
-            $activos=$activos->where('activo.estado',"0")->paginate(8);
+            $activos=$activos->where('activo.estado',$estado)->paginate(8);
         }
         return response()->json($activos);
     }
