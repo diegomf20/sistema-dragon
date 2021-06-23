@@ -3882,6 +3882,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3901,6 +3911,7 @@ __webpack_require__.r(__webpack_exports__);
         data: []
       },
       selectPage: 1,
+      estado: 'A',
       url: null
     };
   },
@@ -3932,7 +3943,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var n = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.selectPage;
       this.selectPage = n;
-      axios.get(url_base + '/obra?page=' + n).then(function (response) {
+      axios.get(url_base + '/obra?estado=' + this.estado + '&page=' + n).then(function (response) {
         _this.table = response.data;
       });
     },
@@ -60293,18 +60304,20 @@ var render = function() {
                           [_c("i", { staticClass: "fas fa-building" })]
                         ),
                         _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-sm btn-danger",
-                            on: {
-                              click: function($event) {
-                                return _vm.eliminar(activo.id)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "fas fa-ban" })]
-                        )
+                        activo.estado == "0"
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm btn-danger",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.eliminar(activo.id)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fas fa-ban" })]
+                            )
+                          : _vm._e()
                       ])
                     ])
                   }),
@@ -63137,7 +63150,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-5" }, [
+      _c("div", { staticClass: "col-sm-4" }, [
         _c("div", { staticClass: "card" }, [
           _vm._m(0),
           _vm._v(" "),
@@ -63356,10 +63369,56 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-7" }, [
+      _c("div", { staticClass: "col-sm-8" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm-6" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.estado,
+                        expression: "estado"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.estado = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        },
+                        function($event) {
+                          return _vm.listar()
+                        }
+                      ]
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "A" } }, [
+                      _vm._v("En Ejecución")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "I" } }, [
+                      _vm._v("Finalizadas")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
               _c("div", { staticClass: "col-sm-2" }, [
                 _c(
                   "a",
@@ -63367,7 +63426,10 @@ var render = function() {
                     staticClass: "btn btn-danger mb-3",
                     attrs: { href: _vm.pdf }
                   },
-                  [_c("i", { staticClass: "far fa-file-pdf" }), _vm._v(" PDF")]
+                  [
+                    _c("i", { staticClass: "far fa-file-pdf" }),
+                    _vm._v(" PDF\n                            ")
+                  ]
                 )
               ])
             ]),

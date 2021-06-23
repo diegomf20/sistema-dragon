@@ -25,21 +25,24 @@ class ObraController extends Controller
                             ->get();
             $pdf = PDF::loadView('pdf.obra',compact('obras'));
             return $pdf->download('obras.pdf');
-        }      
+        }
+
+        switch ($request->estado) {
+            case 'A':
+                $obras=Obra::orderBy('fecha_inicio','DESC')->where('estado','A');
+                break;
+            case 'I':
+                $obras=Obra::orderBy('fecha_inicio','DESC')->where('estado','I');
+                break;
+            default:
+                $obras=Obra::orderBy('fecha_inicio','DESC');
+                break;
+        }
+
         if ($request->all==true) {
-            switch ($request->estado) {
-                case 'A':
-                    $obras=Obra::orderBy('fecha_inicio','DESC')->where('estado','A')->get();
-                    break;
-                case 'I':
-                    $obras=Obra::orderBy('fecha_inicio','DESC')->where('estado','I')->get();
-                    break;
-                default:
-                    $obras=Obra::orderBy('fecha_inicio','DESC')->get();
-                    break;
-            }
+            $obras=$obras->get();
         }else{
-            $obras=Obra::orderBy('fecha_inicio','DESC')->paginate(10);
+            $obras=$obras->paginate(10);
         }
         return response()->json($obras);
     }

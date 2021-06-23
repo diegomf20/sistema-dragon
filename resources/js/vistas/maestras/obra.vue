@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-sm-5">
+            <div class="col-sm-4">
                 <div class="card">
                     <div class="card-header">
                         <h6 class="text-primary mb-0 font-weight-bold">Nuevo Obra</h6>
@@ -48,12 +48,22 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-7">
+            <div class="col-sm-8">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-sm-6">
+                                <select @change="listar()" class="form-control" v-model="estado">
+                                    <option value="A">En Ejecución</option>
+                                    <option value="I">Finalizadas</option>
+                                </select>
+                            </div>
                             <div class="col-sm-2">
-                                <a :href="pdf" class="btn btn-danger mb-3"><i class="far fa-file-pdf"></i> PDF</a>
+                                
+                                <a  :href="pdf" 
+                                    class="btn btn-danger mb-3">
+                                    <i class="far fa-file-pdf"></i> PDF
+                                </a>
                             </div>
                         </div>
                         <table class="table table-striped">
@@ -193,7 +203,7 @@ export default {
                 data:[]
             },
             selectPage: 1,
-
+            estado: 'A',
             url: null
         }
     },
@@ -222,7 +232,7 @@ export default {
         },
         listar(n=this.selectPage){
             this.selectPage=n;
-            axios.get(url_base+'/obra?page='+n)
+            axios.get(url_base+'/obra?estado='+this.estado+'&page='+n)
             .then(response => {
                 this.table = response.data;
             })
