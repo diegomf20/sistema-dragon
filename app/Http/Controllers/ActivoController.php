@@ -34,7 +34,8 @@ class ActivoController extends Controller
          */
         if ($request->has('pdf')) {
             $activos=Activo::leftJoin('obra','obra.id','=','activo.obra_id')
-                            ->select('activo.*','obra.titulo as obra')
+                            ->leftJoin('categoria_activo','categoria_activo.id','=','activo.categoria_id')
+                            ->select('activo.*','obra.titulo as obra','categoria_activo.nombre_categoria as categoria')
                             ->where('activo.estado',$estado)
                             ->get();
             $pdf = PDF::loadView('pdf.activo',compact('activos'));
@@ -43,7 +44,8 @@ class ActivoController extends Controller
         
         if ($request->has('excel')) {
             $activos=Activo::leftJoin('obra','obra.id','=','activo.obra_id')
-                            ->select('activo.*','obra.titulo as obra')
+                            ->leftJoin('categoria_activo','categoria_activo.id','=','activo.categoria_id')
+                            ->select('activo.*','obra.titulo as obra','categoria_activo.nombre_categoria as categoria')
                             ->where('activo.estado',$estado)
                             ->get();
             $tituloEstado=($estado=='A') ? 'En Uso': 'De Baja';
@@ -54,8 +56,10 @@ class ActivoController extends Controller
          * Listar JSON
          */
         $texto_busqueda=explode(" ",$request->search);
-        $activos=Activo::select('activo.*','obra.titulo')->leftJoin('obra','obra.id','=','activo.obra_id')
-        ->where("nombre_activo","like","%".$texto_busqueda[0]."%");
+        $activos=Activo::select('activo.*','obra.titulo','categoria_activo.nombre_categoria')
+            ->leftJoin('obra','obra.id','=','activo.obra_id')
+            ->leftJoin('categoria_activo','categoria_activo.id','=','activo.categoria_id')
+            ->where("nombre_activo","like","%".$texto_busqueda[0]."%");
         
         for ($i=1; $i < count($texto_busqueda); $i++) { 
             $activos=$activos->where("nombre_activo","like","%".$texto_busqueda[$i]."%");

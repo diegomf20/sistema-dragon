@@ -10,6 +10,7 @@
                 <th>Nombre</th>
                 <th>Modelo</th>
                 <th>Serie</th>
+                <th>Categoria</th>
                 <th>Fecha Compra</th>
                 <th>Precio</th>
                 <th>Contable</th>
@@ -23,6 +24,7 @@
                     <td>{{ $activo->nombre_activo }}</td>
                     <td>{{ $activo->marca }}</td>
                     <td>{{ $activo->serie }}</td>
+                    <td>{{ $activo->categoria }}</td>
                     <td>{{ $activo->fecha_compra }}</td>
                     <td>{{ number_format(round($activo->precio_compra,2), 2, '.', ',') }}</td>
                     <td>{{ $activo->contable }}</td>

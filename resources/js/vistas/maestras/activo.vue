@@ -90,6 +90,7 @@
                                         <th>Nombre</th>
                                         <th>Marca</th>
                                         <th>Serie</th>
+                                        <th>Categoria</th>
                                         <th>Precio</th>
                                         <th>Contable</th>
                                         <th>Ubicación</th>
@@ -102,6 +103,7 @@
                                         <td>{{activo.nombre_activo}}</td>
                                         <td>{{activo.marca}}</td>
                                         <td>{{activo.serie}}</td>
+                                        <td>{{activo.nombre_categoria}}</td>
                                         <td>{{activo.precio_compra}}</td>
                                         <td>{{activo.contable}}</td>
                                         <td>{{ ( activo.titulo || 'En Almacen')}}</td>

@@ -2729,6 +2729,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -61276,6 +61278,8 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(activo.serie))]),
                       _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(activo.nombre_categoria))]),
+                      _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(activo.precio_compra))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(activo.contable))]),
@@ -61839,6 +61843,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("Marca")]),
         _vm._v(" "),
         _c("th", [_vm._v("Serie")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Categoria")]),
         _vm._v(" "),
         _c("th", [_vm._v("Precio")]),
         _vm._v(" "),
