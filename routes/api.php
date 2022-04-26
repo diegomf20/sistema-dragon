@@ -9,8 +9,11 @@ use Illuminate\Http\Request;
 */
 Route::post('retorno','RetornoController@store');
 
-Route::post('activo/{id}/movimiento','ActivoController@movimiento');
-Route::post('activo/{id}/obra','ActivoController@asignarObra');
+// Route::post('activo/{id}/movimiento','ActivoController@movimiento');
+Route::post('activo/{id}/regresar','ActivoController@regresar');
+Route::get('activo/movimiento','ActivoController@listarMovimiento');
+Route::get('activo/movimiento/{id}','ActivoController@listarDetMovimiento');
+Route::post('activo/movimiento','ActivoController@movimiento');
 Route::resource('activo', 'ActivoController');
 Route::resource('categoria-activo', 'CategoriaActivoController');
 Route::resource('colaborador', 'ColaboradorController');

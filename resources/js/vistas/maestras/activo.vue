@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
                 <div class="card">
                     <div class="card-header">
                         <h6 class="text-primary mb-0 font-weight-bold">Nuevo Activo</h6>
@@ -36,6 +36,14 @@
                                 </select>
                             </div>
                             <div class="col-lg-12 form-group">
+                                <label for="">Contable:</label>
+                                <select v-model="activo.contable" class="form-control">
+                                    <option value="SI">Si</option>
+                                    <option value="NO">No</option>
+                                </select>
+                                <strong>{{ errors.contable }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
                                 <label for="">Fecha:</label>
                                 <input v-model="activo.fecha_compra" type="date" class="form-control">
                                 <strong>{{ errors.fecha_compra }}</strong>
@@ -52,7 +60,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -63,8 +71,8 @@
                             </div>
                             <div class="col-sm-4 form-group">
                                 <select class="form-control" v-model="estado" @change="listar()">
-                                    <option value="0">Activos</option>
-                                    <option value="1">De Baja</option>
+                                    <option value="A">Activos</option>
+                                    <option value="I">De Baja</option>
                                 </select>
                             </div>
                             <div class="col-sm-6 form-group">
@@ -82,7 +90,9 @@
                                         <th>Nombre</th>
                                         <th>Marca</th>
                                         <th>Serie</th>
-                                        <th>Obra</th>
+                                        <th>Precio</th>
+                                        <th>Contable</th>
+                                        <th>Ubicación</th>
                                         <th>opciones</th>
                                     </tr>
                                 </thead>
@@ -92,6 +102,8 @@
                                         <td>{{activo.nombre_activo}}</td>
                                         <td>{{activo.marca}}</td>
                                         <td>{{activo.serie}}</td>
+                                        <td>{{activo.precio_compra}}</td>
+                                        <td>{{activo.contable}}</td>
                                         <td>{{ ( activo.titulo || 'En Almacen')}}</td>
                                         <td>
                                             <button @click="abrirEditar(activo.id)" class="btn btn-sm btn-warning">
@@ -129,38 +141,15 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h6 class="text-primary mb-0 font-weight-bold">Mover a obra</h6>
+                        <h6 class="text-primary mb-0 font-weight-bold">Regresar a Almacen</h6>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <form action="" v-on:submit.prevent="grabarCambiar()">
-                            <div class="col-lg-12 form-group">
-                                <label for="">Seleccione Obra:</label>
-                                <select v-model="activo_editar.obra_id" class="form-control">
-                                    <option :value="null">-- En Almacen --</option>
-                                    <option :value="obra.id" v-for="obra in obras">{{ obra.titulo }}</option>
-                                </select>
-                            </div>
-                            <div class="col-12 form-group">
-                                <table class="table" v-if="activo_editar.movimientos.length>0">
-                                    <thead>
-                                        <tr>
-                                            <th>Fecha</th>
-                                            <th>Obra</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="movimiento in activo_editar.movimientos">
-                                            <td>{{ format(movimiento) }}</td>
-                                            <td>{{ (movimiento.titulo || 'En Almacen') }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-success">Guardar</button>
+                                <button type="submit" class="btn btn-success">ALMACEN</button>
                             </div>
                         </form>
                     </div>
@@ -208,6 +197,14 @@
                                 </select>
                             </div>
                             <div class="col-lg-12 form-group">
+                                <label for="">Contable:</label>
+                                <select v-model="activo_editar.contable" class="form-control">
+                                    <option value="SI">Si</option>
+                                    <option value="NO">No</option>
+                                </select>
+                                <strong>{{ errors_editar.contable }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
                                 <label for="">Fecha:</label>
                                 <input v-model="activo_editar.fecha_compra" type="date" class="form-control">
                                 <strong>{{ errors_editar.fecha_compra }}</strong>
@@ -247,7 +244,7 @@ export default {
             url: null,
             //filtros
             search: '',
-            estado: '0'
+            estado: 'A'
         }
     },
     mounted() {
@@ -370,7 +367,7 @@ export default {
             });
         },
         grabarCambiar(){
-            axios.post(url_base+'/activo/'+this.activo_editar.id+'/obra',this.activo_editar)
+            axios.post(url_base+'/activo/'+this.activo_editar.id+'/regresar')
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {

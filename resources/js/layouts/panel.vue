@@ -13,9 +13,11 @@
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
               <div class="bg-white py-2 collapse-inner rounded">
-                  <h6 class="collapse-header">Tablas de Almacen:</h6>
-                  <router-link to="activo" class="collapse-item" >Activos</router-link>
+                  <h6 class="collapse-header">Activos:</h6>
+                  <router-link to="activo" class="collapse-item">Activos</router-link>
+                  <router-link to="activo.movimiento" class="collapse-item">Movimiento Activos</router-link>
                   <router-link to="categoria-activo" class="collapse-item" >Categoria Activo</router-link>
+                  <h6 class="collapse-header">Tablas de Almacen:</h6>
                   <router-link to="insumo" class="collapse-item" >Insumos</router-link>
                   <router-link to="unidad" class="collapse-item" >unidad</router-link>
                   <router-link to="proveedor" class="collapse-item" >Proveedores</router-link>

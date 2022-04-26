@@ -31,6 +31,7 @@ class ActivoValidate extends FormRequest
             'codigo' => 'required|max:12|unique:activo',
             'nombre_activo' => 'required|max:150',
             'marca' => 'max:50',
+            'contable'=> 'required',
             'serie' => 'nullable|max:50|unique:activo',
             'precio_compra' => 'numeric'
         ];

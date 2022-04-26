@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddEstadoToActivo extends Migration
+class CreateMovActivoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddEstadoToActivo extends Migration
      */
     public function up()
     {
-        Schema::table('activo', function (Blueprint $table) {
-            $table->string('estado',1)->default('A');
+        Schema::create('mov_activo', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedInteger('colaborador_id');
+            $table->unsignedInteger('obra_id');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddEstadoToActivo extends Migration
      */
     public function down()
     {
-        Schema::table('gasto', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('mov_activo');
     }
 }

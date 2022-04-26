@@ -30,8 +30,9 @@ class ActivoUpdateValidate extends FormRequest
         $rules=[
             'nombre_activo' => 'required|max:150',
             'marca' => 'max:50',
-            'serie' => 'nullable|max:50|unique:activo',
-            'precio_compra' => 'numeric'
+            'serie' => 'nullable|max:50',
+            'precio_compra' => 'numeric',
+            'contable'=> 'required',
         ];
 
         return $rules;

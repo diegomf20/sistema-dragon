@@ -11,8 +11,9 @@
                 <th>Modelo</th>
                 <th>Serie</th>
                 <th>Fecha Compra</th>
-                <th>Ubicación</th>
                 <th>Precio</th>
+                <th>Contable</th>
+                <th>Ubicación</th>
             </tr>
         </thead>
         <tbody>
@@ -23,8 +24,9 @@
                     <td>{{ $activo->marca }}</td>
                     <td>{{ $activo->serie }}</td>
                     <td>{{ $activo->fecha_compra }}</td>
-                    <td>{{ ($activo->titulo?$activo->titulo:"En Almacen")  }}</td>
                     <td>{{ number_format(round($activo->precio_compra,2), 2, '.', ',') }}</td>
+                    <td>{{ $activo->contable }}</td>
+                    <td>{{ ($activo->titulo?$activo->titulo:"En Almacen")  }}</td>
                 </tr>
             @endforeach
         </tbody>

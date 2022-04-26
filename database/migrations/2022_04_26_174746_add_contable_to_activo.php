@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddEstadoToActivo extends Migration
+class AddContableToActivo extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddEstadoToActivo extends Migration
     public function up()
     {
         Schema::table('activo', function (Blueprint $table) {
-            $table->string('estado',1)->default('A');
+            $table->string('contable',2)->nullable(); // SC y NC
         });
     }
 

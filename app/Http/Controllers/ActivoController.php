@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Model\Activo;
+use App\Model\MovActivo;
+use App\Model\DetMovActivo;
 use App\Model\MovimientoActivo;
 use App\Exports\ActivoExports;
 use Illuminate\Http\Request;
@@ -21,23 +23,31 @@ class ActivoController extends Controller
      */
     public function index(Request $request)
     {
+        
         /**
          * Variables
          */
-        $estado = $request->estado | "0" ;
+        $estado = $request->estado | "A" ;
         
         /**
          * Reportes
          */
         if ($request->has('pdf')) {
-            $activos=Activo::where('estado',$estado)->get();
+            $activos=Activo::leftJoin('obra','obra.id','=','activo.obra_id')
+                            ->select('activo.*','obra.titulo as obra')
+                            ->where('activo.estado',$estado)
+                            ->get();
             $pdf = PDF::loadView('pdf.activo',compact('activos'));
             return $pdf->download('activos.pdf');
         }
         
         if ($request->has('excel')) {
-            $activos=Activo::where('estado',$estado)->get();
-            return Excel::download(new ActivoExports($activos), "activos.xlsx");
+            $activos=Activo::leftJoin('obra','obra.id','=','activo.obra_id')
+                            ->select('activo.*','obra.titulo as obra')
+                            ->where('activo.estado',$estado)
+                            ->get();
+            $tituloEstado=($estado=='A') ? 'En Uso': 'De Baja';
+            return Excel::download(new ActivoExports($activos), "Activos $tituloEstado.xlsx");
         }
 
         /**
@@ -78,6 +88,7 @@ class ActivoController extends Controller
         $activo->categoria_id=$request->categoria_id;
         $activo->precio_compra=$request->precio_compra;
         $activo->fecha_compra=$request->fecha_compra;
+        $activo->contable=$request->contable;
         $activo->save();
         return response()->json([
             "status"=> "OK",
@@ -113,6 +124,7 @@ class ActivoController extends Controller
         $activo->categoria_id=$request->categoria_id;
         $activo->precio_compra=$request->precio_compra;
         $activo->fecha_compra=$request->fecha_compra;
+        $activo->contable=$request->contable;
         $activo->save();
         return response()->json([
             "status"=> "OK",
@@ -122,7 +134,7 @@ class ActivoController extends Controller
     
     public function destroy($id){
         $activo=Activo::where('id',$id)->first();
-        $activo->estado='1';
+        $activo->estado='I';
         $activo->save();
         return response()->json([
             "status"=> "OK",
@@ -130,24 +142,62 @@ class ActivoController extends Controller
         ]);
     }
     
-    public function asignarObra(Request $request, $id){
+    public function regresar(Request $request, $id){
         $activo=Activo::where('id',$id)->first();
-        $activo->obra_id=$request->obra_id;
+        $activo->obra_id=null;
         $activo->save();
-        $movimientoActivo=new MovimientoActivo();
-        $movimientoActivo->activo_id=$id;
-        $movimientoActivo->obra_id=$request->obra_id;
-        $movimientoActivo->save();
         return response()->json([
             "status"=> "OK",
-            "data"  => "Activo Actualizado."
+            "data"  => "Activo en Almacen."
         ]);
     }
 
-    public function movimiento($id){
-        $movimientosActivo=MovimientoActivo::where('activo_id',$id)
-                            ->orderBy('id','DESC')
+    public function listarMovimiento(Request $request){
+        $movs=MovActivo::join('obra','obra.id','=','mov_activo.obra_id')
+                            ->join('colaborador','colaborador.id','=','mov_activo.colaborador_id')
+                            ->select('created_at as fecha','mov_activo.id','obra.titulo as obra',DB::raw("CONCAT(colaborador.nombre_colaborador,' ',colaborador.apellido_colaborador) as colaborador"))
+                            ->orderBy('mov_activo.id','DESC')
+                            ->paginate(10);
+        return response()->json($movs);
+    }
+    
+    public function listarDetMovimiento($id){
+        $movs=DetMovActivo::join('activo','activo.id','=','det_mov_activo.activo_id')
+                            ->select('activo.codigo','activo.nombre_activo as activo')
+                            ->where('mov_activo_id',$id)
                             ->get();
-        return response()->json($movimientosActivo);
+        return response()->json($movs);    
+    }
+
+    public function movimiento(Request $request){
+        if (count($request->items)==0) {
+            return response()->json([
+                "status"=> "ERROR",
+                "data"  => "No cuenta con items."    
+            ]);
+        }
+        $movActivo=new MovActivo();
+        $movActivo->obra_id=$request->obra_id;
+        $movActivo->colaborador_id=$request->colaborador_id;
+        $movActivo->save();
+        
+
+        for ($i=0; $i < count($request->items); $i++) { 
+            $item=$request->items[$i];
+            
+            $detMovActivo=new DetMovActivo();
+            $detMovActivo->activo_id=$item["id"];
+            $detMovActivo->mov_activo_id=$movActivo->id;
+            $detMovActivo->save();
+            $activo=Activo::find($item["id"]);
+            $activo->obra_id=$request->obra_id;
+            $activo->save();
+        }
+
+
+        return response()->json([
+            "status"=> "OK",
+            "data"  => "Movimiento de Activo Registrado."
+        ]);
     }
 }
