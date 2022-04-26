@@ -114,7 +114,7 @@
                                             <button @click="abrirCambiar(activo.id)" class="btn btn-sm btn-info">
                                                 <i class="fas fa-building"></i>
                                             </button>
-                                            <button v-if="activo.estado=='0'" @click="eliminar(activo.id)" class="btn btn-sm btn-danger">
+                                            <button v-if="activo.estado=='A'" @click="eliminar(activo.id)" class="btn btn-sm btn-danger">
                                                 <i class="fas fa-ban"></i>
                                             </button>
                                         </td>

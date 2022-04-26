@@ -61313,7 +61313,7 @@ var render = function() {
                           [_c("i", { staticClass: "fas fa-building" })]
                         ),
                         _vm._v(" "),
-                        activo.estado == "0"
+                        activo.estado == "A"
                           ? _c(
                               "button",
                               {
