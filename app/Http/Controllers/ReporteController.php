@@ -33,7 +33,6 @@ class ReporteController extends Controller
             $datos=$this->paginate($query,[],10,$request->page);
         }else{
             $datos=DB::select(DB::raw($query));
-
             if ($request->has('excel')) {
                 return Excel::download(new ReporteStockExports($datos), "stock.xlsx");
             }
@@ -133,7 +132,7 @@ class ReporteController extends Controller
         $insumos=DB::select(
             DB::raw("SELECT insumo.id,
                             insumo.nombre_insumo, 
-                            GROUP_CONCAT(movimiento.documento) documentos,
+                            GROUP_CONCAT(distinct movimiento.documento order by movimiento.documento ASC separator ' , ') documentos,
                             SUM( IF('IXR'=tipo_movimiento,-1,1)*cantidad ) cantidad,
                             SUM( IF('IXR'=tipo_movimiento,-1,1)*cantidad*precio) total
                     FROM kardex 

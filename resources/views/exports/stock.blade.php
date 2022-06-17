@@ -16,7 +16,7 @@
                 <td>{{ $stock->nombre_insumo }}</td>
                 <td>{{ $stock->punto_reorden }}</td>
                 <td>{{ $stock->stock }}</td>
-                <td>{{ round($stock->total/$stock->stock,2) }}</td>
+                <td>{{ $stock->stock!=0 ? round($stock->total/$stock->stock,2) : 0 }}</td>
                 <td>{{ round($stock->total,2) }}</td>
             </tr>
         @endforeach
