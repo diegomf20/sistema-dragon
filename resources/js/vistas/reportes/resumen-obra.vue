@@ -30,7 +30,10 @@
                     <div class="row" v-if="resumen_obra!=null">
                         <div class="col-12">
                             
-                            <h5>Resumen de Obra <a :href="url" class="btn btn-danger">PDF</a></h5>
+                            <h5>Resumen de Obra 
+                                <a :href="url" class="btn btn-danger">PDF</a>
+                                <a :href="url_excel" class="btn btn-success">Excel</a>
+                            </h5>
                             <hr>
                             <p><strong>Titulo: </strong> {{ resumen_obra.obra.titulo }}</p> 
                             <p><strong>Descripción: </strong> {{ resumen_obra.obra.descripcion }}</p> 
@@ -43,22 +46,26 @@
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th>Fecha</th>
+                                        <th>Categoria</th>
                                         <th>Insumo</th>
-                                        <th>SXC</th>
+                                        <th>Detalles</th>
                                         <th>Cantidad</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="insumo in resumen_obra.insumos">
-                                        <td>{{ insumo.nombre_insumo }}</td>
-                                        <td>{{ insumo.documentos }}</td>
+                                        <td>{{ insumo.fecha }}</td>
+                                        <td>{{ insumo.categoria }}</td>
+                                        <td>{{ insumo.insumo }}</td>
+                                        <td>{{ insumo.documento }} - {{ insumo.colaborador }} </td>
                                         <td>{{ insumo.cantidad }}</td>
-                                        <td>{{ insumo.total.toFixed(2) }}</td>
+                                        <td>{{ insumo.total.toFixed(3) }}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3">Total:</td>
-                                        <td>{{ totalInsumos.toFixed(2) }}</td>
+                                        <td colspan="5">Total:</td>
+                                        <td>{{ totalInsumos.toFixed(3) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -132,6 +139,9 @@ export default {
         },
         url(){
             return url_base+'/resumen-obra?pdf&obra_id='+this.obra_select.id;
+        },
+        url_excel(){
+            return url_base+'/resumen-obra?excel&obra_id='+this.obra_select.id;
         }
     },
     methods: {

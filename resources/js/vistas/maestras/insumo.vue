@@ -26,6 +26,13 @@
                                 <input v-model="insumo.punto_reorden" class="form-control" type="number">
                                 <strong>{{ errors.punto_reorden }}</strong>
                             </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Categoria:</label>
+                                <select v-model="insumo.categoria_id" class="form-control">
+                                    <option :value="null">--Seleccionar Categoria--</option>
+                                    <option v-for="categoria in categorias" :value="categoria.id">{{ categoria.nombre_categoria }}</option>
+                                </select>
+                            </div>
                             <div class="col-lg-12 text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
                             </div>
@@ -51,6 +58,7 @@
                             <thead>
                                 <tr>
                                     <th>Código</th>
+                                    <th>Categoria</th>
                                     <th>Unidad</th>
                                     <th>Descripcion</th>
                                     <th>P.R.</th>
@@ -60,6 +68,7 @@
                             <tbody>
                                 <tr v-for="insumo in table.data">
                                     <td>{{insumo.codigo}}</td>
+                                    <td>{{insumo.nombre_categoria}}</td>
                                     <td>{{insumo.nombre_unidad}}</td>
                                     <td>{{insumo.nombre_insumo}}</td>
                                     <td>{{insumo.punto_reorden}}</td>
@@ -124,6 +133,13 @@
                                 <input v-model="insumo_editar.punto_reorden" class="form-control" type="number" >
                                 <strong>{{ errors_editar.punto_reorden }}</strong>
                             </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="">Categoria:</label>
+                                <select v-model="insumo_editar.categoria_id" class="form-control">
+                                    <option :value="null">--Seleccionar Categoria--</option>
+                                    <option v-for="categoria in categorias" :value="categoria.id">{{ categoria.nombre_categoria }}</option>
+                                </select>
+                            </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success">Guardar</button>
                             </div>
@@ -146,6 +162,7 @@ export default {
     data() {
         return {
             areas: [],
+            categorias:[],
             insumo: this.iniInsumo(), //datos de logeo
             insumo_editar: this.iniInsumo(),
             errors: {}, //datos de errores
@@ -158,11 +175,13 @@ export default {
             unidades: [],
             url: null,
             search: ''
+
         }
     },
     mounted() {
         this.listar();
         this.listarUnidades();
+        this.listarCategorias();
     },
     computed: {
         pdf(){
@@ -170,6 +189,12 @@ export default {
         }
     },
     methods: {
+        listarCategorias(){
+            axios.get(url_base+'/categoria-insumo?all=true')
+            .then(response => {
+                this.categorias = response.data;
+            })
+        },
         buscarTecleo(){
             this.search=this.insumo.nombre_insumo;
             this.listar();

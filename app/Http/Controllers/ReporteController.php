@@ -130,23 +130,32 @@ class ReporteController extends Controller
         $obra_id=$request->obra_id;
         $obra=Obra::where('id',$obra_id)->first();
         $insumos=DB::select(
-            DB::raw("SELECT insumo.id,
-                            insumo.nombre_insumo, 
-                            GROUP_CONCAT(distinct movimiento.documento order by movimiento.documento ASC separator ' , ') documentos,
-                            SUM( IF('IXR'=tipo_movimiento,-1,1)*cantidad ) cantidad,
-                            SUM( IF('IXR'=tipo_movimiento,-1,1)*cantidad*precio) total
-                    FROM kardex 
-                    INNER JOIN movimiento ON movimiento.id=kardex.documento_id
-                    INNER JOIN insumo ON insumo.id= kardex.producto_id
-                    WHERE obra_id =  :id
-                    GROUP BY insumo.id,nombre_insumo"),
+                DB::raw("SELECT 	kardex.fecha,
+                                    movimiento.tipo_movimiento,
+                                    movimiento.documento,
+                                    insumo.nombre_insumo insumo,
+                                    nombre_categoria categoria,
+                                    CONCAT(colaborador.nombre_colaborador,' ',colaborador.apellido_colaborador) colaborador,
+                                    kardex.cantidad cantidad,
+                                    ROUND(precio*kardex.cantidad,3) total 
+                        FROM movimiento 
+                        INNER JOIN kardex ON kardex.documento_id=movimiento.id 
+                        INNER JOIN insumo ON insumo.id=kardex.producto_id
+                        INNER JOIN colaborador ON colaborador.id=movimiento.entidad_id
+                        LEFT JOIN categoria_insumo ON categoria_insumo.id=insumo.categoria_id
+                        WHERE movimiento.obra_id= :id"),
         [
             "id"    => $obra_id
         ]);
         $gastos=Gasto::where('obra_id',$obra_id)->get();
         if ($request->has('pdf')) {
             $pdf = PDF::loadView('pdf.resumen_obra',compact('obra','insumos','gastos'));
-            return $pdf->download('reporte-obra-'.$obra_id.'.pdf');
+            return $pdf->download('Rpt Obra - '.$obra->descripcion.'.pdf');
+        }
+        if ($request->has('excel')) {
+            return Excel::download(new DataExports(
+                ['obra'=>$obra,'insumos'=>$insumos,'gastos'=>$gastos],'exports.resumen_obra'), 
+                'Rpt Obra - '.$obra->descripcion.".xlsx");
         }
         return response()->json([
                 "obra" => $obra,

@@ -37,6 +37,10 @@ var routes =[
         component: require('../vistas/activo/movimiento.new.vue').default,
     },
     { 
+        path: '/categoria-insumo', 
+        component: require('../vistas/maestras/categoria-insumo.vue').default,
+    },
+    { 
         path: '/categoria-activo', 
         component: require('../vistas/maestras/categoria-activo.vue').default,
     },

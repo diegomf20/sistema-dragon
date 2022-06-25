@@ -15,6 +15,7 @@ Route::get('activo/movimiento','ActivoController@listarMovimiento');
 Route::get('activo/movimiento/{id}','ActivoController@listarDetMovimiento');
 Route::post('activo/movimiento','ActivoController@movimiento');
 Route::resource('activo', 'ActivoController');
+Route::resource('categoria-insumo', 'CategoriaInsumoController');
 Route::resource('categoria-activo', 'CategoriaActivoController');
 Route::resource('colaborador', 'ColaboradorController');
 Route::resource('proveedor', 'ProveedorController');

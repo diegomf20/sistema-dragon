@@ -1,14 +1,37 @@
-@extends('pdf.pdf')
+@extends('exports.excel')
 
 @section('titulo','RESUMEN DE OBRA')
 
 @section('content')
-        <p><strong>Titulo: </strong> {{ $obra->titulo }}</p> 
-        <p><strong>Descripción: </strong> {{ $obra->descripcion }}</p> 
-        <p><strong>Fecha Inicio: </strong> {{ $obra->fecha_inicio }}</p> 
-        <p><strong>Fecha Fin: </strong> {{ $obra->fecha_fin }}</p> 
-        <p><strong>Cotizado: </strong> S/. {{ $obra->total }}</p> 
-        <br>
+@php
+    $obra=$datos["obra"];
+    $insumos=$datos["insumos"];
+    $gastos=$datos["gastos"];
+@endphp    
+<table class="table">
+            <tbody>
+                <tr>
+                    <td><strong>Titulo: </strong></td>
+                    <td>{{ $obra->titulo }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Descripción: </strong></td>
+                    <td>{{ $obra->descripcion }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Fecha Inicio: </strong></td>
+                    <td>{{ $obra->fecha_inicio }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Fecha Fin: </strong></td>
+                    <td>{{ $obra->fecha_fin }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Cotizado: </strong></td>
+                    <td>S/. {{ $obra->total }}</td>
+                </tr>
+            </tbody>
+        </table>
         <h4>Insumos Consumidos</h4>
         <table class="table">
             <thead>
@@ -44,7 +67,6 @@
                 </tr>
             </tbody>
         </table>
-        <br>
         <h4>Gastos Otros</h4>
         <table class="table">
             <thead>

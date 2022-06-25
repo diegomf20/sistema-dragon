@@ -7,6 +7,7 @@
         <thead>
             <tr>
                 <th>Código</th>
+                <th>Categoria</th>
                 <th>Nombre</th>
                 <th>Unidad</th>
                 <th>Punto Reorden</th>
@@ -16,6 +17,7 @@
             @foreach ($insumos as $insumo)
                 <tr>
                     <td>{{ $insumo->codigo }}</td>
+                    <td>{{ $insumo->nombre_categoria }}</td>
                     <td>{{ $insumo->nombre_insumo }}</td>
                     <td>{{ $insumo->nombre_unidad }}</td>
                     <td>{{ $insumo->punto_reorden }}</td>
