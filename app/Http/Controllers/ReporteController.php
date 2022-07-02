@@ -132,18 +132,22 @@ class ReporteController extends Controller
         $insumos=DB::select(
                 DB::raw("SELECT 	kardex.fecha,
                                     movimiento.tipo_movimiento,
-                                    movimiento.documento,
+                                    concat(movimiento.tipo_movimiento,'-',movimiento.documento) documento,
                                     insumo.nombre_insumo insumo,
                                     nombre_categoria categoria,
                                     CONCAT(colaborador.nombre_colaborador,' ',colaborador.apellido_colaborador) colaborador,
                                     kardex.cantidad cantidad,
-                                    ROUND(precio*kardex.cantidad,3) total 
-                        FROM movimiento 
-                        INNER JOIN kardex ON kardex.documento_id=movimiento.id 
-                        INNER JOIN insumo ON insumo.id=kardex.producto_id
-                        INNER JOIN colaborador ON colaborador.id=movimiento.entidad_id
-                        LEFT JOIN categoria_insumo ON categoria_insumo.id=insumo.categoria_id
-                        WHERE movimiento.obra_id= :id"),
+                                    ROUND(IF('Ingreso'=kardex.tipo,-1,1)*kardex.precio*(kardex.cantidad-IFNULL(k_r.cantidad,0)),3) total
+                    FROM movimiento 
+                    INNER JOIN kardex ON kardex.documento_id=movimiento.id 
+                    INNER JOIN insumo ON insumo.id=kardex.producto_id
+                    LEFT JOIN colaborador ON colaborador.id=movimiento.entidad_id
+                    LEFT JOIN categoria_insumo ON categoria_insumo.id=insumo.categoria_id
+                    LEFT JOIN retorno R ON R.movimiento_id=movimiento.id
+                    LEFT JOIN kardex k_r ON k_r.documento_id=R.retorno_id AND k_r.producto_id=kardex.producto_id 
+                    WHERE movimiento.obra_id= :id AND movimiento.tipo_movimiento='SXC' 
+                    AND (kardex.cantidad!=k_r.cantidad OR k_r.cantidad is NULL)
+                    ORDER BY insumo.id ASC,kardex.fecha ASC"),
         [
             "id"    => $obra_id
         ]);
