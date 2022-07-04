@@ -151,7 +151,15 @@ class ReporteController extends Controller
         [
             "id"    => $obra_id
         ]);
-        $gastos=Gasto::where('obra_id',$obra_id)->get();
+        $gastos=DB::select(
+                        DB::raw("SELECT 	gasto.*,
+                                            categoria_gasto.nombre_categoria categoria
+                            FROM gasto 
+                            LEFT JOIN categoria_gasto ON categoria_gasto.id=gasto.categoria_id 
+                            WHERE gasto.obra_id= :id"),
+                [
+                    "id"    => $obra_id
+                ]);
         if ($request->has('pdf')) {
             $pdf = PDF::loadView('pdf.resumen_obra',compact('obra','insumos','gastos'));
             return $pdf->download('Rpt Obra - '.$obra->descripcion.'.pdf');

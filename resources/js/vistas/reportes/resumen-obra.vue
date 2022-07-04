@@ -77,6 +77,7 @@
                                 <thead>
                                     <tr>
                                         <th>Fecha</th>
+                                        <th>Categoria</th>
                                         <th>Descripcion</th>
                                         <th>Monto</th>
                                     </tr>
@@ -84,13 +85,14 @@
                                 <tbody>
                                     <tr v-for="gasto in resumen_obra.gastos">
                                         <td>{{ gasto.fecha }}</td>
+                                        <td>{{ gasto.categoria }}</td>
                                         <td>{{ gasto.descripcion }}</td>
                                         <td>{{ gasto.monto.toFixed(2) }}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="2"><b>Total:</b></td>
+                                        <td colspan="3"><b>Total:</b></td>
                                         <td><b>{{ totalGastos.toFixed(2) }}</b></td>
                                     </tr>
                                 </tfoot>

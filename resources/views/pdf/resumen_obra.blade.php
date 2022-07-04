@@ -50,6 +50,7 @@
             <thead>
                 <tr>
                     <th class="w-100">Fecha</th>
+                    <th class="center">Categoria</th>
                     <th class="center">Descripcion</th>
                     <th class="w-100 center">Total</th>
                 </tr>
@@ -61,6 +62,7 @@
                 @foreach ($gastos as $gasto)
                     <tr>
                         <td class="left">{{ $gasto->fecha }}</td>
+                        <td class="left">{{ $gasto->categoria }}</td>
                         <td class="">{{ $gasto->descripcion }}</td>
                         <td class="w-100 right">{{ round($gasto->monto,2) }}</td>
                     </tr>
@@ -69,7 +71,7 @@
                     @endphp
                 @endforeach
                 <tr>
-                    <td colspan="2"><b>Total:</b></td>
+                    <td colspan="3"><b>Total:</b></td>
                     <td class="w-100 right"><b>{{ round($total,2) }}</b></td>
                 </tr>
             </tbody>

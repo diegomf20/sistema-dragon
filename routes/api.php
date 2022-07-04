@@ -17,6 +17,7 @@ Route::post('activo/movimiento','ActivoController@movimiento');
 Route::resource('activo', 'ActivoController');
 Route::resource('categoria-insumo', 'CategoriaInsumoController');
 Route::resource('categoria-activo', 'CategoriaActivoController');
+Route::resource('categoria-gasto', 'CategoriaGastoController');
 Route::resource('colaborador', 'ColaboradorController');
 Route::resource('proveedor', 'ProveedorController');
 Route::resource('cliente', 'ClienteController');

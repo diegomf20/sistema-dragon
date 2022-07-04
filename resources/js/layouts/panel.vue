@@ -14,17 +14,18 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
               <div class="bg-white py-2 collapse-inner rounded">
                   <h6 class="collapse-header">Activos:</h6>
-                  <router-link to="activo" class="collapse-item">Activos</router-link>
-                  <router-link to="activo.movimiento" class="collapse-item">Movimiento Activos</router-link>
-                  <router-link to="categoria-activo" class="collapse-item" >Categoria Activo</router-link>
+                  <router-link to="/activo" class="collapse-item">Activos</router-link>
+                  <router-link to="/activo.movimiento" class="collapse-item">Movimiento Activos</router-link>
+                  <router-link to="/categoria-activo" class="collapse-item" >Categoria Activo</router-link>
                   <h6 class="collapse-header">Tablas de Almacen:</h6>
-                  <router-link to="insumo" class="collapse-item" >Insumos</router-link>
-                  <router-link to="categoria-insumo" class="collapse-item" >Categoria Insumos</router-link>
-                  <router-link to="unidad" class="collapse-item" >unidad</router-link>
-                  <router-link to="proveedor" class="collapse-item" >Proveedores</router-link>
-                  <router-link to="obra" class="collapse-item" >Obras</router-link>
-                  <router-link to="colaborador" class="collapse-item" >Colaboradores</router-link>
-                  <router-link to="cliente" class="collapse-item" >Cliente</router-link>
+                  <router-link to="/insumo" class="collapse-item" >Insumos</router-link>
+                  <router-link to="/categoria-insumo" class="collapse-item" >Categoria Insumos</router-link>
+                  <router-link to="/categoria-gasto" class="collapse-item" >Categoria Gasto</router-link>
+                  <router-link to="/unidad" class="collapse-item" >unidad</router-link>
+                  <router-link to="/proveedor" class="collapse-item" >Proveedores</router-link>
+                  <router-link to="/obra" class="collapse-item" >Obras</router-link>
+                  <router-link to="/colaborador" class="collapse-item" >Colaboradores</router-link>
+                  <router-link to="/cliente" class="collapse-item" >Cliente</router-link>
                   <!-- <a class="collapse-item" href="buttons.html">Insumos</a> -->
               </div>
             </div>
@@ -36,11 +37,11 @@
             <div id="collapseOperaciones" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
               <div class="bg-white py-2 collapse-inner rounded">
                   <h6 class="collapse-header">Tablas de Almacen:</h6>
-                  <router-link to="compra" class="collapse-item" >Ingreso X Compra</router-link>
-                  <router-link to="consumo" class="collapse-item" >Salida X Consumo</router-link>
-                  <router-link to="cuadre" class="collapse-item" >Cuadre</router-link>
-                  <router-link to="retorno" class="collapse-item" >Ingreso X Retorno</router-link>
-                  <router-link to="gasto" class="collapse-item" >Gasto</router-link>
+                  <router-link to="/compra" class="collapse-item" >Ingreso X Compra</router-link>
+                  <router-link to="/consumo" class="collapse-item" >Salida X Consumo</router-link>
+                  <router-link to="/cuadre" class="collapse-item" >Cuadre</router-link>
+                  <router-link to="/retorno" class="collapse-item" >Ingreso X Retorno</router-link>
+                  <router-link to="/gasto" class="collapse-item" >Gasto</router-link>
               </div>
             </div>
           </li>
@@ -51,13 +52,14 @@
             <div id="collapseReportes" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
               <div class="bg-white py-2 collapse-inner rounded">
                   <h6 class="collapse-header">Reportes de Almacen:</h6>
-                  <router-link to="movimiento" class="collapse-item" >Movimientos</router-link>
-                  <router-link to="ingreso-insumos" class="collapse-item" >Ingreso x Insumos</router-link>
-                  <router-link to="salida-insumos" class="collapse-item" >Salida x Insumos</router-link>
-                  <router-link to="stock" class="collapse-item" >Stock</router-link>
-                  <router-link to="kardex" class="collapse-item" >Kardex</router-link>
-                  <router-link to="reorden" class="collapse-item" >Reorden</router-link>
-                  <router-link to="resumen-obra" class="collapse-item" >resumen-obra</router-link>
+                  <router-link to="/reportes/gasto" class="collapse-item" >Gasto</router-link>
+                  <router-link to="/movimiento" class="collapse-item" >Movimientos</router-link>
+                  <router-link to="/ingreso-insumos" class="collapse-item" >Ingreso x Insumos</router-link>
+                  <router-link to="/salida-insumos" class="collapse-item" >Salida x Insumos</router-link>
+                  <router-link to="/stock" class="collapse-item" >Stock</router-link>
+                  <router-link to="/kardex" class="collapse-item" >Kardex</router-link>
+                  <router-link to="/reorden" class="collapse-item" >Reorden</router-link>
+                  <router-link to="/resumen-obra" class="collapse-item" >resumen-obra</router-link>
               </div>
             </div>
           </li>

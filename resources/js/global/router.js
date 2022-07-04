@@ -45,6 +45,10 @@ var routes =[
         component: require('../vistas/maestras/categoria-activo.vue').default,
     },
     { 
+        path: '/categoria-gasto', 
+        component: require('../vistas/maestras/categoria-gasto.vue').default,
+    },
+    { 
         path: '/unidad', 
         component: require('../vistas/maestras/unidad.vue').default,
     },
@@ -99,6 +103,10 @@ var routes =[
     { 
         path: '/ingreso-insumos', 
         component: require('../vistas/reportes/ingreso-insumos.vue').default,
+    },
+    { 
+        path: '/reportes/gasto', 
+        component: require('../vistas/reportes/gasto.vue').default,
     },
     { 
         path: '/salida-insumos', 
