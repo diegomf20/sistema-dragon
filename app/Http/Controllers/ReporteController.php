@@ -129,28 +129,71 @@ class ReporteController extends Controller
     public function resumen_obra(Request $request){
         $obra_id=$request->obra_id;
         $obra=Obra::where('id',$obra_id)->first();
-        $insumos=DB::select(
-                DB::raw("SELECT 	kardex.fecha,
-                                    movimiento.tipo_movimiento,
-                                    concat(movimiento.tipo_movimiento,'-',movimiento.documento) documento,
-                                    insumo.nombre_insumo insumo,
-                                    nombre_categoria categoria,
-                                    CONCAT(colaborador.nombre_colaborador,' ',colaborador.apellido_colaborador) colaborador,
-                                    kardex.cantidad cantidad,
-                                    ROUND(IF('Ingreso'=kardex.tipo,-1,1)*kardex.precio*(kardex.cantidad-IFNULL(k_r.cantidad,0)),3) total
-                    FROM movimiento 
-                    INNER JOIN kardex ON kardex.documento_id=movimiento.id 
-                    INNER JOIN insumo ON insumo.id=kardex.producto_id
-                    LEFT JOIN colaborador ON colaborador.id=movimiento.entidad_id
-                    LEFT JOIN categoria_insumo ON categoria_insumo.id=insumo.categoria_id
-                    LEFT JOIN retorno R ON R.movimiento_id=movimiento.id
-                    LEFT JOIN kardex k_r ON k_r.documento_id=R.retorno_id AND k_r.producto_id=kardex.producto_id 
-                    WHERE movimiento.obra_id= :id AND movimiento.tipo_movimiento='SXC' 
-                    AND (kardex.cantidad!=k_r.cantidad OR k_r.cantidad is NULL)
-                    ORDER BY insumo.id ASC,kardex.fecha ASC"),
-        [
-            "id"    => $obra_id
-        ]);
+        if ($request->has('resumido')) {
+            $insumos=DB::select(
+                            DB::raw("SELECT 	'' fecha,
+                                                GROUP_CONCAT(CONCAT(movimiento.tipo_movimiento,'-',movimiento.documento)) documento,
+                                                insumo.nombre_insumo insumo,
+                                                unidad.nombre_unidad unidad,
+                                                nombre_categoria categoria,
+                                                '' colaborador,
+                                                SUM(kardex.cantidad - IFNULL(k_r.cantidad,0)) cantidad,
+                                                SUM(ROUND(IF('Ingreso'=kardex.tipo,-1,1)*kardex.precio*(kardex.cantidad-IFNULL(k_r.cantidad,0)),3)) total
+                                FROM movimiento 
+                                INNER JOIN kardex ON kardex.documento_id=movimiento.id 
+                                INNER JOIN insumo ON insumo.id=kardex.producto_id
+                                LEFT JOIN unidad ON unidad.id=insumo.unidad_id
+                                LEFT JOIN colaborador ON colaborador.id=movimiento.entidad_id
+                                LEFT JOIN categoria_insumo ON categoria_insumo.id=insumo.categoria_id
+                                LEFT JOIN retorno R ON R.movimiento_id=movimiento.id
+                                LEFT JOIN kardex k_r ON k_r.documento_id=R.retorno_id AND k_r.producto_id=kardex.producto_id 
+                                WHERE movimiento.obra_id= :id AND movimiento.tipo_movimiento='SXC' 
+                                AND (kardex.cantidad!=k_r.cantidad OR k_r.cantidad is NULL)
+                                GROUP BY insumo.nombre_insumo,unidad.nombre_unidad,nombre_categoria
+                                ORDER BY insumo.id ASC,kardex.fecha ASC
+                                "),
+                    [
+                        "id"    => $obra_id
+                    ]);
+                    // $gastos=DB::select(
+                    //                 DB::raw("SELECT 	'' fecha,
+                    //                                     SUM(gasto.monto) monto,
+                    //                                     '' descripcion,
+                    //                                     categoria_gasto.nombre_categoria categoria
+                    //                     FROM gasto 
+                    //                     LEFT JOIN categoria_gasto ON categoria_gasto.id=gasto.categoria_id 
+                    //                     WHERE gasto.obra_id= :id
+                    //                     GROUP BY nombre_categoria"),
+                    //         [
+                    //             "id"    => $obra_id
+                    //         ]);
+        }else{
+            
+            $insumos=DB::select(
+                    DB::raw("SELECT 	kardex.fecha,
+                                        movimiento.tipo_movimiento,
+                                        concat(movimiento.tipo_movimiento,'-',movimiento.documento) documento,
+                                        insumo.nombre_insumo insumo,
+                                        unidad.nombre_unidad unidad,
+                                        nombre_categoria categoria,
+                                        CONCAT(colaborador.nombre_colaborador,' ',colaborador.apellido_colaborador) colaborador,
+                                        kardex.cantidad - IFNULL(k_r.cantidad,0) cantidad,
+                                        ROUND(IF('Ingreso'=kardex.tipo,-1,1)*kardex.precio*(kardex.cantidad-IFNULL(k_r.cantidad,0)),3) total
+                        FROM movimiento 
+                        INNER JOIN kardex ON kardex.documento_id=movimiento.id 
+                        INNER JOIN insumo ON insumo.id=kardex.producto_id
+                        LEFT JOIN unidad ON unidad.id=insumo.unidad_id
+                        LEFT JOIN colaborador ON colaborador.id=movimiento.entidad_id
+                        LEFT JOIN categoria_insumo ON categoria_insumo.id=insumo.categoria_id
+                        LEFT JOIN retorno R ON R.movimiento_id=movimiento.id
+                        LEFT JOIN kardex k_r ON k_r.documento_id=R.retorno_id AND k_r.producto_id=kardex.producto_id 
+                        WHERE movimiento.obra_id= :id AND movimiento.tipo_movimiento='SXC' 
+                        AND (kardex.cantidad!=k_r.cantidad OR k_r.cantidad is NULL)
+                        ORDER BY insumo.id ASC,kardex.fecha ASC"),
+            [
+                "id"    => $obra_id
+            ]);
+        }
         $gastos=DB::select(
                         DB::raw("SELECT 	gasto.*,
                                             categoria_gasto.nombre_categoria categoria

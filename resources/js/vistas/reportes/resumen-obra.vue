@@ -7,7 +7,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-10 form-group">
+                        <div class="col-sm-8 form-group">
                             <label>Seleccionar Obra</label>
                             <v-select :options="obras" label="titulo" v-model="obra_select">
                                 <template slot="option" slot-scope="option">
@@ -24,6 +24,11 @@
                             <!-- <input v-model="fecha" type="text" class="form-control"> -->
                         </div>
                         <div class="col-sm-2 form-group">
+                            <br>
+                            <input type="checkbox" v-model="resumido" >Reporte Consolidado
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            
                             <button class="btn btn-primary mt-sm-4" @click="consultarObra">Consultar</button>
                         </div>
                     </div>
@@ -51,6 +56,7 @@
                                         <th>Insumo</th>
                                         <th>Detalles</th>
                                         <th>Cantidad</th>
+                                        <th>Unidad</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
@@ -61,10 +67,11 @@
                                         <td>{{ insumo.insumo }}</td>
                                         <td>{{ insumo.documento }} - {{ insumo.colaborador }} </td>
                                         <td>{{ insumo.cantidad }}</td>
+                                        <td>{{ insumo.unidad }}</td>
                                         <td>{{ insumo.total.toFixed(3) }}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5">Total:</td>
+                                        <td colspan="6">Total:</td>
                                         <td>{{ totalInsumos.toFixed(3) }}</td>
                                     </tr>
                                 </tbody>
@@ -110,13 +117,18 @@ export default {
         return {
             obra_select: null,
             resumen_obra: null,
-            obras: []
+            obras: [],
+            resumido: false
         }
     },
     mounted() {
         this.listarObras();
     },
     computed: {
+        // optionsCategoriaInsumos(){
+        //     return this.resumen_obra.insumos.map(item => item.categoria)
+        //             .filter((value, index, self) => self.indexOf(value) === index)
+        // },
         totalInsumos(){
             var total=0;
 
@@ -140,11 +152,14 @@ export default {
             return total;
         },
         url(){
-            return url_base+'/resumen-obra?pdf&obra_id='+this.obra_select.id;
+            return url_base+'/resumen-obra?pdf&obra_id='+this.obra_select.id+this.sResumido;
         },
         url_excel(){
-            return url_base+'/resumen-obra?excel&obra_id='+this.obra_select.id;
-        }
+            return url_base+'/resumen-obra?excel&obra_id='+this.obra_select.id+this.sResumido;
+        },
+        sResumido(){
+            return this.resumido ? '&resumido':'';
+        },
     },
     methods: {
         listarObras(){
@@ -154,7 +169,7 @@ export default {
             });
         },
         consultarObra(){
-            axios.get(url_base+'/resumen-obra?obra_id='+this.obra_select.id)
+            axios.get(url_base+'/resumen-obra?obra_id='+this.obra_select.id+this.sResumido)
             .then(response=>{
                 this.resumen_obra=response.data;
             });

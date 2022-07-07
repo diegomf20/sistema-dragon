@@ -18,6 +18,7 @@
                     <th>Insumo</th>
                     <th>Detalles</th>
                     <th class="w-100 center">Cantidad</th>
+                    <th class="w-100 center">Unidad</th>
                     <th class="w-100 center">Total</th>
                 </tr>
             </thead>
@@ -32,6 +33,7 @@
                         <td>{{ $insumo->insumo }}</td>
                         <td class="w-100 center">{{ $insumo->documento }} - {{ $insumo->colaborador }}</td>
                         <td class="w-100 center">{{ $insumo->cantidad }}</td>
+                        <td class="w-100 center">{{ $insumo->unidad }}</td>
                         <td class="w-100 right">{{ round($insumo->total,3) }}</td>
                     </tr>
                     @php
@@ -39,7 +41,7 @@
                     @endphp
                 @endforeach
                 <tr>
-                    <td colspan="5"><b>Total:</b></td>
+                    <td colspan="6"><b>Total:</b></td>
                     <td class="w-100 right"><b>{{ round($total,3) }}</b></td>
                 </tr>
             </tbody>
