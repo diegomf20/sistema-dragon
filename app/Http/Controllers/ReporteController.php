@@ -17,24 +17,49 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReporteController extends Controller
 {
+    // public function stock(Request $request)
+    // {
+    //     $fecha=($request->has('fecha')&&$request->fecha!="null"&&$request->fecha!=null) ? $request->fecha : Carbon::now()->format('Y-m-d');
+    //     $buscar=$request->buscar;
+    //     $query='SELECT insumo.*,IF(kar.stock is Null,0,kar.stock) stock ,kar.total '.
+    //         'FROM insumo LEFT JOIN ('.'
+    //             SELECT kardex.* '.
+    //                 'FROM kardex WHERE kardex.id=('.
+    //                     "SELECT k.id FROM kardex k WHERE k.producto_id=kardex.producto_id AND k.fecha<='".$fecha."' ORDER BY k.fecha DESC , k.id  DESC LIMIT 1".
+    //                 ')'.
+    //         ') kar ON insumo.id=kar.producto_id '."WHERE CONCAT(insumo.codigo,insumo.nombre_insumo) like '%$buscar%'";
+
+    //     if ($request->has('paginate')) {
+    //         $datos=$this->paginate($query,[],10,$request->page);
+    //     }else{
+    //         $datos=DB::select(DB::raw($query));
+    //         if ($request->has('excel')) {
+    //             return Excel::download(new ReporteStockExports($datos), "stock.xlsx");
+    //         }
+    //     }
+
+        
+    //     return response()->json($datos);
+    // }
     public function stock(Request $request)
     {
         $fecha=($request->has('fecha')&&$request->fecha!="null"&&$request->fecha!=null) ? $request->fecha : Carbon::now()->format('Y-m-d');
         $buscar=$request->buscar;
-        $query='SELECT insumo.*,IF(kar.stock is Null,0,kar.stock) stock ,kar.total '.
-            'FROM insumo LEFT JOIN ('.'
-                SELECT kardex.* '.
-                    'FROM kardex WHERE kardex.id=('.
-                        "SELECT k.id FROM kardex k WHERE k.producto_id=kardex.producto_id AND k.fecha<='".$fecha."' ORDER BY k.fecha DESC , k.id  DESC LIMIT 1".
-                    ')'.
-            ') kar ON insumo.id=kar.producto_id '."WHERE CONCAT(insumo.codigo,insumo.nombre_insumo) like '%$buscar%'";
+        $query="SELECT insumo.*,unidad.nombre_unidad unidad,SUM(IFNULL(lote.stock,0)) stock, nombre_categoria categoria 
+        FROM insumo
+        LEFT JOIN unidad ON unidad.id=insumo.unidad_id
+        LEFT JOIN lote ON insumo.id=lote.insumo_id
+        LEFT JOIN categoria_insumo ON categoria_insumo.id=insumo.categoria_id
+        WHERE CONCAT(insumo.codigo,insumo.nombre_insumo) like '%$buscar%'
+        GROUP BY insumo.id
+        ORDER BY insumo.id";
 
         if ($request->has('paginate')) {
             $datos=$this->paginate($query,[],10,$request->page);
         }else{
             $datos=DB::select(DB::raw($query));
             if ($request->has('excel')) {
-                return Excel::download(new ReporteStockExports($datos), "stock.xlsx");
+                return Excel::download(new ReporteStockExports($datos), "Stock $fecha.xlsx");
             }
         }
 

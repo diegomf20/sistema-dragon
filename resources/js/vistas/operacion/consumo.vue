@@ -58,12 +58,12 @@
                             <v-select :options="insumos" v-model="itemMomentaneo.insumo" :filterable="false"  @search="onSearch">
                                 <template slot="option" slot-scope="option">
                                     <div class="d-center">
-                                        {{ option.nombre_insumo+" - ("+option.stock+" UNI)" }}
+                                        {{ `${option.nombre_insumo} - (${option.stock.toFixed(2)} ${option.unidad})` }}
                                     </div>
                                 </template>
                                 <template slot="selected-option" slot-scope="option">
                                     <div class="selected d-center">
-                                        {{ option.nombre_insumo+" - ("+option.stock+" UNI)" }}
+                                        {{ `${option.nombre_insumo} - (${option.stock.toFixed(2)} ${option.unidad})` }}
                                     </div>
                                 </template>
                             </v-select>
@@ -89,10 +89,7 @@
                             <tr v-for="(item,index) in consumo.items">
                                 <td>{{ item.codigo}}</td>
                                 <td>{{ item.nombre}}</td>
-                                <td>{{ item.cantidad }}</td>
-                                <!-- <td>
-                                    <input type="text" v-model="item.cantidad" class="form-control text-center cantidad">
-                                </td> -->
+                                <td>{{ item.cantidad }} {{ item.unidad }}</td>
                                 <td>
                                     <button @click="eliminarItem(index)" type="button" class="btn btn-danger btn-sm">
                                         X
@@ -183,6 +180,7 @@ export default {
                     codigo: this.itemMomentaneo.insumo.codigo,
                     nombre: this.itemMomentaneo.insumo.nombre_insumo,
                     cantidad: this.itemMomentaneo.cantidad,
+                    unidad: this.itemMomentaneo.insumo.unidad,
                 });
                 this.itemMomentaneo={insumo: null,cantidad: 1};
             }else{

@@ -19,19 +19,19 @@
                         <thead>
                             <tr>
                                 <th>CODIGO</th>
+                                <th>CATEGORIA</th>
                                 <th>NOMBRE</th>
                                 <th>STOCK</th>
-                                <th>PRECIO P.</th>
-                                <th>TOTAL</th>
+                                <th>UNIDAD</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="item in table.data">
                                 <td>{{ item.codigo }}</td>
+                                <td>{{ item.categoria }}</td>
                                 <td>{{ item.nombre_insumo }}</td>
                                 <td>{{ item.stock }}</td>
-                                <td>{{ (item.stock==0) ? 0 : (item.total/item.stock).toFixed(2) }}</td>
-                                <td>{{ (item.total!=null) ? item.total.toFixed(2) : 0.00 }}</td>
+                                <td>{{ item.unidad }}</td>
                             </tr>
                         </tbody>
                     </table>
