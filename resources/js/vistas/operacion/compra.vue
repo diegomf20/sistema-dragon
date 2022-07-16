@@ -46,12 +46,12 @@
                             <v-select :options="insumos" v-model="itemMomentaneo.insumo" :filterable="false"  @search="onSearch">
                                 <template slot="option" slot-scope="option">
                                     <div class="d-center">
-                                        {{ option.nombre_insumo }}
+                                        {{ `${option.nombre_insumo} (${option.unidad})` }}
                                     </div>
                                 </template>
                                 <template slot="selected-option" slot-scope="option">
                                     <div class="selected d-center">
-                                        {{ option.nombre_insumo }}
+                                        {{ `${option.nombre_insumo} (${option.unidad})` }}
                                     </div>
                                 </template>
                             </v-select>
@@ -74,7 +74,9 @@
                                 <th>Codigo</th>
                                 <th>Nombre</th>
                                 <th>Cantidad</th>
+                                <th>Unidad</th>
                                 <th>P.U.</th>
+                                <th>Detalles</th>
                                 <th>Quitar</th>
                             </tr>
                         </thead>
@@ -83,7 +85,9 @@
                                 <td>{{ item.codigo}}</td>
                                 <td>{{ item.nombre}}</td>
                                 <td>{{ item.cantidad }}</td>
-                                <td>{{ item.precio }}</td>
+                                <td>{{ item.unidad }}</td>
+                                <td width="150px"><input type="text" v-model="item.precio" class="form-control"></td>
+                                <td><input type="text" v-model="item.detalle" class="form-control"></td>
                                 <!-- <td>
                                     <input type="text" v-model="item.cantidad" class="form-control text-center cantidad">
                                 </td> -->
@@ -177,6 +181,8 @@ export default {
                     codigo: this.itemMomentaneo.insumo.codigo,
                     nombre: this.itemMomentaneo.insumo.nombre_insumo,
                     cantidad: this.itemMomentaneo.cantidad,
+                    unidad: this.itemMomentaneo.insumo.unidad,
+                    detalle: '',
                     precio: Number(this.itemMomentaneo.precio)
                 });
                 this.itemMomentaneo={insumo: null,cantidad: 1, precio: 0.00};

@@ -6,6 +6,7 @@
             <th>Nombre</th>
             <th>Stock</th>
             <th>Unidad</th>
+            <th>Pre. Promedio</th>
         </tr>
     </thead>
     <tbody>
@@ -16,6 +17,7 @@
                 <td>{{ $stock->nombre_insumo }}</td>
                 <td>{{ $stock->stock }}</td>
                 <td>{{ $stock->unidad }}</td>
+                <td>{{ $stock->precio_promedio }}</td>
             </tr>
         @endforeach
     </tbody>

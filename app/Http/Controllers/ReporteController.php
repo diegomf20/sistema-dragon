@@ -45,7 +45,11 @@ class ReporteController extends Controller
     {
         $fecha=($request->has('fecha')&&$request->fecha!="null"&&$request->fecha!=null) ? $request->fecha : Carbon::now()->format('Y-m-d');
         $buscar=$request->buscar;
-        $query="SELECT insumo.*,unidad.nombre_unidad unidad,SUM(IFNULL(lote.stock,0)) stock, nombre_categoria categoria 
+        $query="SELECT  insumo.*,
+                        unidad.nombre_unidad unidad,
+                        SUM(IFNULL(lote.stock,0)) stock, 
+                        nombre_categoria categoria,
+                        IFNULL(ROUND(SUM(IFNULL(lote.stock,0)*IFNULL(lote.precio,0))/SUM(IFNULL(lote.stock,0)),3),0) precio_promedio
         FROM insumo
         LEFT JOIN unidad ON unidad.id=insumo.unidad_id
         LEFT JOIN lote ON insumo.id=lote.insumo_id

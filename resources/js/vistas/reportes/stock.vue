@@ -23,6 +23,7 @@
                                 <th>NOMBRE</th>
                                 <th>STOCK</th>
                                 <th>UNIDAD</th>
+                                <th>PRE. PROMEDIO</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -30,8 +31,9 @@
                                 <td>{{ item.codigo }}</td>
                                 <td>{{ item.categoria }}</td>
                                 <td>{{ item.nombre_insumo }}</td>
-                                <td>{{ item.stock }}</td>
-                                <td>{{ item.unidad }}</td>
+                                <td class="text-right">{{ item.stock }}</td>
+                                <td class="text-center">{{ item.unidad }}</td>
+                                <td class="text-right">{{ item.precio_promedio.toFixed(3) }}</td>
                             </tr>
                         </tbody>
                     </table>

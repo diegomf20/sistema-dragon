@@ -61,6 +61,7 @@ class CompraController extends Controller
                 $insumo_id=$item['insumo_id'];
                 $cantidad=$item['cantidad'];
                 $precio=$item['precio'];
+                $detalle=$item['detalle'];
                 /**
                  * Registro de Lote
                  */
@@ -69,6 +70,7 @@ class CompraController extends Controller
                 $lote->precio=$precio;                    
                 $lote->stock=$cantidad;                    
                 $lote->cantidad=$cantidad;
+                $lote->detalle=$detalle;
                 $lote->movimiento_id=$movimiento->id;
                 $lote->fecha_ingreso=$fecha;
                 $lote->save();

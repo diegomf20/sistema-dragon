@@ -17,7 +17,9 @@ class MovimientoController extends Controller
 
     public function show(Request $request,$id){
         $movimiento=Movimiento::where('id',$id)->first();
-        $movimiento->detalles=Kardex::join('insumo','producto_id','=','insumo.id')->where('documento_id',$movimiento->id)->get();
+        $movimiento->detalles=Kardex::join('insumo','producto_id','=','insumo.id')
+                                ->leftjoin('lote','lote.id','=','kardex.lote_id')
+                                ->where('documento_id',$movimiento->id)->get();
         switch ($movimiento->tipo_movimiento) {
             case 'IXC':
                 $movimiento->entidad=Proveedor::where('id',$movimiento->entidad_id)->first();

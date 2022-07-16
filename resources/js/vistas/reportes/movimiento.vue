@@ -64,7 +64,9 @@
                                     <tr>
                                         <th>Codigo</th>
                                         <th>Insumo</th>
+                                        <th>Detalles</th>
                                         <th>Cantidad</th>
+                                        <th>unidad</th>
                                         <th>Costo/unidad</th>
                                     </tr>
                                 </thead>
@@ -72,13 +74,15 @@
                                     <tr v-for="insumo in movimiento.detalles">
                                         <td>{{ insumo.codigo }}</td>
                                         <td>{{ insumo.nombre_insumo }}</td>
-                                        <td>{{ insumo.cantidad }}</td>
+                                        <td>{{ insumo.detalle }}</td>
+                                        <td>{{ insumo.cantidad.toFixed(2) }}</td>
+                                        <td>{{ insumo.nombre_unidad }}</td>
                                         <td class="text-rigth">{{ insumo.precio.toFixed(2) }}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="3" class="text-rigth">
+                                        <td colspan="5" class="text-rigth">
                                             Total:
                                         </td>
                                         <td class="text-rigth">
