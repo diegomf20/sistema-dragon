@@ -64,22 +64,30 @@ class CuadreController extends Controller
                     foreach ($request->items as $key => $item) {
                         $insumo_id=$item['insumo_id'];
                         $cantidad=$item['cantidad'];
-                        $precio=0;
+                        $precio=isset($item['precio']) ? isset($item['precio']) : 0;
+                        // comprobacion de que precio tomar
+                        if ($precio==0) {
+                            $precio=Lote::where('insumo_id',$insumo_id)
+                            ->where('stock','>',0)
+                            ->select(DB::raw('SUM(stock*precio)/SUM(stock) as precio_promedio'))
+                            ->groupBy('insumo_id')
+                            ->first()->precio_promedio;   
+                        }
                         /**
                          * Registro de Lote
                          */
                         $lote=new Lote();
                         $lote->insumo_id=$insumo_id;
-                        $lote->precio=0;                    
-                        $lote->stock=$cantidad;                    
+                        $lote->precio=$precio;                    
+                        $lote->stock=$cantidad;
                         $lote->cantidad=$cantidad;
                         $lote->movimiento_id=$movimiento->id;
                         $lote->fecha_ingreso=$fecha;
                         $lote->save();
                         $anterior=Kardex::where('producto_id',$insumo_id)
                             ->where('fecha','<=',$fecha)
-                            ->orderBy('id','DESC')
                             ->orderBy('fecha','DESC')
+                            ->orderBy('id','DESC')
                             ->first();
                         $anterior_stock=0;
                         $anterior_total=0;   
@@ -181,5 +189,54 @@ class CuadreController extends Controller
                 "data"      =>  $e->getMessage()
             ]); 
         }
+    }
+
+    public function refresh(){
+        $datos=DB::select(
+            DB::raw("SELECT KA_S.producto_id FROM kardex as KA_S
+            INNER JOIN 
+            (
+                SELECT MAX(KA.id) kardex_id,producto_id FROM kardex  as KA
+                WHERE KA.fecha=(SELECT MAX(fecha) FROM kardex where producto_id=KA.producto_id )
+                GROUP BY KA.producto_id
+            ) KA_TOP ON KA_TOP.kardex_id= KA_S.id
+            INNER JOIN lote ON KA_S.producto_id = lote.insumo_id
+            GROUP BY KA_S.producto_id,KA_S.stock
+            HAVING SUM(lote.stock)<>KA_S.stock")
+        );
+
+        foreach ($datos as $key => $dato) {
+            $kardexs=DB::select(
+                DB::raw("SELECT kardex.*,movimiento.tipo_movimiento FROM kardex
+                INNER JOIN movimiento ON movimiento.id=kardex.documento_id
+                
+                WHERE producto_id=?
+                ORDER BY fecha ASC, id ASC")
+            ,[
+                $dato->producto_id
+            ]);
+            $stock=0;
+            $total_anterior=0;
+            for ($i=0; $i < count($kardexs); $i++) { 
+                $kardex=$kardexs[$i];
+                if ($i==0) {
+                    $stock=$kardex->stock;
+                    $total_anterior=$kardex->total;
+                }else{
+                    if($kardex->tipo=='Ingreso'){
+                        $kardexs[$i]->stock=$stock+$kardex->cantidad;
+                        $kardexs[$i]->total=$total_anterior+($kardex->cantidad*$kardex->precio);
+                    }else{
+                        $kardexs[$i]->stock=$stock-$kardex->cantidad;
+                        $kardexs[$i]->total=$total_anterior-($kardex->cantidad*$kardex->precio);
+                    }
+
+                    $stock=$kardexs[$i]->stock;
+                    $total_anterior=$kardexs[$i]->total;
+                }
+            }
+            dd($kardexs);
+        }
+        dd($data);        
     }
 }

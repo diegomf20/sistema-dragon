@@ -52,13 +52,19 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <select @change="listar()" class="form-control" v-model="estado">
                                     <option value="A">En Ejecución</option>
                                     <option value="I">Finalizadas</option>
                                 </select>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-4 form-group">
+                                <input type="text" class="form-control" v-model="search" @keyup="listar()">
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <button class="btn btn-info" @click="listar()">Buscar</button>
+                            </div>
+                            <div class="col-sm-4">
                                 
                                 <a  :href="pdf" 
                                     class="btn btn-danger mb-3">
@@ -190,6 +196,7 @@
 export default {
     data() {
         return {
+            search: '',
             areas: [],
             clientes: [],
             obra: this.iniobra(), //datos de logeo
@@ -232,7 +239,7 @@ export default {
         },
         listar(n=this.selectPage){
             this.selectPage=n;
-            axios.get(url_base+'/obra?estado='+this.estado+'&page='+n)
+            axios.get(url_base+'/obra?estado='+this.estado+'&page='+n+'&search='+this.search)
             .then(response => {
                 this.table = response.data;
             })

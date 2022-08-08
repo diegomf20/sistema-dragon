@@ -44,6 +44,16 @@ class CompraController extends Controller
 
         DB::beginTransaction();
         try {
+            $movSearch=Movimiento::where('documento',$request->documento)
+                        ->where('tipo_movimiento',"IXC")
+                        ->where('entidad_id',$request->proveedor_id)
+                        ->first();
+            if ($movSearch!=null) {
+                return response()->json([
+                    "status"    =>  "ERROR",
+                    "data"      =>  "Documento ya registrado"
+                ]); 
+            }
             $movimiento=new Movimiento();
             $movimiento->documento=$request->documento;
             $movimiento->tipo_movimiento="IXC";
@@ -77,8 +87,8 @@ class CompraController extends Controller
                     
                 $anterior=Kardex::where('producto_id',$insumo_id)
                     ->where('fecha','<=',$fecha)
-                    ->orderBy('id','DESC')
                     ->orderBy('fecha','DESC')
+                    ->orderBy('id','DESC')
                     ->first();
                 $anterior_stock=0;
                 $anterior_total=0;   

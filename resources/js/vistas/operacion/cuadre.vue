@@ -51,6 +51,8 @@
                                 <th>Codigo</th>
                                 <th>Nombre</th>
                                 <th>Cantidad</th>
+                                <th>Unidad</th>
+                                <th v-if="consumo.tipo=='IC'">Precio</th>
                                 <th>Quitar</th>
                             </tr>
                         </thead>
@@ -59,9 +61,8 @@
                                 <td>{{ item.codigo}}</td>
                                 <td>{{ item.nombre}}</td>
                                 <td>{{ item.cantidad }}</td>
-                                <!-- <td>
-                                    <input type="text" v-model="item.cantidad" class="form-control text-center cantidad">
-                                </td> -->
+                                <td>{{ item.unidad }}</td>
+                                <td width="150px" v-if="consumo.tipo=='IC'"><input type="text" v-model="item.precio" class="form-control"></td>
                                 <td>
                                     <button @click="eliminarItem(index)" type="button" class="btn btn-danger btn-sm">
                                         X
@@ -139,6 +140,8 @@ export default {
                     codigo: this.itemMomentaneo.insumo.codigo,
                     nombre: this.itemMomentaneo.insumo.nombre_insumo,
                     cantidad: this.itemMomentaneo.cantidad,
+                    unidad: this.itemMomentaneo.insumo.unidad,
+                    precio: 0
                 });
                 this.itemMomentaneo={insumo: null,cantidad: 1};
             }else{

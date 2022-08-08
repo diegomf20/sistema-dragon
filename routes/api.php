@@ -28,6 +28,7 @@ Route::resource('obra', 'ObraController');
 Route::resource('consumo', 'ConsumoController');
 Route::get('consumo', 'MovimientoController@getConsumo');
 Route::resource('compra', 'CompraController');
+Route::get('cuadre/refresh','CuadreController@refresh');
 Route::resource('cuadre', 'CuadreController');
 Route::resource('gasto', 'GastoController');
 
@@ -35,6 +36,7 @@ Route::resource('gasto', 'GastoController');
 Route::get('ingreso-insumos','ReporteController@ingreso_insumos');
 Route::get('salida-insumos','ReporteController@salida_insumos');
 Route::get('stock','ReporteController@stock');
+Route::get('flujo-diario','ReporteController@flujo_diario');
 Route::get('kardex_unitario','ReporteController@kardex_unitario');
 Route::get('reorden','ReporteController@reorden');
 Route::get('resumen-obra','ReporteController@resumen_obra');

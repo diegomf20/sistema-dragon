@@ -109,6 +109,10 @@ var routes =[
         component: require('../vistas/reportes/gasto.vue').default,
     },
     { 
+        path: '/reportes/flujo-diario', 
+        component: require('../vistas/reportes/flujo-diario.vue').default,
+    },
+    { 
         path: '/salida-insumos', 
         component: require('../vistas/reportes/salida-insumos.vue').default,
     },

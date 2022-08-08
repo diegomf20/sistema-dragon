@@ -6,6 +6,7 @@ use App\Model\Gasto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\GastoValidate;
+use App\Exports\DataExports;
 use Maatwebsite\Excel\Facades\Excel;
 
 class GastoController extends Controller
@@ -29,7 +30,7 @@ class GastoController extends Controller
                     $fecha_fin
                 ]);
         if ($request->has('excel')) {
-            return Excel::download(new DataExports($data,'exports.ingreso-insumos'), "ingreso-insumos.xlsx");
+            return Excel::download(new DataExports($data,'exports.gasto'), "Gasto $fecha_inicio $fecha_fin.xlsx");
         }
         return response()->json($data);
     }

@@ -114,6 +114,32 @@ class ReporteController extends Controller
         return response()->json($datos);
     }
 
+    public function flujo_diario(Request $request){
+        $fecha=$request->fecha;
+        $data=DB::select(
+                DB::raw("(SELECT CONCAT(GA.descripcion,' - ',CG.nombre_categoria) descripcion,
+                                    GA.monto 
+                        FROM gasto GA
+                        INNER JOIN categoria_gasto CG ON CG.id=GA.categoria_id
+                        WHERE GA.fecha=?)
+                        UNION
+                        (SELECT CONCAT(MO.documento,' ',PR.razon_social) descripcion, 
+                                        SUM(KA.cantidad*ROUND(KA.precio,3)) monto 
+                        FROM movimiento MO
+                        INNER JOIN kardex KA ON KA.documento_id=MO.id
+                        INNER JOIN proveedor PR ON PR.id=MO.entidad_id
+                        WHERE MO.fecha_ingreso=?
+                        AND MO.tipo_movimiento='IXC'
+                        GROUP BY MO.id)"),
+                [
+                    $fecha,
+                    $fecha
+                ]);
+        if ($request->has('excel')) {
+            return Excel::download(new DataExports($data,'exports.flujo-diario'), "Flujo Diario $fecha.xlsx");
+        }
+        return response()->json($data);
+    }
     public function ingreso_insumos(Request $request){
         $fecha_inicio=$request->fecha_inicio;
         $fecha_fin=$request->fecha_fin;

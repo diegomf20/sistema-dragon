@@ -48,7 +48,7 @@
                                 <a :href="pdf" class="btn btn-danger mb-3"><i class="far fa-file-pdf"></i> PDF</a>
                             </div>
                             <div class="col-sm-8 form-group">
-                                <input type="text" class="form-control" v-model="search">
+                                <input type="text" class="form-control" v-model="search" @keyup="listar()">
                             </div>
                             <div class="col-sm-2 form-group">
                                 <button class="btn btn-info" @click="listar()">Buscar</button>

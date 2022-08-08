@@ -42,7 +42,8 @@ class ObraController extends Controller
         if ($request->all==true) {
             $obras=$obras->get();
         }else{
-            $obras=$obras->paginate(10);
+            $search=$request->search;
+            $obras=$obras->where('titulo','like',"%$search%")->paginate(10);
         }
         return response()->json($obras);
     }

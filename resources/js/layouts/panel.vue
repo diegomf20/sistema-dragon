@@ -52,6 +52,7 @@
             <div id="collapseReportes" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
               <div class="bg-white py-2 collapse-inner rounded">
                   <h6 class="collapse-header">Reportes de Almacen:</h6>
+                  <router-link to="/reportes/flujo-diario" class="collapse-item" >Flujo Diario</router-link>
                   <router-link to="/reportes/gasto" class="collapse-item" >Gasto</router-link>
                   <router-link to="/movimiento" class="collapse-item" >Movimientos</router-link>
                   <router-link to="/ingreso-insumos" class="collapse-item" >Ingreso x Insumos</router-link>
