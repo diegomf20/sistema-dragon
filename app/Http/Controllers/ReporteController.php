@@ -200,8 +200,12 @@ class ReporteController extends Controller
                                 LEFT JOIN unidad ON unidad.id=insumo.unidad_id
                                 LEFT JOIN colaborador ON colaborador.id=movimiento.entidad_id
                                 LEFT JOIN categoria_insumo ON categoria_insumo.id=insumo.categoria_id
-                                LEFT JOIN retorno R ON R.movimiento_id=movimiento.id
-                                LEFT JOIN kardex k_r ON k_r.documento_id=R.retorno_id AND k_r.producto_id=kardex.producto_id 
+                                LEFT JOIN (
+                                    SELECT R.movimiento_id,R.id retorno_id, k_r.producto_id, k_r.lote_id, k_r.id kardex_id , SUM(k_r.cantidad) cantidad
+                                    FROM retorno R 
+                                    INNER JOIN kardex k_r ON  R.retorno_id = k_r.documento_id
+                                    GROUP BY  R.movimiento_id , k_r.producto_id, k_r.lote_id) k_r 
+                                    ON k_r.movimiento_id=movimiento.id AND k_r.producto_id=kardex.producto_id 
                                 WHERE movimiento.obra_id= :id AND movimiento.tipo_movimiento='SXC' 
                                 AND (kardex.cantidad!=k_r.cantidad OR k_r.cantidad is NULL)
                                 GROUP BY insumo.nombre_insumo,unidad.nombre_unidad,nombre_categoria
