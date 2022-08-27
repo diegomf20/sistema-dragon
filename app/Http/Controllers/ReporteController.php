@@ -188,7 +188,7 @@ class ReporteController extends Controller
             $insumos=DB::select(
                             DB::raw("SELECT 	'' fecha,
                                                 GROUP_CONCAT(CONCAT(movimiento.tipo_movimiento,'-',movimiento.documento)) documento,
-                                                insumo.nombre_insumo insumo,
+                                                CONCAT(insumo.nombre_insumo,'\n', IFNULL(lote.detalle,'') ) insumo,
                                                 unidad.nombre_unidad unidad,
                                                 nombre_categoria categoria,
                                                 '' colaborador,
@@ -196,6 +196,7 @@ class ReporteController extends Controller
                                                 SUM(ROUND(IF('Ingreso'=kardex.tipo,-1,1)*kardex.precio*(kardex.cantidad-IFNULL(k_r.cantidad,0)),3)) total
                                 FROM movimiento 
                                 INNER JOIN kardex ON kardex.documento_id=movimiento.id 
+                                INNER JOIN lote ON lote.id=kardex.lote_id
                                 INNER JOIN insumo ON insumo.id=kardex.producto_id
                                 LEFT JOIN unidad ON unidad.id=insumo.unidad_id
                                 LEFT JOIN colaborador ON colaborador.id=movimiento.entidad_id
@@ -232,7 +233,8 @@ class ReporteController extends Controller
                     DB::raw("SELECT 	kardex.fecha,
                                         movimiento.tipo_movimiento,
                                         concat(movimiento.tipo_movimiento,'-',movimiento.documento) documento,
-                                        insumo.nombre_insumo insumo,
+                                        -- insumo.nombre_insumo insumo,
+                                        CONCAT(insumo.nombre_insumo,'\n' ,IFNULL(lote.detalle,'') ) insumo,
                                         unidad.nombre_unidad unidad,
                                         nombre_categoria categoria,
                                         CONCAT(colaborador.nombre_colaborador,' ',colaborador.apellido_colaborador) colaborador,
@@ -241,6 +243,7 @@ class ReporteController extends Controller
                         FROM movimiento 
                         INNER JOIN kardex ON kardex.documento_id=movimiento.id 
                         INNER JOIN insumo ON insumo.id=kardex.producto_id
+                        INNER JOIN lote ON lote.id=kardex.lote_id
                         LEFT JOIN unidad ON unidad.id=insumo.unidad_id
                         LEFT JOIN colaborador ON colaborador.id=movimiento.entidad_id
                         LEFT JOIN categoria_insumo ON categoria_insumo.id=insumo.categoria_id
@@ -250,7 +253,7 @@ class ReporteController extends Controller
                         AND (kardex.cantidad!=k_r.cantidad OR k_r.cantidad is NULL)
                         GROUP BY kardex.fecha,
                                 movimiento.tipo_movimiento,
-                                insumo.nombre_insumo,
+                                -- insumo.nombre_insumo,
                                 unidad.nombre_unidad,
                                 nombre_categoria,
                                 kardex.id
