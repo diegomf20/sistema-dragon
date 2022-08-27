@@ -3,6 +3,13 @@
 @section('titulo','RESUMEN DE OBRA')
 
 @section('content')
+        @if ($resumido)
+            <style>
+                .resumido{
+                    display: none;
+                }
+            </style>
+        @endif
         <p><strong>Titulo: </strong> {{ $obra->titulo }}</p> 
         <p><strong>Descripción: </strong> {{ $obra->descripcion }}</p> 
         <p><strong>Fecha Inicio: </strong> {{ $obra->fecha_inicio }}</p> 
@@ -12,14 +19,14 @@
         <h4>Insumos Consumidos</h4>
         <table class="table">
             <thead>
-                <tr>
-                    <th>Fecha</th>
+                <tr class="center">
+                    <th class="resumido">Fecha</th>
                     <th>Categoria</th>
                     <th>Insumo</th>
-                    <th>Detalles</th>
-                    <th class="w-100 center">Cantidad</th>
-                    <th class="w-100 center">Unidad</th>
-                    <th class="w-100 center">Total</th>
+                    <th class="resumido">Detalles</th>
+                    <th>Cantidad</th>
+                    <th>Unidad</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,22 +35,30 @@
                 @endphp
                 @foreach ($insumos as $insumo)
                     <tr>
-                        <td>{{ $insumo->fecha }}</td>
+                        <td class="resumido">{{ $insumo->fecha }}</td>
                         <td>{{ $insumo->categoria }}</td>
                         <td>{{ $insumo->insumo }}</td>
-                        <td class="w-100 center">{{ $insumo->documento }} - {{ $insumo->colaborador }}</td>
-                        <td class="w-100 center">{{ $insumo->cantidad }}</td>
-                        <td class="w-100 center">{{ $insumo->unidad }}</td>
-                        <td class="w-100 right">{{ round($insumo->total,3) }}</td>
+                        <td class="resumido right">{{ $insumo->documento }} - {{ $insumo->colaborador }}</td>
+                        <td class="center">{{ $insumo->cantidad }}</td>
+                        <td class="center">{{ $insumo->unidad }}</td>
+                        <td class="right">{{ round($insumo->total,3) }}</td>
                     </tr>
                     @php
                         $total+= $insumo->total;   
                     @endphp
                 @endforeach
-                <tr>
-                    <td colspan="6"><b>Total:</b></td>
-                    <td class="w-100 right"><b>{{ round($total,3) }}</b></td>
-                </tr>
+                @if ($resumido)
+                    <tr>
+                        <td colspan="4"><b>Total:</b></td>
+                        <td class="right"><b>{{ round($total,3) }}</b></td>
+                    </tr>
+                @else
+                    <tr>
+                        <td colspan="6"><b>Total:</b></td>
+                        <td class="right"><b>{{ round($total,3) }}</b></td>
+                    </tr>
+                    
+                @endif
             </tbody>
         </table>
         <br>

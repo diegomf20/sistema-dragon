@@ -8,11 +8,11 @@
                     </div>
                     <div class="card-body">
                         <form action="" v-on:submit.prevent="grabarNuevo()" class="row">
-                            <div class="col-lg-12 form-group">
+                            <!-- <div class="col-lg-12 form-group">
                                 <label for="">Código:</label>
                                 <input v-model="activo.codigo" class="form-control" type="text">
                                 <strong>{{ errors.codigo }}</strong>
-                            </div>
+                            </div> -->
                             <div class="col-lg-12 form-group">
                                 <label for="">Nombre de activo:</label>
                                 <input v-model="activo.nombre_activo" class="form-control" @keyup="buscarTecleo()" type="text">
@@ -76,7 +76,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-6 form-group">
-                                <input type="text" class="form-control" v-model="search">
+                                <input @keyup="searching()" type="text" class="form-control" v-model="search">
                             </div>
                             <div class="col-sm-2 form-group">
                                 <button class="btn btn-info" @click="listar()">Buscar</button>
@@ -246,7 +246,8 @@ export default {
             url: null,
             //filtros
             search: '',
-            estado: 'A'
+            estado: 'A',
+            timeout: null
         }
     },
     mounted() {
@@ -263,6 +264,17 @@ export default {
         }
     },
     methods: {
+        searching: function() {
+            
+            // clear timeout variable
+            clearTimeout(this.timeout);
+            
+            var self = this;
+            this.timeout = setTimeout(function () {
+                self.listar();
+            }, 250);
+
+        },
         buscarTecleo(){
             this.search=this.activo.nombre_activo;
             this.listar();

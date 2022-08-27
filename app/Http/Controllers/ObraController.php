@@ -67,6 +67,25 @@ class ObraController extends Controller
             "data"  => "Obra Registrado."
         ]);
     }
+
+    public function pdf($id,Request $request){
+        if($request->hasFile("file")){
+            $file=$request->file("file");
+            
+            if($file->guessExtension()=="pdf"){
+                
+                
+                $nombre = "obra-".$id.".".$file->guessExtension();
+                $ruta = public_path("pdf/".$nombre);
+                copy($file, $ruta);
+                $obra=Obra::where('id',$id)->first();
+                $obra->pdf=$nombre;
+                $obra->save();
+            }else{
+                dd("NO ES UN PDF");
+            }
+        }
+    }
     
     /**
      * Visualiza datos de un solo Obra

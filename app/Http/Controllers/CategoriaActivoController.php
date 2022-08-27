@@ -31,6 +31,7 @@ class CategoriaActivoController extends Controller
     public function store(CategoriaActivoValidate $request)
     {
         $CategoriaActivo=new CategoriaActivo();
+        $CategoriaActivo->codigo=$request->codigo;
         $CategoriaActivo->nombre_categoria=$request->nombre_categoria;
         $CategoriaActivo->save();
         return response()->json([
@@ -51,6 +52,18 @@ class CategoriaActivoController extends Controller
     public function update(CategoriaActivoValidate $request, $id)
     {
         $CategoriaActivo=CategoriaActivo::where('id',$id)->first();
+        $codigoActivo=CategoriaActivo::where('codigo',$request->codigo)
+                        ->where('id','<>',$id)
+                        ->first();
+        if ($codigoActivo!=null) {
+            return response()->json([
+                "status"=> "VALIDATION",
+                "data"  => [
+                    'codigo'=> 'Código pertenece a otra categoria.'
+                ]
+            ]);
+        }
+        $CategoriaActivo->codigo=$request->codigo;
         $CategoriaActivo->nombre_categoria=$request->nombre_categoria;
         $CategoriaActivo->save();
         return response()->json([

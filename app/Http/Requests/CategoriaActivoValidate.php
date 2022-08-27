@@ -27,6 +27,7 @@ class CategoriaActivoValidate extends FormRequest
     public function rules()
     {
         return [
+            'codigo' => 'required|max:5',
             'nombre_categoria' => 'required|max:50',
         ];
     }

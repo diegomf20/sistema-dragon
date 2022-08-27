@@ -7,6 +7,7 @@ use App\Model\Proveedor;
 use App\Model\Colaborador;
 use App\Model\Kardex;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MovimientoController extends Controller
 {
@@ -38,14 +39,28 @@ class MovimientoController extends Controller
     public function getConsumo(Request $request){
         $documento=$request->codigo;
         // dd($documento);
-        $movimiento=Movimiento::with('detalles')
-            ->join('obra','obra.id','=','movimiento.obra_id')
-            ->leftJoin('retorno','movimiento.id','=','retorno.movimiento_id')
-            ->select('movimiento.*','retorno.retorno_id','obra.titulo')
-            ->where('documento','like',"%$documento")
+        $movimiento=Movimiento::where('documento','like',"%$documento")
             ->where('tipo_movimiento','SXC')
-            ->whereNull('retorno_id')
             ->first();
+            $movimiento_id=$movimiento->id;
+        $detalles=DB::select(
+                        DB::raw("SELECT  
+                                    kardex.lote_id,
+                                    kardex.id as kardex_id,
+                                    kardex.cantidad - SUM(IFNULL(k_r.cantidad,0)) cantidad,
+                                    SUM(k_r.cantidad) cantidad_retorno,
+                                    kardex.precio,
+                                    insumo.nombre_insumo
+                        FROM kardex 
+                        INNER JOIN INSUMO on insumo.id=kardex.producto_id
+                        LEFT JOIN retorno R ON R.movimiento_id=kardex.documento_id
+                        LEFT JOIN kardex k_r ON k_r.documento_id=R.retorno_id AND k_r.producto_id=kardex.producto_id
+                        WHERE kardex.documento_id=$movimiento_id
+                        GROUP BY kardex.id,kardex.lote_id,kardex.precio,insumo.nombre_insumo
+                        ")
+                    );
+
+        $movimiento->detalles=$detalles;
         if ($movimiento==null) {
             $movimiento="vacio";
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Activo;
+use App\Model\CategoriaActivo;
 use App\Model\MovActivo;
 use App\Model\DetMovActivo;
 use App\Model\MovimientoActivo;
@@ -59,7 +60,7 @@ class ActivoController extends Controller
         $activos=Activo::select('activo.*','obra.titulo','categoria_activo.nombre_categoria')
             ->leftJoin('obra','obra.id','=','activo.obra_id')
             ->leftJoin('categoria_activo','categoria_activo.id','=','activo.categoria_id')
-            ->where("nombre_activo","like","%".$texto_busqueda[0]."%");
+            ->where(DB::raw("CONCAT(nombre_activo,' ',nombre_categoria)"),"like","%".$texto_busqueda[0]."%");
         
         for ($i=1; $i < count($texto_busqueda); $i++) { 
             $activos=$activos->where("nombre_activo","like","%".$texto_busqueda[$i]."%");
@@ -77,15 +78,11 @@ class ActivoController extends Controller
      */
     public function store(ActivoValidate $request)
     {
-        $activoBuscar=Activo::where('codigo',$request->codigo)->first();
-        if ($activoBuscar!=null) {
-            return response()->json([
-                "status"=>"ERROR",
-                "data"=>"El activo ya fue registrado."
-            ]);
-        }
+        $categoriaActivo=CategoriaActivo::where('id',$request->categoria_id)->first();
+        $cantidad=Activo::where('categoria_id',$request->categoria_id)->count();
+        // dd($cantidad);
         $activo=new Activo();
-        $activo->codigo=$request->codigo;
+        $activo->codigo=$categoriaActivo->codigo.'-'.str_pad($cantidad+1, 3, "0", STR_PAD_LEFT);
         $activo->nombre_activo=$request->nombre_activo;
         $activo->marca=$request->marca;
         $activo->serie=$request->serie;

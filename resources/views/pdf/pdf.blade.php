@@ -17,8 +17,17 @@
         .table{
             width: 100%;
         }
+        .w-150{
+            width: 150px;
+        }
         .w-100{
             width: 100px;
+        }
+        .w-50{
+            width: 50px;
+        }
+        .w-75{
+            width: 75px;
         }
         table{
             border-collapse: collapse;
@@ -29,7 +38,7 @@
         td,th{
             border: 1px solid #ddd;
             padding: 8px 16px;
-            font-size: 12px
+            font-size: 10px
         }
         .encabezado{
             padding: 2rem;

@@ -23,6 +23,7 @@ Route::resource('proveedor', 'ProveedorController');
 Route::resource('cliente', 'ClienteController');
 Route::resource('unidad', 'UnidadController');
 Route::resource('insumo', 'InsumoController');
+Route::post('obra/{id}/pdf','ObraController@pdf');
 Route::post('obra/{id}/finalizar','ObraController@finalizar');
 Route::resource('obra', 'ObraController');
 Route::resource('consumo', 'ConsumoController');

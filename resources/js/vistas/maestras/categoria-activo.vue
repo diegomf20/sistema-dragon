@@ -9,6 +9,11 @@
                     <div class="card-body">
                         <form action="" v-on:submit.prevent="grabarNuevo()" class="row">
                             <div class="col-lg-12 form-group">
+                                <label for="">Código:</label>
+                                <input v-model="categoria_activo.codigo" class="form-control" type="text">
+                                <strong>{{ errors.codigo }}</strong>
+                            </div>
+                            <div class="col-lg-12 form-group">
                                 <label for="">Nombre de Categoria:</label>
                                 <input v-model="categoria_activo.nombre_categoria" class="form-control" type="text">
                                 <strong>{{ errors.nombre_categoria }}</strong>
@@ -26,12 +31,14 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
+                                    <th>Código</th>
                                     <th>Nombre</th>
                                     <th>Editar</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="categoria_activo in table.data">
+                                    <td>{{categoria_activo.codigo}}</td>
                                     <td>{{categoria_activo.nombre_categoria}}</td>
                                     <td>
                                         <button @click="abrirEditar(categoria_activo.id)" class="btn btn-sm btn-warning">
@@ -69,6 +76,11 @@
                     </div>
                     <div class="modal-body">
                         <form action="" v-on:submit.prevent="grabarEditar()">
+                            <div class="col-lg-12 form-group">
+                                <label for="">Código:</label>
+                                <input v-model="categoria_activo_editar.codigo" class="form-control" type="text">
+                                <strong>{{ errors_editar.codigo }}</strong>
+                            </div>
                             <div class="col-lg-12 form-group">
                                 <label for="">Nombre de categoria:</label>
                                 <input v-model="categoria_activo_editar.nombre_categoria" class="form-control" type="text">
@@ -117,7 +129,8 @@ export default {
             this.errors_editar={};
             this.errors={};
             return {
-                nombre_categoria: null,
+                codigo: null,
+                nombre_categoria: null
             }
         },
         listar(n=this.selectPage){

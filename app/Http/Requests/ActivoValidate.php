@@ -28,7 +28,6 @@ class ActivoValidate extends FormRequest
     {
         
         $rules=[
-            'codigo' => 'required|max:12|unique:activo',
             'nombre_activo' => 'required|max:150',
             'marca' => 'max:50',
             'contable'=> 'required',

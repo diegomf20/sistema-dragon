@@ -259,7 +259,8 @@ class ReporteController extends Controller
                     "id"    => $obra_id
                 ]);
         if ($request->has('pdf')) {
-            $pdf = PDF::loadView('pdf.resumen_obra',compact('obra','insumos','gastos'));
+            $resumido=$request->has('resumido') ? true : false;
+            $pdf = PDF::loadView('pdf.resumen_obra',compact('obra','insumos','gastos','resumido'));
             return $pdf->download('Rpt Obra - '.$obra->descripcion.'.pdf');
         }
         if ($request->has('excel')) {

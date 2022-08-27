@@ -78,6 +78,7 @@
                                     <th>Fecha Inicio</th>
                                     <th>Fecha Fin</th>
                                     <th>Título de Obra</th>
+                                    <th>PDF</th>
                                     <th>Editar</th>
                                     <th>Finalizar</th>
                                 </tr>
@@ -88,15 +89,23 @@
                                     <td>{{obra.fecha_fin}}</td>
                                     <td>{{obra.titulo}}</td>
                                     <td>
+                                        <a 
+                                            class="btn btn-danger btn-sm"
+                                            v-if="obra.pdf!=null" 
+                                            :href="pdfObraUrl(obra.pdf)">
+                                            <i class="far fa-file-pdf"></i>
+                                        </a>
+                                    </td>
+                                    <td>
                                         <button @click="abrirEditar(obra.id)" class="btn btn-sm btn-warning">
                                             <i class="fas fa-pen"></i>
                                         </button>
                                     </td>
                                     <td>
-                                        <button v-if="obra.estado=='A'" @click="abrirFinalizar(obra.id)" class="btn btn-info">
+                                        <button v-if="obra.estado=='A'" @click="abrirFinalizar(obra.id)" class="btn btn-sm btn-info">
                                             <i class="fas fa-archive"></i>
                                         </button> 
-                                        <button v-if="obra.estado=='I'" class="btn btn-secondary">
+                                        <button v-if="obra.estado=='I'" class="btn btn-sm btn-secondary">
                                             <i class="fas fa-archive"></i>
                                         </button> 
                                     </td>
@@ -139,7 +148,7 @@
         </div>
         <!--Modal Editar-->
         <div id="modal-editar" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="text-primary mb-0 font-weight-bold">Editar Obra</h6>
@@ -148,43 +157,58 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="" v-on:submit.prevent="grabarEditar()">
-                            <div class="col-lg-12 form-group">
-                                <label for="">Titulo:</label>
-                                <input v-model="obra_editar.titulo" class="form-control" type="text">
-                                <strong>{{ errors_editar.titulo }}</strong>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <form action="" v-on:submit.prevent="grabarEditar()">
+                                    <div class="col-lg-12 form-group">
+                                        <label for="">Titulo:</label>
+                                        <input v-model="obra_editar.titulo" class="form-control" type="text">
+                                        <strong>{{ errors_editar.titulo }}</strong>
+                                    </div>
+                                    <div class="col-lg-12 form-group">
+                                        <label for="">Cliente:</label>
+                                        <select v-model="obra_editar.cliente_id" class="form-control">
+                                            <option value=null>-- Seleccionar Cliente --</option>
+                                            <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.razon_social }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-12 form-group">
+                                        <label for="">Descripcion:</label>
+                                        <textarea v-model="obra_editar.descripcion" class="form-control" rows="2"></textarea>
+                                        <strong>{{ errors_editar.descripcion }}</strong>
+                                    </div>
+                                    <div class="col-lg-12 form-group">
+                                        <label for="">Fecha Inicio:</label>
+                                        <input v-model="obra_editar.fecha_inicio" class="form-control" type="date">
+                                        <strong>{{ errors_editar.fecha_inicio }}</strong>
+                                    </div>
+                                    <div class="col-lg-12 form-group">
+                                        <label for="">Total:</label>
+                                        <input v-model="obra_editar.total" class="form-control" type="text">
+                                        <strong>{{ errors_editar.total }}</strong>
+                                    </div>
+                                    <div class="col-lg-12 form-group">
+                                        <label for="">Dirección:</label>
+                                        <textarea v-model="obra_editar.direccion" class="form-control" rows="4"></textarea>
+                                        <strong>{{ errors_editar.direccion }}</strong>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-success">Guardar</button>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="col-lg-12 form-group">
-                                <label for="">Cliente:</label>
-                                <select v-model="obra_editar.cliente_id" class="form-control">
-                                    <option value=null>-- Seleccionar Cliente --</option>
-                                    <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.razon_social }}</option>
-                                </select>
+                            <div class="col-lg-4">
+                                <div class="row">
+                                    <div class="col-12 form-group">
+                                        <label for="">Archivo de documentación</label>
+                                        <input ref="fileUpload" @change="pdfUpload" placeholder="Seleccionar PDF" class="form-control-file" type="file">
+                                    </div>
+                                    <div class="col-12">
+                                        <button @click="pdfSubmin" class="btn btn-danger">Subir</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-lg-12 form-group">
-                                <label for="">Descripcion:</label>
-                                <textarea v-model="obra_editar.descripcion" class="form-control" rows="2"></textarea>
-                                <strong>{{ errors_editar.descripcion }}</strong>
-                            </div>
-                            <div class="col-lg-12 form-group">
-                                <label for="">Fecha Inicio:</label>
-                                <input v-model="obra_editar.fecha_inicio" class="form-control" type="date">
-                                <strong>{{ errors_editar.fecha_inicio }}</strong>
-                            </div>
-                            <div class="col-lg-12 form-group">
-                                <label for="">Total:</label>
-                                <input v-model="obra_editar.total" class="form-control" type="text">
-                                <strong>{{ errors_editar.total }}</strong>
-                            </div>
-                            <div class="col-lg-12 form-group">
-                                <label for="">Dirección:</label>
-                                <textarea v-model="obra_editar.direccion" class="form-control" rows="4"></textarea>
-                                <strong>{{ errors_editar.direccion }}</strong>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-success">Guardar</button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -196,6 +220,7 @@
 export default {
     data() {
         return {
+            pdfArchive: null,
             search: '',
             areas: [],
             clientes: [],
@@ -211,7 +236,8 @@ export default {
             },
             selectPage: 1,
             estado: 'A',
-            url: null
+            url: null,
+            pdfArchive: null
         }
     },
     mounted() {
@@ -221,9 +247,42 @@ export default {
     computed: {
         pdf(){
             return url_base+'/obra?pdf'
-        }
+        },
     },
     methods: {
+        pdfObraUrl(doc){
+            if (doc!=null) {
+                return `${url_base}/../pdf/${doc}`;
+            }else{
+                return null
+            }
+        },
+        pdfSubmin(){
+            let data = new FormData();
+            data.append('file', this.pdfArchive);
+
+            axios.post(`${url_base}/obra/${this.obra_editar.id}/pdf`, data,
+            {
+                headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+            }).then(response => {
+                console.log(this);
+                this.obra_editar=this.iniobra();
+                this.listar();
+                this.$refs.fileUpload.value=null;
+                swal("", "PDF actualizado", "success");
+                $('#modal-editar').modal('hide');
+            }).catch(error => {
+                if (error.response.status === 422) {
+                    this.errors = error.response.data.errors || {};
+                }
+            });
+        },
+        pdfUpload(event){
+            let files = event.target.files;
+            if (files.length) this.pdfArchive = files[0];
+        },
         iniobra(){
             this.errors_editar={};
             this.errors={};

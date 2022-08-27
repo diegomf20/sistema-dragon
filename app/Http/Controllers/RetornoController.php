@@ -56,7 +56,7 @@ class RetornoController extends Controller
                      * Actualizar Lote
                      */
                     $lote=Lote::where('id',$kardex_retorno->lote_id)->first();
-                    $lote->stock+=(int)$retorno;                    
+                    $lote->stock+=(double)$retorno;                    
                     $lote->save();
                     
                     $anterior=Kardex::where('producto_id',$kardex_retorno->producto_id)
