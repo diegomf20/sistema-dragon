@@ -28,7 +28,7 @@ class GastoValidate extends FormRequest
     {
         return [
             'fecha' => 'required',
-            'descripcion' => 'required|max:50',
+            'descripcion' => 'required|max:100',
             'monto' => 'required|max:50',
             'obra_id' => 'required',
             'categoria_id' => 'required',
