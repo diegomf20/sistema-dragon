@@ -134,7 +134,6 @@ export default {
             });
         },
         agregarItem(){
-            if (this.itemMomentaneo.cantidad<=this.itemMomentaneo.insumo.stock) {
                 this.consumo.items.push({
                     insumo_id: this.itemMomentaneo.insumo.id,
                     codigo: this.itemMomentaneo.insumo.codigo,
@@ -144,9 +143,6 @@ export default {
                     precio: 0
                 });
                 this.itemMomentaneo={insumo: null,cantidad: 1};
-            }else{
-                swal({title: "Stock insuficiente",icon: "info",timer: "2000"});
-            }
         },
         eliminarItem(index){
             this.consumo.items.splice(index, 1);
