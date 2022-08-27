@@ -83,7 +83,6 @@ class CuadreController extends Controller
                         $lote->cantidad=$cantidad;
                         $lote->movimiento_id=$movimiento->id;
                         $lote->fecha_ingreso=$fecha;
-                        dd($lote);
                         $lote->save();
                         $anterior=Kardex::where('producto_id',$insumo_id)
                             ->where('fecha','<=',$fecha)
