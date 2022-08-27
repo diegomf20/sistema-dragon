@@ -188,7 +188,7 @@ class ReporteController extends Controller
             $insumos=DB::select(
                             DB::raw("SELECT 	'' fecha,
                                                 GROUP_CONCAT(CONCAT(movimiento.tipo_movimiento,'-',movimiento.documento)) documento,
-                                                CONCAT(insumo.nombre_insumo, IFNULL(CONCAT(' (',lote.detalle,')','')) insumo,
+                                                CONCAT(insumo.nombre_insumo,' - ', IFNULL(lote.detalle,'') ) insumo,
                                                 unidad.nombre_unidad unidad,
                                                 nombre_categoria categoria,
                                                 '' colaborador,
@@ -234,7 +234,7 @@ class ReporteController extends Controller
                                         movimiento.tipo_movimiento,
                                         concat(movimiento.tipo_movimiento,'-',movimiento.documento) documento,
                                         -- insumo.nombre_insumo insumo,
-                                        CONCAT(insumo.nombre_insumo, IFNULL(CONCAT(' (',lote.detalle,')','')) insumo,
+                                        CONCAT(insumo.nombre_insumo,' - ' ,IFNULL(lote.detalle,'') ) insumo,
                                         unidad.nombre_unidad unidad,
                                         nombre_categoria categoria,
                                         CONCAT(colaborador.nombre_colaborador,' ',colaborador.apellido_colaborador) colaborador,
