@@ -64,7 +64,7 @@ class CuadreController extends Controller
                     foreach ($request->items as $key => $item) {
                         $insumo_id=$item['insumo_id'];
                         $cantidad=$item['cantidad'];
-                        $precio=isset($item['precio']) ? isset($item['precio']) : 0;
+                        $precio=isset($item['precio']) ? $item['precio'] : 0;
                         // comprobacion de que precio tomar
                         if ($precio==0) {
                             $precio=Lote::where('insumo_id',$insumo_id)
@@ -83,6 +83,7 @@ class CuadreController extends Controller
                         $lote->cantidad=$cantidad;
                         $lote->movimiento_id=$movimiento->id;
                         $lote->fecha_ingreso=$fecha;
+                        dd($lote);
                         $lote->save();
                         $anterior=Kardex::where('producto_id',$insumo_id)
                             ->where('fecha','<=',$fecha)
