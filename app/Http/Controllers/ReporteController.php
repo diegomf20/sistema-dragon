@@ -144,7 +144,7 @@ class ReporteController extends Controller
         $fecha_inicio=$request->fecha_inicio;
         $fecha_fin=$request->fecha_fin;
         $data=DB::select(
-                DB::raw("SELECT producto_id,codigo,nombre_insumo,tipo,SUM(cantidad) cantidad_compra, SUM(precio*cantidad) total_compra
+                DB::raw("SELECT producto_id,codigo,nombre_insumo,tipo,SUM(cantidad) cantidad_compra, ROUND(SUM(ROUND(precio,3)*ROUND(cantidad,3)),3) total_compra
                         FROM kardex 
                         INNER JOIN insumo ON insumo.id=kardex.producto_id
                         WHERE (fecha BETWEEN ? AND ?)
