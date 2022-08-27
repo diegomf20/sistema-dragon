@@ -232,8 +232,8 @@ class ReporteController extends Controller
                                         unidad.nombre_unidad unidad,
                                         nombre_categoria categoria,
                                         CONCAT(colaborador.nombre_colaborador,' ',colaborador.apellido_colaborador) colaborador,
-                                        kardex.cantidad - IFNULL(k_r.cantidad,0) cantidad,
-                                        ROUND(IF('Ingreso'=kardex.tipo,-1,1)*kardex.precio*(kardex.cantidad-IFNULL(k_r.cantidad,0)),3) total
+                                        kardex.cantidad - SUM(IFNULL(k_r.cantidad,0)) cantidad,
+                                        ROUND(IF('Ingreso'=kardex.tipo,-1,1)*kardex.precio*(kardex.cantidad-SUM(IFNULL(k_r.cantidad,0))),3) total
                         FROM movimiento 
                         INNER JOIN kardex ON kardex.documento_id=movimiento.id 
                         INNER JOIN insumo ON insumo.id=kardex.producto_id
@@ -244,7 +244,14 @@ class ReporteController extends Controller
                         LEFT JOIN kardex k_r ON k_r.documento_id=R.retorno_id AND k_r.producto_id=kardex.producto_id 
                         WHERE movimiento.obra_id= :id AND movimiento.tipo_movimiento='SXC' 
                         AND (kardex.cantidad!=k_r.cantidad OR k_r.cantidad is NULL)
-                        ORDER BY insumo.id ASC,kardex.fecha ASC"),
+                        ORDER BY insumo.id ASC,kardex.fecha ASC
+                        GROUP BY kardex.fecha,
+                                movimiento.tipo_movimiento,
+                                insumo.nombre_insumo insumo,
+                                unidad.nombre_unidad unidad,
+                                nombre_categoria categoria,
+                                kardex.id
+                        "),
             [
                 "id"    => $obra_id
             ]);
